@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сортировочный Центр — Имитационная Модель</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <header id="header">
+            <h1>Сортировочный Центр</h1>
+            <div id="controls">
+                <button id="btn-start" class="ctrl-btn active">▶ Старт</button>
+                <button id="btn-pause" class="ctrl-btn">⏸ Пауза</button>
+                <button id="btn-reset" class="ctrl-btn">⏹ Сброс</button>
+                <label id="speed-label">
+                    Скорость:
+                    <input type="range" id="speed-slider" min="1" max="10" value="3">
+                    <span id="speed-value">x3</span>
+                </label>
+                <label id="arrival-label">
+                    Поток:
+                    <input type="range" id="arrival-slider" min="1" max="20" value="8">
+                    <span id="arrival-value">8 шт/с</span>
+                </label>
+                <button id="btn-fault" class="ctrl-btn danger">⚠ Сбой выхода</button>
+            </div>
+        </header>
+
+        <main id="main">
+            <div id="canvas-container">
+                <canvas id="simulation-canvas" width="800" height="500"></canvas>
+            </div>
+
+            <aside id="dashboard">
+                <div class="dash-section">
+                    <h2>Метрики в реальном времени</h2>
+                    <div class="metric"><span class="metric-label">Обработано:</span><span id="m-processed" class="metric-value">0</span></div>
+                    <div class="metric"><span class="metric-label">В системе:</span><span id="m-in-system" class="metric-value">0</span></div>
+                    <div class="metric"><span class="metric-label">Пропускная способность:</span><span id="m-throughput" class="metric-value">0 шт/мин</span></div>
+                    <div class="metric"><span class="metric-label">Среднее время в СЦ:</span><span id="m-avg-time" class="metric-value">0.0 с</span></div>
+                    <div class="metric"><span class="metric-label">Загрузка конвейера:</span><span id="m-conveyor-load" class="metric-value">0%</span></div>
+                </div>
+
+                <div class="dash-section">
+                    <h2>Выходы по регионам</h2>
+                    <div id="exit-stats"></div>
+                </div>
+
+                <div class="dash-section">
+                    <h2>События</h2>
+                    <div id="event-log"></div>
+                </div>
+
+                <div class="dash-section">
+                    <h2>Статистика по типам</h2>
+                    <div class="metric"><span class="metric-label">Стандартные:</span><span id="m-standard" class="metric-value">0</span></div>
+                    <div class="metric"><span class="metric-label">Крупные:</span><span id="m-large" class="metric-value">0</span></div>
+                    <div class="metric"><span class="metric-label">Хрупкие:</span><span id="m-fragile" class="metric-value">0</span></div>
+                </div>
+
+                <div class="dash-section">
+                    <h2>Отказоустойчивость</h2>
+                    <div class="metric"><span class="metric-label">Активные сбои:</span><span id="m-faults" class="metric-value">0</span></div>
+                    <div class="metric"><span class="metric-label">Перенаправлено:</span><span id="m-rerouted" class="metric-value">0</span></div>
+                    <div class="metric"><span class="metric-label">Буферы заполнены:</span><span id="m-buffers-full" class="metric-value">0</span></div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

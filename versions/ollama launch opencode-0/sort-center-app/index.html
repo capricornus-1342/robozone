@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>RoboZon — Имитация сортировочного центра</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo">📦</span>
+      <div>
+        <h1>RoboZon</h1>
+        <p class="subtitle">Имитационная модель сортировочного центра</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="badge">OzonTech Hackathon</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- LEFT PANEL: Controls + KPIs -->
+    <aside class="panel left-panel">
+      <section class="card">
+        <h2>Управление</h2>
+        <div class="btn-row">
+          <button id="btn-start" class="btn btn-primary">▶ Старт</button>
+          <button id="btn-pause" class="btn">⏸ Пауза</button>
+          <button id="btn-reset" class="btn">↻ Сброс</button>
+          <button id="btn-stop"  class="btn">■ Стоп</button>
+        </div>
+        <div class="control">
+          <label>Скорость симуляции: <span id="speed-label">x1.0</span></label>
+          <input id="speed-slider" type="range" min="0.2" max="20" step="0.2" value="1" />
+        </div>
+        <div class="control">
+          <label>Интенсивность входа: <span id="arrival-label">1.2 пос/с</span></label>
+          <input id="arrival-slider" type="range" min="0.2" max="5" step="0.1" value="1.2" />
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Сценарий</h2>
+        <select id="scenario-select" class="select">
+          <option value="normal">Обычный рабочий день</option>
+          <option value="peak">Чёрная пятница (пик)</option>
+          <option value="fault">Отказ оборудования</option>
+          <option value="bottleneck">Узкое горлышко</option>
+        </select>
+        <p class="hint" id="scenario-hint">Базовый поток 1.2 посылки/сек, без сбоев.</p>
+      </section>
+
+      <section class="card">
+        <h2>Что-если (ручные сбои)</h2>
+        <div class="btn-row vertical">
+          <button id="btn-induce-burst"  class="btn btn-warn">⚡ Всплеск нагрузки x3</button>
+          <button id="btn-break-scanner" class="btn btn-danger">📷 Сбой сканера</button>
+          <button id="btn-break-conveyor" class="btn btn-danger">⚙ Сбой конвейера</button>
+          <button id="btn-jam-chute"      class="btn btn-danger">🚫 Затор в жёлобе</button>
+        </div>
+      </section>
+
+      <section class="card kpi-card">
+        <h2>KPI</h2>
+        <div class="kpi-grid">
+          <div class="kpi"><span class="kpi-label">Принято</span><span class="kpi-value" id="kpi-received">0</span></div>
+          <div class="kpi"><span class="kpi-label">Отсортировано</span><span class="kpi-value" id="kpi-sorted">0</span></div>
+          <div class="kpi"><span class="kpi-label">Загружено</span><span class="kpi-value" id="kpi-loaded">0</span></div>
+          <div class="kpi"><span class="kpi-label">Среднее время цикла</span><span class="kpi-value" id="kpi-cycle">0.0s</span></div>
+          <div class="kpi"><span class="kpi-label">Перенаправлений</span><span class="kpi-value" id="kpi-reroutes">0</span></div>
+          <div class="kpi"><span class="kpi-label">Машин в отгрузке</span><span class="kpi-value" id="kpi-trucks">0/0</span></div>
+          <div class="kpi"><span class="kpi-label">Очередь входа</span><span class="kpi-value" id="kpi-queue">0</span></div>
+          <div class="kpi"><span class="kpi-label">Загрузка петли</span><span class="kpi-value" id="kpi-loop">0/0</span></div>
+          <div class="kpi"><span class="kpi-label">Средняя загрузка желобов</span><span class="kpi-value" id="kpi-fill">0%</span></div>
+          <div class="kpi"><span class="kpi-label">Повреждения хрупких</span><span class="kpi-value" id="kpi-damages">0</span></div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- CENTER: Simulation canvas + charts -->
+    <section class="center">
+      <div class="card canvas-card">
+        <h2>Карта СЦ</h2>
+        <canvas id="canvas" width="1000" height="560"></canvas>
+        <div class="legend">
+          <span class="lg-item"><i class="lg-i" style="background:#4f9cf9"></i> Главная петля</span>
+          <span class="lg-item"><i class="lg-i" style="background:#7da3c8"></i> Индукция</span>
+          <span class="lg-item"><i class="lg-i" style="background:#f9c74f"></i> Сканер</span>
+          <span class="lg-item"><i class="lg-i" style="background:#06d6a0"></i> Отгрузка</span>
+          <span class="lg-item"><i class="lg-i" style="background:#e63946"></i> Сбой</span>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="card chart-card">
+          <h3>Поток (шт / 5 сек)</h3>
+          <canvas id="chart-throughput" width="450" height="140"></canvas>
+        </div>
+        <div class="card chart-card">
+          <h3>Время цикла (с)</h3>
+          <canvas id="chart-cycle" width="450" height="140"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Event log -->
+    <aside class="panel right-panel">
+      <section class="card">
+        <h2>Журнал событий</h2>
+        <ul id="log-list" class="log-list"></ul>
+      </section>
+      <section class="card">
+        <h2>Архитектурные принципы</h2>
+        <ul class="principles">
+          <li>🏗 Одноэтажное здание, свободный пролёт</li>
+          <li>🔁 Кольцевой конвейер с выходами по периметру</li>
+          <li>📦 Буферы перед каждым выходом (5–10 посылок)</li>
+          <li>🛡 Двойной привод петли + резервные сканеры</li>
+          <li>🧠 WCS: динамическая перемаршрутизация</li>
+          <li>📈 Предиктивная аналитика и мониторинг</li>
+        </ul>
+      </section>
+    </aside>
+  </main>
+
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

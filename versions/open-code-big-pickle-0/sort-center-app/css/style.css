@@ -1,0 +1,159 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #1a2530;
+  color: #ecf0f1;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  flex-shrink: 0;
+}
+
+#header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #3498db;
+  letter-spacing: 1px;
+}
+
+#header .subtitle {
+  font-size: 11px;
+  color: #7f8c8d;
+  margin-left: 10px;
+}
+
+#controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#controls button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#controls button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+#controls button:active {
+  transform: translateY(0);
+}
+
+.btn-start {
+  background: #27ae60;
+  color: #fff;
+}
+
+.btn-pause {
+  background: #f39c12;
+  color: #fff;
+}
+
+.btn-stop {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-reset {
+  background: #7f8c8d;
+  color: #fff;
+}
+
+#controls .status {
+  font-size: 11px;
+  color: #7f8c8d;
+  margin-left: 10px;
+}
+
+#controls .status .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.dot-active {
+  background: #27ae60;
+}
+
+.dot-paused {
+  background: #f39c12;
+}
+
+.dot-stopped {
+  background: #e74c3c;
+}
+
+#canvas-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  overflow: hidden;
+}
+
+#simCanvas {
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 20px;
+  background: #2c3e50;
+  border-top: 1px solid #34495e;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: #7f8c8d;
+}
+
+#footer .kpi {
+  display: flex;
+  gap: 20px;
+}
+
+#footer .kpi-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+#footer .kpi-value {
+  color: #3498db;
+  font-weight: 600;
+}

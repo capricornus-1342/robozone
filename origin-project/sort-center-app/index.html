@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Имитационная модель сортировочного центра — Robozon</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">SC</div>
+      <div>
+        <h1>Имитационная модель сортировочного центра</h1>
+        <div class="subtitle">Robozon · Одноэтажный мега-СЦ с кольцевым конвейером · WCS-мониторинг</div>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button id="btn-play" class="btn primary">▶ Старт</button>
+      <button id="btn-pause" class="btn">⏸ Пауза</button>
+      <button id="btn-step" class="btn">⏭ Шаг</button>
+      <button id="btn-reset" class="btn">⟲ Сброс</button>
+      <button id="btn-export" class="btn">⤓ Экспорт CSV</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- LEFT: Configuration + Scenarios -->
+    <aside class="panel left">
+      <section class="card">
+        <h2>1. Параметры СЦ</h2>
+        <div class="param-grid">
+          <label>Скорость конвейера (м/с)
+            <input type="range" id="p-belt-speed" min="0.5" max="3" step="0.1" value="1.6" />
+            <span class="val" id="v-belt-speed">1.6</span>
+          </label>
+          <label>Количество выходов (карманов)
+            <input type="range" id="p-outputs" min="6" max="48" step="1" value="24" />
+            <span class="val" id="v-outputs">24</span>
+          </label>
+          <label>Региональных направлений
+            <input type="range" id="p-regions" min="2" max="8" step="1" value="6" />
+            <span class="val" id="v-regions">6</span>
+          </label>
+          <label>Ёмкость буфера на выходе
+            <input type="range" id="p-buffer" min="3" max="20" step="1" value="8" />
+            <span class="val" id="v-buffer">8</span>
+          </label>
+          <label>Время сканирования (с)
+            <input type="range" id="p-scan-time" min="0.2" max="2" step="0.1" value="0.6" />
+            <span class="val" id="v-scan-time">0.6</span>
+          </label>
+          <label>Время разгрузки фуры (с)
+            <input type="range" id="p-unload" min="30" max="180" step="5" value="75" />
+            <span class="val" id="v-unload">75</span>
+          </label>
+          <label>Интервал прибытия фур (с)
+            <input type="range" id="p-truck-int" min="10" max="120" step="1" value="35" />
+            <span class="val" id="v-truck-int">35</span>
+          </label>
+          <label>Посылок на фуру (шт)
+            <input type="range" id="p-truck-cnt" min="50" max="500" step="10" value="220" />
+            <span class="val" id="v-truck-cnt">220</span>
+          </label>
+          <label>Длина кольца (м)
+            <input type="range" id="p-ring-len" min="120" max="600" step="10" value="320" />
+            <span class="val" id="v-ring-len">320</span>
+          </label>
+          <label>Допуск % крупногабаритных
+            <input type="range" id="p-bulky" min="0" max="30" step="1" value="10" />
+            <span class="val" id="v-bulky">10</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>2. Сценарии «Что если»</h2>
+        <div class="scenario-list">
+          <button class="btn scen" data-scen="baseline">📊 Базовый режим</button>
+          <button class="btn scen" data-scen="blackfriday">🛒 Чёрная пятница (×3)</button>
+          <button class="btn scen" data-scen="newyear">🎄 Новый год (×5 + хрупкие)</button>
+          <button class="btn scen" data-scen="failure">⚠️ Авария: 1 выход сломан</button>
+          <button class="btn scen" data-scen="bulky">📦 Только крупногабарит</button>
+          <button class="btn scen" data-scen="speedup">⚡ Ускоренный конвейер</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>3. Сбои и отказоустойчивость</h2>
+        <div class="failure-buttons">
+          <button class="btn danger" id="btn-fail-motor">🔧 Сбой мотора конвейера</button>
+          <button class="btn danger" id="btn-fail-sorter">🤖 Сбой сорт-машины</button>
+          <button class="btn danger" id="btn-fail-scanner">📷 Сбой сканера</button>
+          <button class="btn warn" id="btn-block-output">⛔ Засор выхода</button>
+          <button class="btn warn" id="btn-trigger-bypass">↪️ Ручная обходная линия</button>
+          <button class="btn ok" id="btn-recover">✅ Восстановить всё</button>
+        </div>
+        <div class="status-pill" id="system-status">🟢 Все системы в норме</div>
+      </section>
+    </aside>
+
+    <!-- CENTER: Visualization -->
+    <section class="panel center">
+      <div class="card viz-card">
+        <div class="viz-toolbar">
+          <h2>Схема СЦ (вид сверху)</h2>
+          <div class="speed-control">
+            <span>Скорость симуляции:</span>
+            <input type="range" id="sim-speed" min="0.25" max="8" step="0.25" value="1" />
+            <span class="val" id="v-sim-speed">1×</span>
+          </div>
+        </div>
+        <canvas id="viz" width="900" height="560"></canvas>
+        <div class="legend">
+          <span class="lg lg-truck">⬛ Фура</span>
+          <span class="lg lg-pkg">🟧 Стандартная посылка</span>
+          <span class="lg lg-bulky">🟥 Крупногабарит</span>
+          <span class="lg lg-frag">🟦 Хрупкая</span>
+          <span class="lg lg-belt">─ Конвейер</span>
+          <span class="lg lg-output">▣ Выход</span>
+          <span class="lg lg-fail">✖ Сбой</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: KPIs + Charts -->
+    <aside class="panel right">
+      <section class="card kpi-card">
+        <h2>KPI в реальном времени</h2>
+        <div class="kpi-grid">
+          <div class="kpi"><div class="kpi-label">Обработано (шт)</div><div class="kpi-value" id="k-processed">0</div></div>
+          <div class="kpi"><div class="kpi-label">Пропускная способность (шт/ч)</div><div class="kpi-value" id="k-throughput">0</div></div>
+          <div class="kpi"><div class="kpi-label">Среднее время цикла (с)</div><div class="kpi-value" id="k-cycle">0</div></div>
+          <div class="kpi"><div class="kpi-label">Загрузка конвейера</div><div class="kpi-value" id="k-belt-load">0%</div></div>
+          <div class="kpi"><div class="kpi-label">Загруженность выходов</div><div class="kpi-value" id="k-out-load">0%</div></div>
+          <div class="kpi"><div class="kpi-label">Посылок в системе</div><div class="kpi-value" id="k-inflight">0</div></div>
+          <div class="kpi"><div class="kpi-label">Отказов сортировки</div><div class="kpi-value" id="k-misorts">0</div></div>
+          <div class="kpi"><div class="kpi-label">Засоров / Простоев</div><div class="kpi-value" id="k-blocked">0</div></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Поток по направлениям</h2>
+        <canvas id="chart-regions" width="320" height="180"></canvas>
+      </section>
+
+      <section class="card">
+        <h2>Загрузка во времени</h2>
+        <canvas id="chart-history" width="320" height="140"></canvas>
+      </section>
+
+      <section class="card">
+        <h2>События</h2>
+        <div class="event-log" id="event-log"></div>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="app-footer">
+    <span>Robozon · Hackathon · Задача 1: Имитационное моделирование СЦ</span>
+    <span class="muted">Архитектура: одноэтажный ангар · кольцевой конвейер · WCS-мониторинг · отказоустойчивость по принципам replication + graceful degradation</span>
+  </footer>
+
+  <script src="src/simulation.js"></script>
+  <script src="src/visualization.js"></script>
+  <script src="src/dashboard.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

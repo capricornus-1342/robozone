@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Имитационная модель сортировочного центра — Robozon</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+      <div style="display:flex;align-items:baseline">
+        <h1>📦 Robozon</h1>
+        <span class="subtitle">Имитационное моделирование сортировочного центра</span>
+      </div>
+      <div id="controls">
+        <button id="btnStart" class="btn-start">▶ Старт</button>
+        <button id="btnPause" class="btn-pause">⏸ Пауза</button>
+        <button id="btnStop" class="btn-stop">⏹ Стоп</button>
+        <button id="btnReset" class="btn-reset">⟳ Сброс</button>
+        <span class="status">
+          <span id="statusDot" class="dot dot-stopped"></span>
+          <span id="statusText">Остановлено</span>
+        </span>
+      </div>
+    </div>
+    <div id="canvas-wrapper">
+      <canvas id="simCanvas"></canvas>
+    </div>
+    <div id="footer">
+      <div>
+        Сортировочный центр • Одноэтажный • Кольцевой конвейер • WCS
+      </div>
+      <div class="kpi">
+        <span class="kpi-item">Обработано: <span id="kpiProcessed" class="kpi-value">0</span></span>
+        <span class="kpi-item">В системе: <span id="kpiInSystem" class="kpi-value">0</span></span>
+        <span class="kpi-item">Пропускная сп-ть: <span id="kpiThroughput" class="kpi-value">0</span>/мин</span>
+        <span class="kpi-item">Среднее время: <span id="kpiTime" class="kpi-value">—</span></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/core/EventBus.js"></script>
+  <script src="js/models/Parcel.js"></script>
+  <script src="js/models/Conveyor.js"></script>
+  <script src="js/models/LoopConveyor.js"></script>
+  <script src="js/models/Exit.js"></script>
+  <script src="js/models/Buffer.js"></script>
+  <script src="js/models/Scanner.js"></script>
+  <script src="js/models/Dock.js"></script>
+  <script src="js/zones/InboundZone.js"></script>
+  <script src="js/zones/SortingZone.js"></script>
+  <script src="js/zones/OutboundZone.js"></script>
+  <script src="js/management/WCS.js"></script>
+  <script src="js/management/Dashboard.js"></script>
+  <script src="js/visualization/Renderer.js"></script>
+  <script src="js/core/SimulationEngine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

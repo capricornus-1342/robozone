@@ -1,0 +1,20 @@
+global.window = global;
+require('./src/simulation.js');
+const SortingCenter = global.SortingCenter;
+
+const sim = new SortingCenter();
+sim.reset();
+sim.setScenario("failure");
+console.log("Before start, broken:", [...sim.failures.brokenOutputs]);
+console.log("Before start, cycleSamples len:", sim.metrics.cycleSamples.length);
+sim.start();
+for (let i = 0; i < 3600; i++) sim.tick(0.5);
+const cs = sim.metrics.cycleSamples;
+console.log("After 3600 ticks:");
+console.log("  count:", cs.length);
+console.log("  sum:", cs.reduce((a,b)=>a+b,0));
+console.log("  avg:", cs.reduce((a,b)=>a+b,0) / cs.length);
+console.log("  min:", Math.min(...cs));
+console.log("  max:", Math.max(...cs));
+console.log("  any NaN:", cs.some(x => Number.isNaN(x)));
+console.log("  any neg:", cs.filter(x => x < 0));
