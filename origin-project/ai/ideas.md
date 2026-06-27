@@ -15,6 +15,6 @@ https://chat.deepseek.com/share/cpdt59gqwnmuyke77b
 Все компоненты системы и все процессы V2   
 https://chat.deepseek.com/share/nc8utknyrer28zs2ww   
 
-Skill v0
+Skill v0  
 https://chat.deepseek.com/share/lmki4a3o86h1dmv101  
 
