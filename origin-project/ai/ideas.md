@@ -12,3 +12,6 @@ https://chat.deepseek.com/share/2ndskuc8rpo8okjtli
 Все компоненты системы и все процессы  
 https://chat.deepseek.com/share/cpdt59gqwnmuyke77b  
 
+Все компоненты системы и все процессы V2   
+https://chat.deepseek.com/share/nc8utknyrer28zs2ww   
+
