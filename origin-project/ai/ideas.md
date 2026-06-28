@@ -18,3 +18,7 @@ https://chat.deepseek.com/share/nc8utknyrer28zs2ww
 Skill v0  
 https://chat.deepseek.com/share/lmki4a3o86h1dmv101  
 
+Skill v1  
+https://chat.deepseek.com/share/72vijpskr7vvn63fea   
+
+
