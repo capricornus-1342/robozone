@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Имитационная модель СЦ — Скелет</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app-container">
+        <h1>Имитационная модель сортировочного центра</h1>
+
+        <canvas id="sim-canvas"></canvas>
+
+        <!-- Control panel -->
+        <div id="controls">
+            <button class="btn-start"  id="btn-start"           >▶ Старт</button>
+            <button class="btn-pause"  id="btn-pause"  disabled>⏸ Пауза</button>
+            <button class="btn-reset"  id="btn-reset"           >↺ Сброс</button>
+            <button class="btn-event"  id="btn-event"           >🚚 Сгенерировать событие</button>
+            <button class="btn-save"   id="btn-save"   disabled>💾 Сохранить</button>
+
+            <label for="speed-slider">Скорость:</label>
+            <input type="range" id="speed-slider" min="1" max="10" value="1" step="1">
+            <span id="speed-value">1x</span>
+        </div>
+
+        <!-- Log container removed — логи в console -->
+    </div>
+
+    <script src="config.js"></script>
+    <script src="classes/Box.js"></script>
+    <script src="classes/Truck.js"></script>
+    <script src="classes/Pocket.js"></script>
+    <script src="visualization.js"></script>
+    <script src="classes/SimulationEngine.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сортировочный центр — Имитационная модель</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0a1a;color:#e0e0e0;font-family:Consolas,'Courier New',monospace}
+.app-container{display:flex;flex-direction:column;width:100%;height:100%}
+.header{background:linear-gradient(135deg,#1a1a3e,#0f0f23);padding:8px 20px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.header h1{font-size:16px;color:#00d2ff;letter-spacing:2px;text-transform:uppercase}
+.controls{display:flex;align-items:center;gap:10px}
+.controls label{font-size:11px;color:#8899aa}
+.btn{padding:6px 16px;border:none;border-radius:4px;font-family:inherit;font-size:12px;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:1px}
+.btn-start{background:#2ecc71;color:#fff}.btn-start:hover{background:#27ae60}
+.btn-pause{background:#f39c12;color:#fff}.btn-pause:hover{background:#e67e22}
+.btn-reset{background:#e74c3c;color:#fff}.btn-reset:hover{background:#c0392b}
+.btn-export{background:#3498db;color:#fff}.btn-export:hover{background:#2980b9}
+input[type=range]{width:100px;height:4px;-webkit-appearance:none;appearance:none;background:#34495e;border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:#00d2ff;cursor:pointer}
+#speed-value{font-size:11px;color:#00d2ff;min-width:35px;text-align:center}
+.main-content{display:flex;flex:1;min-height:0;overflow:hidden}
+.canvas-container{flex:1;min-width:0;position:relative;overflow:hidden}
+#sim-canvas{width:100%;height:100%;display:block}
+.sidebar{width:320px;background:#0f0f23;border-left:1px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.sidebar-section{padding:10px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-section h3{font-size:11px;color:#8899aa;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+#stats-panel{font-size:11px}
+.stat-row{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.stat-label{color:#8899aa}.stat-value{color:#e0e0e0;text-align:right}
+#pocket-table{flex:1;overflow-y:auto;font-size:10px}
+#pocket-table table{width:100%;border-collapse:collapse}
+#pocket-table th{position:sticky;top:0;background:#1a1a3e;padding:4px 6px;text-align:left;font-size:9px;color:#8899aa;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid rgba(255,255,255,0.1)}
+#pocket-table td{padding:3px 6px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.status-ready{color:#2ecc71;font-weight:bold}
+.status-full{color:#e74c3c;font-weight:bold}
+.status-mid{color:#f39c12}
+.status-ok{color:#3498db}
+#log-panel{max-height:150px;overflow-y:auto;font-size:10px;line-height:1.5}
+.log-entry{padding:1px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.log-time{color:#555577}
+#log-panel::-webkit-scrollbar,#pocket-table::-webkit-scrollbar{width:4px}
+#log-panel::-webkit-scrollbar-track,#pocket-table::-webkit-scrollbar-track{background:transparent}
+#log-panel::-webkit-scrollbar-thumb,#pocket-table::-webkit-scrollbar-thumb{background:#34495e;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="app-container">
+<header class="header">
+<h1>Sorting Center Simulation</h1>
+<div class="controls">
+<button id="btn-start" class="btn btn-start">Start</button>
+<button id="btn-reset" class="btn btn-reset">Reset</button>
+<button id="btn-export-json" class="btn btn-export">JSON</button>
+<button id="btn-export-csv" class="btn btn-export">CSV</button>
+<label for="speed-slider">Speed:</label>
+<input type="range" id="speed-slider" min="0.1" max="10" step="0.1" value="1">
+<span id="speed-value">1.0x</span>
+</div>
+</header>
+<div class="main-content">
+<div class="canvas-container">
+<canvas id="sim-canvas"></canvas>
+</div>
+<aside class="sidebar">
+<div class="sidebar-section">
+<h3>Statistics</h3>
+<div id="stats-panel"><div class="stat-row"><span class="stat-label">Initializing...</span></div></div>
+</div>
+<div class="sidebar-section" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+<h3>Pockets</h3>
+<div id="pocket-table"></div>
+</div>
+<div class="sidebar-section">
+<h3>Event Log</h3>
+<div id="log-panel"><div class="log-entry"><span class="log-time">System ready. Click Start.</span></div></div>
+</div>
+</aside>
+</div>
+</div>
+<div id="init-error" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#1a0000;color:#ff4444;padding:40px;font-family:monospace;z-index:9999;overflow:auto"></div>
+
+<script>
+(function(){
+"use strict";
+
+// ─── CONFIG ─────────────────────────────────────────────────
+var CONFIG = {
+    unloadDocks:10, loadDocks:5, pockets:30,
+    pocketCapacity:500, pocketThreshold:400,
+    bufferCapacity:2000, reserveBufferCapacity:3000,
+    autoUnloadSpeed:3000, manualUnloadSpeed:400,
+    autoUnloadWorkers:3, manualUnloadWorkers:5,
+    depalletizerCount:2, loaderCount:4,
+    conveyorSpeed:35000, inboundIntensity:2000,
+    sorterCount:2,
+    autoUnloadTime:2000, manualUnloadTime:12000,
+    palletUnloadTime:90000, depalletizeTime:600000,
+    itemUnloadTime:15000, loadTime:10000,
+    balanceCheckInterval:30000
+};
+
+// ─── ID COUNTERS ────────────────────────────────────────────
+function makeIdCounter(){var n=1;return{next:function(){return n++},reset:function(){n=1}}}
+
+var idCounters={
+    Truck:makeIdCounter(),Box:makeIdCounter(),Pallet:makeIdCounter(),
+    Item:makeIdCounter(),Worker:makeIdCounter(),
+    ConveyorBelt:makeIdCounter(),Dock:makeIdCounter(),
+    Pocket:makeIdCounter(),Buffer:makeIdCounter()
+};
+function resetAllIds(){for(var k in idCounters)idCounters[k].reset()}
+
+// ─── UTILITIES ──────────────────────────────────────────────
+function formatTime(ms){
+    var h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000),s=Math.floor((ms%60000)/1000);
+    return (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s
+}
+function poissonInterval(mean){return -Math.log(1-Math.random())*mean}
+function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+
+function generateRegions(count){
+    var r=[];
+    for(var i=0;i<count;i++){
+        if(i<26)r.push(String.fromCharCode(65+i));
+        else{var f=Math.floor((i-26)/26),s=(i-26)%26;r.push(String.fromCharCode(65+f)+String.fromCharCode(65+s))}
+    }
+    return r
+}
+
+// ─── CLASSES ────────────────────────────────────────────────
+function Box(weight,destRegion){this.id=idCounters.Box.next();this.weight=weight;this.destRegion=destRegion;this.isOnPallet=false}
+function Item(weight,destRegion,fragile){this.id=idCounters.Item.next();this.weight=weight;this.destRegion=destRegion;this.fragile=!!fragile}
+function Pallet(numBoxes,destRegions){
+    this.id=idCounters.Pallet.next();this.numBoxes=numBoxes;this.destRegions=destRegions;this.weight=numBoxes*5;
+    this.unpack=function(){
+        var boxes=[];
+        for(var i=0;i<this.numBoxes;i++){
+            var region=this.destRegions[Math.floor(Math.random()*this.destRegions.length)];
+            var box=new Box(5+Math.random()*10,region);box.isOnPallet=true;boxes.push(box)
+        }
+        return boxes
+    }
+}
+function Truck(type,capacity,destRegion){
+    this.id=idCounters.Truck.next();this.type=type;this.load=[];this.arrivalTime=0;this.scheduledTime=0;this.capacity=capacity;this.destRegion=destRegion;
+    this.unload=function(){var l=this.load;this.load=[];return l};
+    this.load=function(boxes){this.load.push.apply(this.load,boxes)};
+    this.depart=function(){var l=this.load;this.load=[];return l}
+}
+function Worker(role,speed){
+    this.id=idCounters.Worker.next();this.role=role;this.speed=speed;this.currentTask=null;this.busy=false;this.totalProcessed=0;
+    this.assignTask=function(t){this.currentTask=t;this.busy=true};
+    this.completeTask=function(){this.currentTask=null;this.busy=false}
+}
+function ConveyorBelt(speed,maxBuffer){
+    this.id=idCounters.ConveyorBelt.next();this.speed=speed;this.buffer=[];this.maxBuffer=maxBuffer||200;
+    this.process=function(){return this.buffer.length>0?this.buffer.shift():null};
+    this.addBox=function(item){if(this.buffer.length<this.maxBuffer){this.buffer.push(item);return true}return false}
+}
+function Dock(type){
+    this.id=idCounters.Dock.next();this.type=type;this.currentTruck=null;this.queue=[];this.busy=false;this.totalProcessed=0;
+    this.assignTruck=function(truck){
+        if(this.currentTruck){this.queue.push(truck);return false}
+        this.currentTruck=truck;this.busy=true;return true
+    };
+    this.free=function(){
+        var processed=this.currentTruck;this.currentTruck=null;this.busy=false;
+        if(this.queue.length>0){var next=this.queue.shift();this.assignTruck(next);return next}
+        return null
+    }
+}
+function Pocket(region,capacity,threshold){
+    this.id=idCounters.Pocket.next();this.region=region;this.capacity=capacity;this.boxes=[];this.threshold=threshold;
+    this.addBox=function(box){if(this.boxes.length<this.capacity){this.boxes.push(box);return true}return false};
+    this.isReadyToShip=function(){return this.boxes.length>=this.threshold};
+    this.clear=function(){var s=this.boxes;this.boxes=[];return s}
+}
+function Buffer(maxCapacity){
+    this.id=idCounters.Buffer.next();this.maxCapacity=maxCapacity;this.items=[];
+    this.add=function(item){if(this.items.length<this.maxCapacity){this.items.push(item);return true}return false};
+    this.remove=function(){return this.items.shift()||null}
+}
+Object.defineProperty(Buffer.prototype,'fillLevel',{get:function(){return this.maxCapacity>0?this.items.length/this.maxCapacity:0}});
+
+// ─── STATISTICS ─────────────────────────────────────────────
+function StatisticsCollector(){
+    this.events=[];this.startTime=Date.now();
+    this.logEvent=function(ev){this.events.push({timestamp:ev.timestamp||0,stage:ev.stage||'',entityId:ev.entityId||'',action:ev.action||'',details:ev.details||'',realTime:new Date().toISOString()})};
+    this.generateSummary=function(){
+        var stages={},byAction={};
+        for(var i=0;i<this.events.length;i++){var e=this.events[i];stages[e.stage]=(stages[e.stage]||0)+1;byAction[e.action]=(byAction[e.action]||0)+1}
+        return{totalEvents:this.events.length,stages:stages,byAction:byAction,runDurationMs:Date.now()-this.startTime,generatedAt:new Date().toISOString()}
+    };
+    this.saveToJSON=function(){this._download(JSON.stringify({events:this.events,summary:this.generateSummary()},null,2),'simulation_stats.json','application/json')};
+    this.saveToCSV=function(){
+        var h=['timestamp','stage','entityId','action','details','realTime'];
+        var rows=this.events.map(function(e){return[e.timestamp,e.stage,e.entityId,e.action,'"'+e.details.replace(/"/g,'""')+'"',e.realTime]});
+        this._download([h.join(','),rows.map(function(r){return r.join(',')}).join('\n')].join('\n'),'simulation_stats.csv','text/csv')
+    };
+    this._download=function(content,filename,mimeType){
+        var blob=new Blob([content],{type:mimeType});
+        if(window.showSaveFilePicker){window.showSaveFilePicker({suggestedName:filename}).then(function(h){return h.createWritable()}).then(function(w){return w.write(blob)}).then(function(w){return w.close()}).catch(function(){_fallbackDownload(blob,filename)})}
+        else _fallbackDownload(blob,filename)
+    };
+    function _fallbackDownload(blob,filename){
+        var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)
+    }
+}
+
+// ─── SIMULATION ENGINE ──────────────────────────────────────
+function SimulationEngine(config){
+    var self=this;
+    self.time=0;self.speed=1;self.isRunning=false;self.eventQueue=[];self.config=config||CONFIG;
+    self.totalBoxesProcessed=0;self.totalBoxesSorted=0;self.totalBoxesShipped=0;
+    self.totalTrucksArrived=0;self.totalTrucksShipped=0;
+    self.docks=[];self.conveyors=[];self.pockets=[];self.buffers={};self.workers=[];self.callbacks={};self._stats=null;
+    self.regions=generateRegions(self.config.pockets);
+    self.init();
+
+    self.setStatsCollector=function(c){self._stats=c};
+    self.on=function(ev,cb){self.callbacks[ev]=cb};
+    self.emit=function(ev,data){if(self.callbacks[ev]){try{self.callbacks[ev](data)}catch(e){console.warn('cb err',e)}}};
+
+    self.scheduleEvent=function(ev,delay){
+        var t=self.time+Math.max(0,delay);ev.time=t;
+        var idx=self.eventQueue.length;
+        for(var i=0;i<self.eventQueue.length;i++){if(self.eventQueue[i].time>t){idx=i;break}}
+        self.eventQueue.splice(idx,0,ev)
+    };
+
+    self.step=function(){
+        if(self.eventQueue.length===0)return false;
+        var ev=self.eventQueue.shift();self.time=ev.time;self.processEvent(ev);return true
+    };
+
+    self.processEvent=function(ev){
+        if(self._stats)self._stats.logEvent({timestamp:self.time,stage:ev.stage||ev.type||'',entityId:ev.entityId||'',action:ev.type||'',details:ev.details||''});
+        switch(ev.type){
+            case'ARRIVAL_TRUCK':self.handleArrival(ev);break;
+            case'UNLOAD_COMPLETE':self.handleUnloadComplete(ev);break;
+            case'PALLET_UNPACK_COMPLETE':self.handlePalletUnpackComplete(ev);break;
+            case'SORTING_STEP':self.handleSortingStep(ev);break;
+            case'POCKET_THRESHOLD_REACHED':self.handlePocketThreshold(ev);break;
+            case'SHIPMENT_LOAD_COMPLETE':self.handleShipmentLoadComplete(ev);break;
+            case'BALANCE_CHECK':self.balanceSystem();self.scheduleEvent({type:'BALANCE_CHECK'},self.config.balanceCheckInterval);break;
+            case'GENERATE_INBOUND':self.generateInboundTruck();break;
+            case'SORTING_CYCLE':self.sortingCycle();break;
+            case'LOAD_DOCK_CHECK':self.checkLoadDockQueue(ev);break
+        }
+        self.emit('statsUpdate',self.getStats())
+    };
+
+    self.logEvent=function(ev){if(self._stats)self._stats.logEvent(ev)};
+}
+
+SimulationEngine.prototype.init=function(){
+    var self=this,c=self.config;
+    for(var i=0;i<c.unloadDocks;i++)self.docks.push(new Dock('unload'));
+    for(var i=0;i<c.loadDocks;i++)self.docks.push(new Dock('load'));
+    self.conveyors.push(new ConveyorBelt(c.conveyorSpeed,500));
+    for(var i=0;i<c.pockets;i++)self.pockets.push(new Pocket(self.regions[i%self.regions.length],c.pocketCapacity,c.pocketThreshold));
+    self.buffers.main=new Buffer(c.bufferCapacity);
+    self.buffers.reserve=new Buffer(c.reserveBufferCapacity);
+    self.buffers.preSort=new Buffer(1000);
+    for(var i=0;i<c.autoUnloadWorkers;i++)self.workers.push(new Worker('unloader_auto',c.autoUnloadSpeed));
+    for(var i=0;i<c.manualUnloadWorkers;i++)self.workers.push(new Worker('unloader_manual',c.manualUnloadSpeed));
+    for(var i=0;i<c.depalletizerCount;i++)self.workers.push(new Worker('depalletizer',600));
+    for(var i=0;i<c.loaderCount;i++)self.workers.push(new Worker('loader',360));
+    for(var i=0;i<c.sorterCount;i++)self.workers.push(new Worker('sorter_manual',500));
+    self.workers.push(new Worker('dispatcher',0))
+};
+
+SimulationEngine.prototype.generateInboundTruck=function(){
+    var self=this,c=self.config;var truck=new Truck('incoming',500+Math.random()*500,null);
+    var loadType=Math.random(),numItems=randomInt(50,250);
+    if(loadType<0.35){
+        for(var i=0;i<numItems;i++){var region=self.regions[Math.floor(Math.random()*self.regions.length)];truck.load.push(new Box(randomInt(1,25),region))}
+    }else if(loadType<0.65){
+        var numPallets=Math.floor(3+Math.random()*8);
+        var palletRegions=self.regions.slice(0,6);
+        for(var i=0;i<numPallets;i++)truck.load.push(new Pallet(randomInt(10,50),palletRegions))
+    }else{
+        var numBoxes=Math.floor(numItems*0.6);
+        for(var i=0;i<numBoxes;i++){var region=self.regions[Math.floor(Math.random()*self.regions.length)];truck.load.push(new Box(randomInt(1,25),region))}
+        var numPallets=Math.floor(2+Math.random()*4);
+        var palletRegions=self.regions.slice(0,6);
+        for(var i=0;i<numPallets;i++)truck.load.push(new Pallet(randomInt(10,30),palletRegions))
+    }
+    truck.arrivalTime=self.time;self.totalTrucksArrived++;
+    self.scheduleEvent({type:'ARRIVAL_TRUCK',truck:truck,entityId:truck.id,stage:'arrival',details:'Truck '+truck.id+' arrived with '+truck.load.length+' items'},0);
+    var loadCount=truck.load.length;var meanInterval=3600000/c.inboundIntensity*(loadCount/150);
+    var nextInterval=poissonInterval(meanInterval);self.scheduleEvent({type:'GENERATE_INBOUND'},Math.max(1000,nextInterval));
+    self.emit('truckArrived',{truck:truck,time:self.time})
+};
+
+SimulationEngine.prototype.handleArrival=function(ev){
+    var self=this;var truck=ev.truck;
+    var unloadDocks=self.docks.filter(function(d){return d.type==='unload'});
+    var freeDock=null;for(var i=0;i<unloadDocks.length;i++){if(!unloadDocks[i].busy){freeDock=unloadDocks[i];break}}
+    if(freeDock){freeDock.assignTruck(truck);self.startUnloading(truck,freeDock)}
+    else{
+        var best=unloadDocks[0];for(var i=1;i<unloadDocks.length;i++){if(unloadDocks[i].queue.length<best.queue.length)best=unloadDocks[i]}
+        best.queue.push(truck);self.emit('truckQueued',{truck:truck,dock:best,time:self.time})
+    }
+};
+
+SimulationEngine.prototype.startUnloading=function(truck,dock){
+    var self=this,c=self.config;var totalTime=0,boxCount=0,palletCount=0,itemCount=0;
+    for(var i=0;i<truck.load.length;i++){var item=truck.load[i];
+        if(item instanceof Pallet){totalTime+=c.palletUnloadTime;palletCount++}
+        else if(item instanceof Box){totalTime+=c.autoUnloadTime;boxCount++}
+        else if(item instanceof Item){totalTime+=c.itemUnloadTime;itemCount++}
+    }
+    var auto=self.workers.filter(function(w){return w.role==='unloader_auto'&&!w.busy});
+    var manual=self.workers.filter(function(w){return w.role==='unloader_manual'&&!w.busy});
+    var available=auto.concat(manual);var workersToAssign=Math.min(available.length,4);
+    for(var i=0;i<workersToAssign;i++)available[i].assignTask({type:'unload',truck:truck,dock:dock,startTime:self.time});
+    var timeReduction=1+workersToAssign*0.4;
+    self.scheduleEvent({type:'UNLOAD_COMPLETE',truck:truck,dock:dock,workers:available.slice(0,workersToAssign),entityId:truck.id,stage:'unloading',details:boxCount+' boxes, '+palletCount+' pallets, '+itemCount+' items, '+workersToAssign+' workers'},totalTime/timeReduction)
+};
+
+SimulationEngine.prototype.handleUnloadComplete=function(ev){
+    var self=this;var truck=ev.truck,dock=ev.dock,workers=ev.workers;var items=truck.unload();
+    for(var i=0;i<items.length;i++){
+        var item=items[i];
+        if(item instanceof Pallet){
+            self.scheduleEvent({type:'PALLET_UNPACK_COMPLETE',pallet:item,entityId:item.id,stage:'depalletizing',details:'Pallet '+item.id+' with '+item.numBoxes+' boxes'},self.config.depalletizeTime)
+        }else{var added=self.buffers.main.add(item);if(!added)self.buffers.reserve.add(item);self.totalBoxesProcessed++}
+    }
+    if(workers)for(var i=0;i<workers.length;i++)if(workers[i])workers[i].completeTask();
+    var allW=self.workers.filter(function(w){return w.role==='unloader_auto'||w.role==='unloader_manual'});
+    for(var i=0;i<allW.length;i++){if(allW[i].currentTask&&allW[i].currentTask.truck===truck)allW[i].completeTask()}
+    dock.totalProcessed+=items.length;
+    var next=dock.free();if(next)self.startUnloading(next,dock);
+    self.emit('unloadComplete',{truck:truck,dock:dock,time:self.time})
+};
+
+SimulationEngine.prototype.handlePalletUnpackComplete=function(ev){
+    var self=this;var pallet=ev.pallet;var boxes=pallet.unpack();
+    var d=self.workers.filter(function(w){return w.role==='depalletizer'&&!w.busy});
+    if(d.length>0){d[0].assignTask({type:'depalletize',pallet:pallet});for(var i=0;i<boxes.length;i++){var added=self.buffers.main.add(boxes[i]);if(!added)self.buffers.reserve.add(boxes[i]);self.totalBoxesProcessed++}d[0].completeTask()}
+    else{for(var i=0;i<boxes.length;i++){var added=self.buffers.main.add(boxes[i]);if(!added)self.buffers.reserve.add(boxes[i]);self.totalBoxesProcessed++}}
+    self.emit('palletUnpacked',{pallet:pallet,boxes:boxes.length,time:self.time})
+};
+
+SimulationEngine.prototype.sortingCycle=function(){
+    var self=this;var conveyor=self.conveyors[0];
+    var ratePerSecond=self.config.conveyorSpeed/3600;
+    var boxesToSort=Math.min(Math.ceil(ratePerSecond*1),self.buffers.main.items.length);
+    for(var i=0;i<boxesToSort;i++){var item=self.buffers.main.remove();if(!item)break;conveyor.addBox(item);self.scheduleEvent({type:'SORTING_STEP',box:item,entityId:item.id||'',stage:'sorting',details:'Item '+(item.id||'')+' -> '+item.destRegion},i*5)}
+    self.scheduleEvent({type:'SORTING_CYCLE'},1000)
+};
+
+SimulationEngine.prototype.handleSortingStep=function(ev){
+    var self=this;var box=ev.box;
+    if(!box||!(box instanceof Box||box instanceof Item))return;
+    var pocket=null;for(var i=0;i<self.pockets.length;i++){if(self.pockets[i].region===box.destRegion){pocket=self.pockets[i];break}}
+    if(!pocket)pocket=self.pockets[Math.floor(Math.random()*self.pockets.length)];
+    var sorter=null;for(var i=0;i<self.workers.length;i++){if(self.workers[i].role==='sorter_manual'&&!self.workers[i].busy){sorter=self.workers[i];break}}
+    if(sorter){sorter.assignTask({type:'sort',box:box});sorter.totalProcessed++;sorter.completeTask()}
+    var added=pocket.addBox(box);if(!added){self.buffers.reserve.add(box);self.emit('pocketFull',{pocket:pocket,box:box,time:self.time})}else self.totalBoxesSorted++;
+    if(pocket.isReadyToShip())self.scheduleEvent({type:'POCKET_THRESHOLD_REACHED',pocket:pocket,entityId:pocket.id,stage:'accumulation',details:'Pocket '+pocket.id+' ('+pocket.region+') ready with '+pocket.boxes.length+' boxes'},100);
+    self.emit('boxSorted',{box:box,pocket:pocket,time:self.time})
+};
+
+SimulationEngine.prototype.handlePocketThreshold=function(ev){
+    var self=this;var pocket=ev.pocket;if(pocket.boxes.length<pocket.threshold)return;
+    var loadDocks=self.docks.filter(function(d){return d.type==='load'});
+    var loadDock=null;for(var i=0;i<loadDocks.length;i++){if(!loadDocks[i].busy){loadDock=loadDocks[i];break}}
+    if(loadDock){var truck=new Truck('outgoing',self.config.pocketCapacity,pocket.region);loadDock.assignTruck(truck);self.startLoading(truck,loadDock,pocket)}
+    else{loadDock=loadDocks.reduce(function(a,b){return a.queue.length<=b.queue.length?a:b});loadDock.queue.push({pocket:pocket,region:pocket.region});self.scheduleEvent({type:'LOAD_DOCK_CHECK',dock:loadDock,entityId:loadDock.id,stage:'loading'},5000)}
+};
+
+SimulationEngine.prototype.checkLoadDockQueue=function(ev){
+    var self=this;var dock=ev.dock;if(dock.busy)return;
+    var loadDocks=self.docks.filter(function(d){return d.type==='load'});
+    for(var i=0;i<loadDocks.length;i++){var ld=loadDocks[i];while(ld.queue.length>0&&!ld.busy){var entry=ld.queue.shift();if(entry.pocket){if(entry.pocket.boxes.length>=entry.pocket.threshold){var truck=new Truck('outgoing',self.config.pocketCapacity,entry.region);ld.assignTruck(truck);self.startLoading(truck,ld,entry.pocket)}else if(entry.pocket.boxes.length>0){ld.queue.unshift(entry);break}}}}
+};
+
+SimulationEngine.prototype.startLoading=function(truck,dock,pocket){
+    var self=this;var boxes=pocket.clear();if(boxes.length===0){dock.free();return}
+    var loaders=self.workers.filter(function(w){return w.role==='loader'&&!w.busy});var workersToAssign=Math.min(loaders.length,3);
+    for(var i=0;i<workersToAssign;i++)loaders[i].assignTask({type:'load',truck:truck,dock:dock,pocket:pocket,startTime:self.time});
+    var totalLoadTime=boxes.length*self.config.loadTime;var timeReduction=1+workersToAssign*0.5;
+    self.scheduleEvent({type:'SHIPMENT_LOAD_COMPLETE',truck:truck,dock:dock,pocket:pocket,boxes:boxes,workers:loaders.slice(0,workersToAssign),entityId:truck.id,stage:'loading',details:boxes.length+' boxes to region '+pocket.region+', '+workersToAssign+' workers'},totalLoadTime/timeReduction);
+    truck.load(boxes);self.emit('loadingStarted',{truck:truck,dock:dock,pocket:pocket,boxes:boxes.length,time:self.time})
+};
+
+SimulationEngine.prototype.handleShipmentLoadComplete=function(ev){
+    var self=this;var truck=ev.truck,dock=ev.dock,boxes=ev.boxes,workers=ev.workers;
+    var processed=truck.depart();self.totalBoxesShipped+=processed.length;self.totalTrucksShipped++;
+    if(workers)for(var i=0;i<workers.length;i++)if(workers[i])workers[i].completeTask();
+    var allL=self.workers.filter(function(w){return w.role==='loader'});
+    for(var i=0;i<allL.length;i++){if(allL[i].currentTask&&allL[i].currentTask.truck===truck)allL[i].completeTask()}
+    dock.totalProcessed+=processed.length;
+    var nextEntry=dock.free();if(nextEntry&&nextEntry.pocket){if(nextEntry.pocket.boxes.length>=nextEntry.pocket.threshold){var nextTruck=new Truck('outgoing',self.config.pocketCapacity,nextEntry.region);dock.assignTruck(nextTruck);self.startLoading(nextTruck,dock,nextEntry.pocket)}else if(nextEntry.pocket.boxes.length>0){dock.queue.unshift(nextEntry)}}
+    self.emit('truckDeparted',{truck:truck,boxesCount:processed.length,time:self.time})
+};
+
+SimulationEngine.prototype.balanceSystem=function(){
+    var self=this;var mainFill=self.buffers.main.fillLevel;
+    var reserveFill=self.buffers.reserve.fillLevel;
+    var totalPocketBoxes=0;for(var i=0;i<self.pockets.length;i++)totalPocketBoxes+=self.pockets[i].boxes.length;
+    var pocketFill=totalPocketBoxes/(self.pockets.length*self.config.pocketCapacity);
+    var decisions=[];
+    if(mainFill>0.8){self.conveyors[0].speed=Math.min(self.config.conveyorSpeed*1.3,60000);decisions.push('Increased conveyor speed (main buffer > 80%)')}
+    else if(mainFill<0.3){self.conveyors[0].speed=self.config.conveyorSpeed;decisions.push('Normalized conveyor speed')}
+    if(reserveFill>0.7){self.conveyors[0].speed=Math.min(self.conveyors[0].speed*1.2,70000);decisions.push('Boosted conveyor (reserve > 70%)')}
+    if(pocketFill>0.8){var nt=Math.max(100,self.config.pocketThreshold-50);if(nt!==self.config.pocketThreshold){self.config.pocketThreshold=nt;decisions.push('Pocket threshold lowered to '+nt)}}
+    else if(pocketFill<0.3){var nt=Math.min(self.config.pocketCapacity,self.config.pocketThreshold+50);if(nt!==self.config.pocketThreshold){self.config.pocketThreshold=nt;decisions.push('Pocket threshold raised to '+nt)}}
+    for(var i=0;i<self.pockets.length;i++)self.pockets[i].threshold=self.config.pocketThreshold;
+    self.emit('balanceUpdate',{mainFill:mainFill,reserveFill:reserveFill,pocketFill:pocketFill,conveyorSpeed:self.conveyors[0].speed,decisions:decisions,time:self.time})
+};
+
+SimulationEngine.prototype.start=function(){
+    var self=this;if(self.isRunning)return;self.isRunning=true;
+    self.scheduleEvent({type:'GENERATE_INBOUND'},500);
+    self.scheduleEvent({type:'SORTING_CYCLE'},1000);
+    self.scheduleEvent({type:'BALANCE_CHECK'},self.config.balanceCheckInterval);
+    self.emit('statusChange','running')
+};
+
+SimulationEngine.prototype.pause=function(){var self=this;self.isRunning=false;self.emit('statusChange','paused')};
+
+SimulationEngine.prototype.reset=function(){
+    var self=this;self.isRunning=false;self.time=0;self.eventQueue=[];self.totalBoxesProcessed=0;self.totalBoxesSorted=0;self.totalBoxesShipped=0;self.totalTrucksArrived=0;self.totalTrucksShipped=0;
+    self.docks=[];self.conveyors=[];self.pockets=[];self.buffers={};self.workers=[];self._stats=null;resetAllIds();self.init();self.emit('statusChange','reset')
+};
+
+SimulationEngine.prototype.getStats=function(){
+    var self=this;
+    var unloadDocks=self.docks.filter(function(d){return d.type==='unload'});
+    var loadDocks=self.docks.filter(function(d){return d.type==='load'});
+    var mb=self.buffers.main||{fillLevel:0,items:[]};var rb=self.buffers.reserve||{fillLevel:0,items:[]};
+    var pocketStats=[];for(var i=0;i<self.pockets.length;i++){var p=self.pockets[i];pocketStats.push({id:p.id,region:p.region,count:p.boxes.length,capacity:p.capacity,fillPercent:(p.boxes.length/p.capacity*100).toFixed(1),ready:p.isReadyToShip()})}
+    var ul={busy:0,total:unloadDocks.length,queueTotal:0};for(var i=0;i<unloadDocks.length;i++){if(unloadDocks[i].busy)ul.busy++;ul.queueTotal+=unloadDocks[i].queue.length}
+    var ld={busy:0,total:loadDocks.length,queueTotal:0};for(var i=0;i<loadDocks.length;i++){if(loadDocks[i].busy)ld.busy++;ld.queueTotal+=loadDocks[i].queue.length}
+    var workersAvail=0;for(var i=0;i<self.workers.length;i++){if(!self.workers[i].busy)workersAvail++}
+    var pocketReady=0;for(var i=0;i<self.pockets.length;i++){if(self.pockets[i].isReadyToShip())pocketReady++}
+    var convBuf=0;for(var i=0;i<self.conveyors.length;i++)convBuf+=self.conveyors[i].buffer.length;
+    return{time:self.time,timeFormatted:formatTime(self.time),totalBoxesProcessed:self.totalBoxesProcessed,totalBoxesSorted:self.totalBoxesSorted,totalBoxesShipped:self.totalBoxesShipped,totalTrucksArrived:self.totalTrucksArrived,totalTrucksShipped:self.totalTrucksShipped,mainBufferFill:mb.fillLevel,mainBufferCount:mb.items.length,reserveBufferFill:rb.fillLevel,reserveBufferCount:rb.items.length,pocketStats:pocketStats,dockUtilization:{unload:ul,load:ld},workersAvailable:workersAvail,workersTotal:self.workers.length,conveyorBuffer:convBuf,pocketReadyCount:pocketReady,eventsQueued:self.eventQueue.length}
+};
+
+// ─── VISUALIZATION ──────────────────────────────────────────
+function Visualization(canvas,engine){
+    var self=this;
+    self.canvas=canvas;self.ctx=canvas.getContext('2d');self.engine=engine;
+    self.width=canvas.width;self.height=canvas.height;
+    self.tooltip=null;self.animOffset=0;
+
+    canvas.addEventListener('mousemove',function(e){
+        var rect=canvas.getBoundingClientRect();
+        var x=(e.clientX-rect.left)*(self.width/rect.width);
+        var y=(e.clientY-rect.top)*(self.height/rect.height);
+        self.tooltip=self.getTooltip(x,y)
+    });
+    canvas.addEventListener('mouseleave',function(){self.tooltip=null})
+}
+
+Visualization.prototype.render=function(){
+    var ctx=this.ctx;if(!ctx)return;
+    ctx.clearRect(0,0,this.width,this.height);
+    this.drawBackground();this.drawDocks();this.drawConveyor();this.drawBuffers();this.drawPockets();this.drawWorkerBar();this.drawTooltip()
+};
+
+Visualization.prototype.drawBackground=function(){
+    var ctx=this.ctx;
+    var grad=ctx.createLinearGradient(0,0,0,this.height);
+    grad.addColorStop(0,'#0f0f23');grad.addColorStop(1,'#1a1a3e');
+    ctx.fillStyle=grad;ctx.fillRect(0,0,this.width,this.height);
+    ctx.strokeStyle='rgba(255,255,255,0.03)';ctx.lineWidth=1;
+    for(var x=0;x<this.width;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,this.height);ctx.stroke()}
+    for(var y=0;y<this.height;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(this.width,y);ctx.stroke()}
+};
+
+Visualization.prototype.drawDocks=function(){
+    var ctx=this.ctx;var dockY=95,dockW=28,dockH=55;
+    ctx.fillStyle='#8899aa';ctx.font='10px monospace';ctx.fillText('DOCKS',10,dockY+dockH+18);
+    for(var i=0;i<this.engine.docks.length;i++){
+        var dock=this.engine.docks[i];var x=55+i*38;
+        if(dock.busy){var g=ctx.createLinearGradient(x,dockY,x,dockY+dockH);if(dock.type==='unload'){g.addColorStop(0,'#c0392b');g.addColorStop(1,'#e74c3c')}else{g.addColorStop(0,'#27ae60');g.addColorStop(1,'#2ecc71')};ctx.fillStyle=g}
+        else ctx.fillStyle='#2c3e50';
+        ctx.fillRect(x,dockY,dockW,dockH);
+        ctx.strokeStyle=dock.busy?'rgba(255,255,255,0.5)':'rgba(255,255,255,0.15)';ctx.lineWidth=dock.busy?2:1;ctx.strokeRect(x,dockY,dockW,dockH);
+        if(dock.busy&&dock.currentTruck){ctx.fillStyle='#ffeb3b';ctx.beginPath();ctx.arc(x+dockW/2,dockY+dockH+8,3,0,Math.PI*2);ctx.fill();ctx.fillStyle='#aaa';ctx.font='6px monospace';ctx.fillText('#'+dock.currentTruck.id,x+2,dockY+dockH+16)}
+        ctx.fillStyle=dock.type==='unload'?'#ff6b6b':'#69db7c';ctx.font='7px monospace';var si=dock.type==='unload'?'U':'L';ctx.fillText(si+dock.id,x+4,dockY+dockH/2+3);
+        if(dock.queue.length>0){ctx.fillStyle='#ff9800';ctx.font='7px monospace';ctx.fillText('Q:'+dock.queue.length,x+4,dockY-4)}
+    }
+    var ly=dockY+dockH+22;ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(10,ly);ctx.lineTo(this.width-10,ly);ctx.stroke()
+};
+
+Visualization.prototype.drawConveyor=function(){
+    var ctx=this.ctx;var y=180;
+    ctx.fillStyle='#8899aa';ctx.font='10px monospace';ctx.fillText('CONVEYOR',10,y-14);
+    var beltX=50,beltW=this.width-100;
+    var g=ctx.createLinearGradient(beltX,y,beltX+beltW,y);g.addColorStop(0,'#2c3e50');g.addColorStop(0.3,'#34495e');g.addColorStop(0.7,'#34495e');g.addColorStop(1,'#2c3e50');
+    ctx.fillStyle=g;ctx.fillRect(beltX,y-6,beltW,12);ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;ctx.strokeRect(beltX,y-6,beltW,12);
+    for(var x=beltX;x<beltX+beltW;x+=30){ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y-6);ctx.lineTo(x,y+6);ctx.stroke()}
+    this.animOffset=(this.animOffset+2*(this.engine.speed||1))%(Math.max(beltW-10,1));
+    var items=this.engine.buffers.main?this.engine.buffers.main.items.slice(-15):[];
+    var speed=this.engine.conveyors[0]?this.engine.conveyors[0].speed:35000;
+    var speedNorm=speed/35000;
+    for(var i=0;i<Math.min(items.length,15);i++){var p=(this.animOffset+i*25)%Math.max(beltW-20,1);var cx=beltX+10+p;var hue=(i*25)%360;ctx.fillStyle='hsl('+hue+',80%,60%)';ctx.shadowColor='hsl('+hue+',80%,60%)';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(cx,y,4*speedNorm,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+    ctx.fillStyle='#8899aa';ctx.font='8px monospace';ctx.fillText(Math.round(speedNorm*100)+'% speed',beltX+beltW-60,y-12);
+    var ly=y+18;ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(10,ly);ctx.lineTo(this.width-10,ly);ctx.stroke()
+};
+
+Visualization.prototype.drawBuffers=function(){
+    var ctx=this.ctx;var yy=215,barW=200,barH=18;
+    ctx.fillStyle='#8899aa';ctx.font='10px monospace';ctx.fillText('BUFFERS',10,yy+14);
+    var mainFill=this.engine.buffers.main?this.engine.buffers.main.fillLevel:0;
+    var reserveFill=this.engine.buffers.reserve?this.engine.buffers.reserve.fillLevel:0;
+    ctx.fillStyle='#1a1a2e';ctx.fillRect(120,yy-6,barW,barH);
+    var color=mainFill>0.8?'#e74c3c':mainFill>0.5?'#f39c12':'#2ecc71';ctx.fillStyle=color;ctx.fillRect(120,yy-6,barW*Math.min(1,mainFill),barH);
+    ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.strokeRect(120,yy-6,barW,barH);ctx.fillStyle='#fff';ctx.font='9px monospace';ctx.fillText('Main '+(mainFill*100).toFixed(0)+'%',125,yy+7);
+    var bx2=340;ctx.fillStyle='#1a1a2e';ctx.fillRect(bx2,yy-6,barW,barH);
+    color=reserveFill>0.7?'#e74c3c':reserveFill>0.4?'#f39c12':'#3498db';ctx.fillStyle=color;ctx.fillRect(bx2,yy-6,barW*Math.min(1,reserveFill),barH);
+    ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.strokeRect(bx2,yy-6,barW,barH);ctx.fillStyle='#fff';ctx.font='9px monospace';ctx.fillText('Reserve '+(reserveFill*100).toFixed(0)+'%',bx2+5,yy+7);
+    var ly=yy+24;ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(10,ly);ctx.lineTo(this.width-10,ly);ctx.stroke()
+};
+
+Visualization.prototype.drawPockets=function(){
+    var ctx=this.ctx;var pocketW=58,pocketH=28,startX=30,startY=275,cols=8,gapX=5,gapY=5;
+    ctx.fillStyle='#8899aa';ctx.font='10px monospace';ctx.fillText('SORTING POCKETS',10,startY-8);
+    var pocketStats=this.engine.pockets||[];
+    for(var i=0;i<pocketStats.length;i++){
+        var pocket=pocketStats[i];var col=i%cols,row=Math.floor(i/cols);
+        var x=startX+col*(pocketW+gapX),y=startY+row*(pocketH+gapY);
+        var fillRatio=pocket.boxes.length/pocket.capacity;
+        ctx.fillStyle='#1a1a2e';ctx.fillRect(x,y,pocketW,pocketH);
+        var color;if(pocket.isReadyToShip())color='#2ecc71';else if(fillRatio>0.85)color='#e74c3c';else if(fillRatio>0.6)color='#f39c12';else if(fillRatio>0.3)color='#3498db';else color='#555577';
+        ctx.fillStyle=color;ctx.fillRect(x+1,y+1,(pocketW-2)*Math.min(1,fillRatio),pocketH-2);
+        ctx.strokeStyle=pocket.isReadyToShip()?'#2ecc71':'rgba(255,255,255,0.15)';ctx.lineWidth=pocket.isReadyToShip()?2:1;ctx.strokeRect(x,y,pocketW,pocketH);
+        if(pocket.isReadyToShip()){ctx.fillStyle='#2ecc71';ctx.font='7px monospace';ctx.fillText('!',x+pocketW-12,y+10)}
+        ctx.fillStyle='#fff';ctx.font='8px monospace';ctx.fillText(pocket.region,x+4,y+11);ctx.fillStyle='rgba(255,255,255,0.7)';ctx.font='7px monospace';ctx.fillText(''+pocket.boxes.length,x+4,y+23)
+    }
+};
+
+Visualization.prototype.drawWorkerBar=function(){
+    var ctx=this.ctx;var y=this.height-30,startX=30;
+    ctx.fillStyle='#8899aa';ctx.font='10px monospace';ctx.fillText('WORKERS',10,y+5);
+    var x=startX;
+    for(var i=0;i<this.engine.workers.length;i++){
+        var w=this.engine.workers[i];ctx.fillStyle=w.busy?'#e74c3c':'#2ecc71';ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.stroke();
+        ctx.fillStyle='#ccc';ctx.font='5px monospace';
+        var short=w.role.substring(0,2)==='un'?w.role.substring(8,13)||'unl':w.role.substring(0,3);ctx.fillText(short,x-5,y+16);
+        if(w.busy){ctx.fillStyle='#ff6b6b';ctx.beginPath();ctx.arc(x+4,y-4,2,0,Math.PI*2);ctx.fill()}
+        x+=24
+    }
+    var avail=0;for(var i=0;i<this.engine.workers.length;i++){if(!this.engine.workers[i].busy)avail++}
+    ctx.fillStyle='#8899aa';ctx.font='8px monospace';ctx.fillText(avail+'/'+this.engine.workers.length+' free',x+5,y+5)
+};
+
+Visualization.prototype.drawTooltip=function(){
+    if(this.tooltip){var ctx=this.ctx;ctx.fillStyle='rgba(0,0,0,0.85)';ctx.fillRect(10,this.height-18,ctx.measureText(this.tooltip).width+16,22);ctx.fillStyle='#fff';ctx.font='11px monospace';ctx.fillText(this.tooltip,18,this.height-3)}
+};
+
+Visualization.prototype.getTooltip=function(x,y){
+    var e=this.engine;var pocketW=58,pocketH=28,startX=120,startY=330,cols=10,gapX=5,gapY=5;
+    for(var i=0;i<e.pockets.length;i++){var col=i%cols,row=Math.floor(i/cols);var px=startX+col*(pocketW+gapX),py=startY+row*(pocketH+gapY);if(x>=px&&x<=px+pocketW&&y>=py&&y<=py+pocketH){var p=e.pockets[i];return 'P#'+p.id+' ['+p.region+']  '+p.boxes.length+'/'+p.capacity+'  '+(p.isReadyToShip()?'READY!':'filling...')}}
+    var dockY=95,dockW=28,dockH=55;for(var i=0;i<e.docks.length;i++){var dx=55+i*38;if(x>=dx&&x<=dx+dockW&&y>=dockY&&y<=dockY+dockH){var d=e.docks[i];return 'Dock#'+d.id+' ['+(d.type==='unload'?'UNLOAD':'LOAD')+']  '+(d.busy?'Truck#'+d.currentTruck.id:'FREE')+'  Queue:'+d.queue.length}}
+    var bufY=245;if(x>=120&&x<=320&&y>=bufY-8&&y<=bufY+12){var mf=(e.buffers.main?e.buffers.main.fillLevel*100:0).toFixed(1),mc=e.buffers.main?e.buffers.main.items.length:0;return'Main Buffer: '+mc+'/'+e.config.bufferCapacity+' ('+mf+'%)'}
+    if(x>=340&&x<=540&&y>=bufY-8&&y<=bufY+12){var rf=(e.buffers.reserve?e.buffers.reserve.fillLevel*100:0).toFixed(1),rc=e.buffers.reserve?e.buffers.reserve.items.length:0;return'Reserve Buffer: '+rc+'/'+e.config.reserveBufferCapacity+' ('+rf+'%)'}
+    return null
+};
+
+// ─── SIMULATION APP ─────────────────────────────────────────
+function SimulationApp(canvasId,config){
+    var self=this;
+    self.canvas=document.getElementById(canvasId);if(!self.canvas)throw new Error('Canvas #'+canvasId+' not found');
+    self.engine=new SimulationEngine(config);
+    self.visualization=new Visualization(self.canvas,self.engine);
+    self.stats=new StatisticsCollector();
+    self.engine.setStatsCollector(self.stats);
+    self.statsPanel=document.getElementById('stats-panel');
+    self.pocketTable=document.getElementById('pocket-table');
+    self.logPanel=document.getElementById('log-panel');
+    self.logCount=0;
+
+    // Engine events
+    self.engine.on('frameUpdate',function(stats){self.updateStatsPanel(stats);self.updatePocketTable(stats)});
+    self.engine.on('statusChange',function(status){
+        var btn=document.getElementById('btn-start');if(btn){btn.textContent=status==='running'?'Pause':'Start';btn.className=status==='running'?'btn btn-pause':'btn btn-start'}
+        self.addLog('System '+status)
+    });
+    self.engine.on('truckArrived',function(d){self.addLog('Truck #'+d.truck.id+' arrived');self.updateDockInfo()});
+    self.engine.on('truckQueued',function(d){self.addLog('Truck #'+d.truck.id+' queued at Dock #'+d.dock.id)});
+    self.engine.on('unloadComplete',function(d){self.addLog('Truck #'+d.truck.id+' unloaded at Dock #'+d.dock.id)});
+    self.engine.on('palletUnpacked',function(d){self.addLog('Pallet unpacked -> '+d.boxes+' boxes')});
+    self.engine.on('boxSorted',function(d){if(Math.random()<0.05)self.addLog('Box sorted to pocket '+d.pocket.region)});
+    self.engine.on('pocketFull',function(d){self.addLog('Pocket '+d.pocket.id+' FULL -> reserve buffer')});
+    self.engine.on('loadingStarted',function(d){self.addLog('Loading '+d.boxes+' boxes for region '+d.pocket.region)});
+    self.engine.on('truckDeparted',function(d){self.addLog('Truck departed with '+d.boxesCount+' boxes');self.updateDockInfo()});
+    self.engine.on('balanceUpdate',function(d){if(d.decisions)for(var i=0;i<d.decisions.length;i++)self.addLog('BALANCE: '+d.decisions[i])});
+
+    // UI controls
+    var btnStart=document.getElementById('btn-start');
+    var btnReset=document.getElementById('btn-reset');
+    var speedSlider=document.getElementById('speed-slider');
+    var speedValue=document.getElementById('speed-value');
+    var btnJson=document.getElementById('btn-export-json');
+    var btnCsv=document.getElementById('btn-export-csv');
+
+    if(btnStart)btnStart.addEventListener('click',function(){
+        if(self.engine.isRunning){self.engine.pause()}
+        else{self.engine.start();self.engine.run()}
+    });
+    if(btnReset)btnReset.addEventListener('click',function(){self.engine.reset();self.stats=new StatisticsCollector();self.engine.setStatsCollector(self.stats);self.addLog('System reset')});
+    if(speedSlider&&speedValue){speedSlider.addEventListener('input',function(){self.engine.speed=parseFloat(speedSlider.value);speedValue.textContent=self.engine.speed.toFixed(1)+'x'});speedValue.textContent=self.engine.speed.toFixed(1)+'x'}
+    if(btnJson)btnJson.addEventListener('click',function(){self.stats.saveToJSON()});
+    if(btnCsv)btnCsv.addEventListener('click',function(){self.stats.saveToCSV()});
+
+    self.addLog('System initialized')
+}
+
+SimulationEngine.prototype.run=function(){
+    var self=this;
+    function loop(){
+        if(!self.isRunning)return;
+        var stepsPerFrame=Math.max(1,Math.floor(self.speed));
+        var taken=0;for(var i=0;i<stepsPerFrame;i++){if(!self.step())break;taken++}
+        if(taken>0)self.emit('frameUpdate',self.getStats());
+        requestAnimationFrame(loop)
+    }
+    loop()
+};
+
+SimulationApp.prototype.updateStatsPanel=function(stats){
+    var p=this.statsPanel;if(!p)return;
+    var u=stats.dockUtilization.unload,l=stats.dockUtilization.load;
+    p.innerHTML=
+        '<div class="stat-row"><span class="stat-label">Time</span><span class="stat-value">'+stats.timeFormatted+'</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Processed</span><span class="stat-value">'+stats.totalBoxesProcessed+'</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Sorted</span><span class="stat-value">'+stats.totalBoxesSorted+'</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Shipped</span><span class="stat-value">'+stats.totalBoxesShipped+'</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Trucks In</span><span class="stat-value">'+stats.totalTrucksArrived+'</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Trucks Out</span><span class="stat-value">'+stats.totalTrucksShipped+'</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Main Buffer</span><span class="stat-value">'+(stats.mainBufferFill*100).toFixed(1)+'% ('+stats.mainBufferCount+')</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Reserve</span><span class="stat-value">'+(stats.reserveBufferFill*100).toFixed(1)+'% ('+stats.reserveBufferCount+')</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Unload Docks</span><span class="stat-value">'+u.busy+'/'+u.total+' (Q:'+u.queueTotal+')</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Load Docks</span><span class="stat-value">'+l.busy+'/'+l.total+' (Q:'+l.queueTotal+')</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Workers Free</span><span class="stat-value">'+stats.workersAvailable+'/'+stats.workersTotal+'</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Ready Pockets</span><span class="stat-value">'+stats.pocketReadyCount+'</span></div>'+
+        '<div class="stat-row"><span class="stat-label">Events</span><span class="stat-value">'+stats.eventsQueued+'</span></div>'
+};
+
+SimulationApp.prototype.updatePocketTable=function(stats){
+    var t=this.pocketTable;if(!t)return;
+    var html='<table><tr><th>P#</th><th>Reg</th><th>Count</th><th>%</th><th>Status</th></tr>';
+    for(var i=0;i<stats.pocketStats.length;i++){
+        var p=stats.pocketStats[i];
+        var status=p.ready?'READY':p.fillPercent>85?'FULL':p.fillPercent>50?'MID':'OK';
+        var cls=p.ready?'status-ready':p.fillPercent>85?'status-full':p.fillPercent>50?'status-mid':'status-ok';
+        html+='<tr><td>'+p.id+'</td><td>'+p.region+'</td><td>'+p.count+'</td><td>'+p.fillPercent+'%</td><td class="'+cls+'">'+status+'</td></tr>'
+    }
+    html+='</table>';t.innerHTML=html
+};
+
+SimulationApp.prototype.updateDockInfo=function(){var s=this.engine.getStats();this.updateStatsPanel(s)};
+
+SimulationApp.prototype.addLog=function(msg){
+    var t=this.engine.time;var h=Math.floor(t/3600000),m=Math.floor((t%3600000)/60000),s=Math.floor((t%60000)/1000);
+    var ts=(h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    var div=document.createElement('div');div.className='log-entry';
+    div.innerHTML='<span class="log-time">['+ts+']</span> '+msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    if(this.logPanel){this.logPanel.appendChild(div);while(this.logPanel.children.length>200)this.logPanel.removeChild(this.logPanel.firstChild);this.logPanel.scrollTop=this.logPanel.scrollHeight}
+};
+
+// ─── RENDER LOOP ────────────────────────────────────────────
+SimulationApp.prototype.startRenderLoop=function(){
+    var self=this;
+    function loop(){self.visualization.render();requestAnimationFrame(loop)}
+    loop()
+};
+
+// ─── INIT ───────────────────────────────────────────────────
+function initApp(){
+    var canvas=document.getElementById('sim-canvas');
+    var container=canvas.parentElement;
+    var app=null;
+
+    function resize(){
+        canvas.width=container.clientWidth;
+        canvas.height=container.clientHeight;
+        if(app&&app.visualization){
+            app.visualization.width=canvas.width;
+            app.visualization.height=canvas.height
+        }
+    }
+    if(window.ResizeObserver){
+        var ro=new ResizeObserver(function(){resize()});
+        ro.observe(container)
+    }
+    resize();
+
+    requestAnimationFrame(function(){
+        try{
+            resize();
+            app=new SimulationApp('sim-canvas');
+            window.__app=app;
+            app.startRenderLoop();
+        }catch(e){
+            var errDiv=document.getElementById('init-error');
+            errDiv.style.display='block';
+            errDiv.innerHTML='<h2>Initialization Error</h2><pre>'+e.stack+'</pre>';
+            console.error(e)
+        }
+    })
+}
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initApp);
+else initApp();
+
+})();
+</script>
+</body>
+</html>

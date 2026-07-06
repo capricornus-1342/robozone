@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Имитационная модель сортировочного центра</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Segoe UI,system-ui,sans-serif;background:#1a1a2e;color:#e0e0e0;overflow:hidden;height:100vh}
+#app{display:flex;flex-direction:column;height:100vh}
+#header{background:#16213e;padding:8px 16px;display:flex;align-items:center;gap:12px;border-bottom:2px solid #0f3460;flex-shrink:0}
+#header h1{font-size:16px;color:#e94560;white-space:nowrap}
+#header .spacer{flex:1}
+#controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#controls button{background:#0f3460;color:#e0e0e0;border:1px solid #1a4a8a;padding:6px 14px;cursor:pointer;border-radius:4px;font-size:13px;transition:.2s}
+#controls button:hover{background:#1a4a8a}
+#controls button.active{background:#e94560;border-color:#e94560}
+#controls label{font-size:12px;color:#aaa}
+#controls input[type=range]{width:80px;vertical-align:middle}
+#controls .val{font-size:12px;color:#e94560;min-width:30px}
+#main{display:flex;flex:1;min-height:0}
+#sidebar{width:280px;background:#16213e;padding:10px;overflow-y:auto;font-size:12px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+#sidebar h3{font-size:13px;color:#e94560;margin-bottom:4px;border-bottom:1px solid #0f3460;padding-bottom:4px}
+.stat-row{display:flex;justify-content:space-between;padding:2px 0}
+.stat-row .label{color:#aaa}
+.stat-row .value{color:#fff;font-weight:600}
+#pocket-table{width:100%;border-collapse:collapse;font-size:11px}
+#pocket-table th{background:#0f3460;padding:3px 4px;text-align:left;color:#aaa;position:sticky;top:0}
+#pocket-table td{padding:2px 4px;border-bottom:1px solid #0f3460}
+#pocket-table .pct-bar{height:4px;border-radius:2px;margin-top:2px;transition:width .3s}
+#canvas-wrap{flex:1;position:relative;background:#1a1a2e;overflow:hidden}
+#canvas-wrap canvas{display:block;width:100%;height:100%}
+#settings-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:100;justify-content:center;align-items:center}
+#settings-modal.open{display:flex}
+#settings-modal .modal{background:#16213e;border:1px solid #0f3460;border-radius:8px;padding:20px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto}
+#settings-modal .modal h2{color:#e94560;margin-bottom:12px;font-size:16px}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #0f3460}
+.setting-row label{color:#ccc;font-size:12px}
+.setting-row input{width:100px;background:#0f3460;border:1px solid #1a4a8a;color:#fff;padding:3px 6px;border-radius:3px;font-size:12px;text-align:right}
+.setting-row input:focus{outline:1px solid #e94560}
+#settings-modal .modal .btn-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+#settings-modal .modal .btn-row button{padding:6px 16px;border-radius:4px;cursor:pointer;border:none;font-size:13px}
+#settings-modal .modal .btn-row .btn-ok{background:#e94560;color:#fff}
+#settings-modal .modal .btn-row .btn-cancel{background:#0f3460;color:#aaa;border:1px solid #1a4a8a}
+.tooltip{position:absolute;background:#16213e;border:1px solid #e94560;border-radius:4px;padding:6px 10px;font-size:11px;pointer-events:none;display:none;z-index:50}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#16213e}
+::-webkit-scrollbar-thumb{background:#0f3460;border-radius:3px}
+@media(max-width:900px){
+  #sidebar{width:200px;font-size:11px}
+  #header h1{font-size:13px}
+  #controls button{padding:4px 10px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="header">
+  <h1>🏭 Сортировочный центр</h1>
+  <div class="spacer"></div>
+  <div id="controls">
+    <button id="btn-start">▶ Старт</button>
+    <button id="btn-pause" disabled>⏸ Пауза</button>
+    <button id="btn-reset">⏹ Сброс</button>
+    <label>Скорость:</label>
+    <input type="range" id="speed-slider" min="1" max="50" value="5" step="1">
+    <span class="val" id="speed-val">5x</span>
+    <button id="btn-settings">⚙ Настройки</button>
+    <button id="btn-export-json">💾 JSON</button>
+    <button id="btn-export-csv">💾 CSV</button>
+  </div>
+</div>
+<div id="main">
+<div id="sidebar">
+  <div>
+    <h3>⏱ Время симуляции</h3>
+    <div class="stat-row"><span class="label">Время:</span><span class="value" id="sim-time">00:00:00</span></div>
+    <div class="stat-row"><span class="label">День:</span><span class="value" id="sim-day">1</span></div>
+  </div>
+  <div>
+    <h3>📦 Общая статистика</h3>
+    <div class="stat-row"><span class="label">Поступило коробок:</span><span class="value" id="stat-total-in">0</span></div>
+    <div class="stat-row"><span class="label">Отправлено коробок:</span><span class="value" id="stat-total-out">0</span></div>
+    <div class="stat-row"><span class="label">Пропускная способность:</span><span class="value" id="stat-throughput">0</span></div>
+    <div class="stat-row"><span class="label">Всего грузовиков:</span><span class="value" id="stat-trucks">0</span></div>
+  </div>
+  <div>
+    <h3>🏗 Буферы</h3>
+    <div class="stat-row"><span class="label">Промежут. буфер:</span><span class="value" id="stat-buffer">0 / 2000</span></div>
+    <div class="stat-row"><span class="label">Резервный буфер:</span><span class="value" id="stat-reserve">0 / 3000</span></div>
+    <div class="stat-row"><span class="label">Конвейер (загрузка):</span><span class="value" id="stat-conveyor">0%</span></div>
+  </div>
+  <div>
+    <h3>🚛 Очереди</h3>
+    <div class="stat-row"><span class="label">Разгрузка (вход):</span><span class="value" id="stat-queue-in">0</span></div>
+    <div class="stat-row"><span class="label">Загрузка (выход):</span><span class="value" id="stat-queue-out">0</span></div>
+  </div>
+  <div>
+    <h3>👷 Персонал</h3>
+    <div class="stat-row"><span class="label">Грузчики (авто):</span><span class="value" id="stat-workers-auto">0/3</span></div>
+    <div class="stat-row"><span class="label">Грузчики (ручн):</span><span class="value" id="stat-workers-manual">0/5</span></div>
+    <div class="stat-row"><span class="label">Распаллет.:</span><span class="value" id="stat-workers-depal">0/2</span></div>
+    <div class="stat-row"><span class="label">Загрузчики:</span><span class="value" id="stat-workers-load">0/4</span></div>
+  </div>
+  <div>
+    <h3>📊 Карманы <span id="pocket-summary" style="font-weight:400;color:#aaa;font-size:11px"></span></h3>
+    <div style="max-height:200px;overflow-y:auto">
+      <table id="pocket-table"><thead><tr><th>Регион</th><th>Кол-во</th><th>Загр%</th></tr></thead><tbody id="pocket-tbody"></tbody></table>
+    </div>
+  </div>
+</div>
+<div id="canvas-wrap">
+  <canvas id="canvas"></canvas>
+  <div class="tooltip" id="tooltip"></div>
+</div>
+</div>
+</div>
+
+<div id="settings-modal">
+<div class="modal">
+  <h2>⚙ Параметры модели</h2>
+  <div id="settings-form"></div>
+  <div class="btn-row">
+    <button class="btn-cancel" id="btn-settings-cancel">Отмена</button>
+    <button class="btn-ok" id="btn-settings-ok">Применить</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ========================================================================
+//  CONFIG
+// ========================================================================
+const CONFIG = {
+  numUnloadDocks: 10,
+  numLoadDocks: 5,
+  numPockets: 30,
+  pocketCapacity: 500,
+  shipmentThreshold: 400,
+  bufferCapacity: 2000,
+  reserveCapacity: 3000,
+  autoUnloadSpeed: 3000,
+  manualUnloadSpeed: 400,
+  numAutoUnloaders: 3,
+  numManualUnloaders: 5,
+  numDepalletizers: 2,
+  numLoaders: 4,
+  sortingConveyorSpeed: 35000,
+  loadTimePerBox: 10,
+  docTime: 5,
+  inflowIntensity: 2000,
+  palletRatio: 0.2,
+  autoUnloadRatio: 0.7,
+  itemRatio: 0.05,
+  simDuration: 0,
+  dockSpacing: 5
+};
+
+const REGIONS = [
+  'Москва','СПб','Казань','Екатеринбург','Новосибирск',
+  'Краснодар','Ростов','Самара','Уфа','Красноярск',
+  'Владивосток','Хабаровск','Иркутск','Омск','Челябинск',
+  'Воронеж','НижНовгород','Волгоград','Пермь','Тюмень',
+  'Барнаул','Томск','Кемерово','Саратов','Тольятти',
+  'Ижевск','Ульяновск','Ярославль','Рязань','Тула'
+];
+
+// ========================================================================
+//  UTILS
+// ========================================================================
+let _idCounter = 0;
+function uid() { return ++_idCounter; }
+
+function poissonInterval(avgPerHour) {
+  if (avgPerHour <= 0) return Infinity;
+  return -Math.log(1 - Math.random() + 1e-10) / avgPerHour;
+}
+
+function rand(min, max) { return Math.random() * (max - min) + min; }
+function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
+
+function formatTime(hours) {
+  const totalMin = Math.floor(hours * 60);
+  const d = Math.floor(totalMin / (24 * 60)) + 1;
+  const h = Math.floor((totalMin % (24 * 60)) / 60);
+  const m = totalMin % 60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+
+// ========================================================================
+//  CLASSES
+// ========================================================================
+
+class Box {
+  constructor(region, weight) {
+    this.id = uid();
+    this.weight = weight || rand(1, 30);
+    this.destRegion = region || pick(REGIONS);
+    this.isOnPallet = false;
+    this.arrivalTime = 0;
+    this.stats = {};
+  }
+}
+
+class Pallet {
+  constructor(numBoxes, regions) {
+    this.id = uid();
+    this.weight = rand(100, 500);
+    this.numBoxes = numBoxes || randInt(10, 40);
+    this.destRegions = regions || [pick(REGIONS)];
+    this.arrivalTime = 0;
+  }
+  unpack() {
+    const boxes = [];
+    for (let i = 0; i < this.numBoxes; i++) {
+      const box = new Box(pick(this.destRegions), rand(1, 30));
+      box.isOnPallet = true;
+      box.arrivalTime = this.arrivalTime;
+      boxes.push(box);
+    }
+    return boxes;
+  }
+}
+
+class Item {
+  constructor(region) {
+    this.id = uid();
+    this.weight = rand(0.1, 5);
+    this.destRegion = region || pick(REGIONS);
+    this.fragile = Math.random() < 0.3;
+    this.arrivalTime = 0;
+  }
+}
+
+class Truck {
+  constructor(type, destRegion) {
+    this.id = uid();
+    this.type = type;
+    this.load = [];
+    this.arrivalTime = 0;
+    this.scheduledTime = 0;
+    this.capacity = type === 'outgoing' ? randInt(400, 600) : 0;
+    this.destRegion = destRegion || null;
+    this.departed = false;
+    this.assignedDock = null;
+    this.unloadType = null;
+  }
+  unload() {
+    const items = this.load.splice(0);
+    this.load = [];
+    return items;
+  }
+}
+
+class ConveyorBelt {
+  constructor(id, speed, maxBuffer) {
+    this.id = id;
+    this.speed = speed;
+    this.buffer = [];
+    this.maxBuffer = maxBuffer || 500;
+    this.currentLoad = 0;
+  }
+  process(dtHours) {
+    const capacity = Math.floor(this.speed * dtHours);
+    const processed = Math.min(capacity, this.buffer.length);
+    const items = this.buffer.splice(0, processed);
+    this.currentLoad = this.buffer.length;
+    return items;
+  }
+  add(item) {
+    if (this.buffer.length < this.maxBuffer) {
+      this.buffer.push(item);
+      return true;
+    }
+    return false;
+  }
+}
+
+class Dock {
+  constructor(id, type) {
+    this.id = id;
+    this.type = type;
+    this.currentTruck = null;
+    this.queue = [];
+    this.totalProcessed = 0;
+    this.busyTime = 0;
+    this.active = true;
+  }
+  assignTruck(truck) {
+    if (this.currentTruck) {
+      this.queue.push(truck);
+      return false;
+    }
+    this.currentTruck = truck;
+    truck.assignedDock = this;
+    return true;
+  }
+  free() {
+    const truck = this.currentTruck;
+    this.currentTruck = null;
+    return truck;
+  }
+}
+
+class Pocket {
+  constructor(id, region, capacity, threshold) {
+    this.id = id;
+    this.region = region;
+    this.capacity = capacity;
+    this.threshold = threshold;
+    this.boxes = [];
+    this.shipmentsFormed = 0;
+    this.maxFill = 0;
+    this.reserve = false;
+  }
+  addBox(box) {
+    if (this.boxes.length < this.capacity) {
+      this.boxes.push(box);
+      if (this.boxes.length > this.maxFill) this.maxFill = this.boxes.length;
+      return true;
+    }
+    return false;
+  }
+  isReadyToShip() {
+    return this.boxes.length >= this.threshold;
+  }
+  takeBoxes(count) {
+    const taken = this.boxes.splice(0, count || this.boxes.length);
+    return taken;
+  }
+  get fillRate() {
+    return this.boxes.length / this.capacity;
+  }
+}
+
+class Buffer {
+  constructor(id, maxCapacity) {
+    this.id = id;
+    this.maxCapacity = maxCapacity;
+    this.items = [];
+  }
+  add(item) {
+    if (this.items.length < this.maxCapacity) {
+      this.items.push(item);
+      return true;
+    }
+    return false;
+  }
+  remove(count) {
+    return this.items.splice(0, Math.min(count, this.items.length));
+  }
+  get fillRate() {
+    return this.items.length / this.maxCapacity;
+  }
+}
+
+class Worker {
+  constructor(id, role, speed) {
+    this.id = id;
+    this.role = role;
+    this.speed = speed;
+    this.currentTask = null;
+    this.totalProcessed = 0;
+    this.busyTime = 0;
+  }
+  assignTask(task) {
+    this.currentTask = task;
+  }
+  completeTask() {
+    this.currentTask = null;
+    this.totalProcessed++;
+  }
+  get isBusy() { return this.currentTask !== null; }
+}
+
+// ========================================================================
+//  STATISTICS COLLECTOR
+// ========================================================================
+class StatisticsCollector {
+  constructor() {
+    this.logs = [];
+    this.startTime = 0;
+  }
+  logEvent(stage, entityId, action, details) {
+    this.logs.push({
+      timestamp: performance.now() - this.startTime,
+      stage, entityId, action, details: details || {}
+    });
+  }
+  generateSummary(engine) {
+    const pockets = engine ? engine.getPocketStats() : [];
+    const avgFill = pockets.length ? pockets.reduce((s,p)=>s+p.fillRate,0)/pockets.length : 0;
+    const maxFill = pockets.length ? Math.max(...pockets.map(p=>p.fillRate)) : 0;
+    const totalIn = engine ? engine.totalBoxesIn : 0;
+    const totalOut = engine ? engine.totalBoxesOut : 0;
+    const elapsedH = engine ? engine.time : 1;
+    const throughput = elapsedH > 0 ? totalOut / elapsedH : 0;
+    const adjustments = this.logs.filter(l => l.stage === 'balance').length;
+
+    return {
+      totalBoxesIn: totalIn,
+      totalBoxesOut: totalOut,
+      avgTimeInSystem: 0,
+      avgPocketFill: avgFill,
+      maxPocketFill: maxFill,
+      docksUsed: engine ? engine.unloadDocks.filter(d=>d.totalProcessed>0).length : 0,
+      loadDocksUsed: engine ? engine.loadDocks.filter(d=>d.totalProcessed>0).length : 0,
+      adjustments,
+      throughput,
+      bottleneck: avgFill > 0.8 ? 'Карманы переполнены' : (engine && engine.buffer.fillRate > 0.8 ? 'Буфер переполнен' : 'Нет')
+    };
+  }
+  exportJSON(engine) {
+    const summary = this.generateSummary(engine);
+    return JSON.stringify({ summary, logs: this.logs }, null, 2);
+  }
+  exportCSV(engine) {
+    const summary = this.generateSummary(engine);
+    let csv = 'Метрика,Значение\n';
+    for (const [k,v] of Object.entries(summary)) {
+      csv += `${k},${typeof v === 'number' ? v.toFixed(2) : v}\n`;
+    }
+    csv += '\nTimestamp,Stage,EntityId,Action\n';
+    for (const l of this.logs) {
+      csv += `${l.timestamp.toFixed(3)},${l.stage},${l.entityId},${l.action}\n`;
+    }
+    return csv;
+  }
+  async saveToFile(data, mime, ext) {
+    if (typeof window.showSaveFilePicker === 'function') {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: `statistics.${ext}`,
+          types: [{
+            description: `${ext.toUpperCase()} file`,
+            accept: { [mime]: [`.${ext}`] }
+          }]
+        });
+        const writable = await handle.createWritable();
+        await writable.write(data);
+        await writable.close();
+        return true;
+      } catch(e) {
+        if (e.name === 'AbortError') return false;
+        throw e;
+      }
+    } else {
+      const blob = new Blob([data], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `statistics.${ext}`; a.click();
+      URL.revokeObjectURL(url);
+      return true;
+    }
+  }
+}
+
+// ========================================================================
+//  VISUALIZATION
+// ========================================================================
+class Visualization {
+  constructor(canvas, tooltipEl) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.tooltip = tooltipEl;
+    this.animFrame = null;
+    this.boxesOnConveyor = [];
+    this._resize();
+    this._onResize = this._resize.bind(this);
+    window.addEventListener('resize', this._onResize);
+    canvas.addEventListener('mousemove', this._onMouseMove.bind(this));
+    canvas.addEventListener('mouseleave', () => { this.tooltip.style.display = 'none'; });
+  }
+  _resize() {
+    const rect = this.canvas.parentElement.getBoundingClientRect();
+    this.canvas.width = rect.width * devicePixelRatio;
+    this.canvas.height = rect.height * devicePixelRatio;
+    this.W = rect.width;
+    this.H = rect.height;
+    this.ctx.scale(devicePixelRatio, devicePixelRatio);
+  }
+  _onMouseMove(e) {
+    const rect = this.canvas.getBoundingClientRect();
+    this.mx = e.clientX - rect.left;
+    this.my = e.clientY - rect.top;
+  }
+
+  setEngine(engine) { this.engine = engine; }
+
+  updateBoxesOnConveyor(boxes) {
+    this.boxesOnConveyor = boxes;
+  }
+
+  render() {
+    const ctx = this.ctx;
+    const W = this.W, H = this.H;
+    ctx.clearRect(0, 0, W, H);
+
+    if (!this.engine) return;
+    const eng = this.engine;
+
+    // Layout constants
+    const pad = 10;
+    const dockW = Math.max(30, (W * 0.12));
+    const dockH = Math.min(25, (H - pad * 2) / Math.max(eng.unloadDocks.length, 1) * 0.7);
+    const loadDockW = dockW;
+    const loadDockH = dockH;
+
+    // Ring conveyor
+    const ringCx = W / 2;
+    const ringCy = H / 2 + 10;
+    const ringRx = Math.min(W * 0.32, dockW * 2 + 60);
+    const ringRy = Math.min(H * 0.38, (eng.unloadDocks.length * dockH) / 2 + 40);
+    const ringR = Math.max(ringRx, ringRy);
+
+    // --- Draw unload docks (left side) ---
+    const unloadX = pad;
+    const unloadStartY = (H - eng.unloadDocks.length * dockH) / 2;
+    eng.unloadDocks.forEach((dock, i) => {
+      const y = unloadStartY + i * dockH;
+      const busy = dock.currentTruck !== null;
+      ctx.fillStyle = busy ? '#e94560' : (dock.queue.length > 0 ? '#f0a500' : '#0f3460');
+      ctx.fillRect(unloadX, y, dockW, dockH - 2);
+      ctx.strokeStyle = '#1a4a8a';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(unloadX, y, dockW, dockH - 2);
+      ctx.fillStyle = '#fff';
+      ctx.font = '9px sans-serif';
+      ctx.fillText(`D${dock.id}`, unloadX + 2, y + 10);
+      if (busy) {
+        ctx.fillStyle = '#ff6b6b';
+        ctx.fillRect(unloadX + dockW - 8, y + 2, 6, 6);
+      }
+    });
+
+    // --- Draw ring conveyor ---
+    ctx.beginPath();
+    ctx.ellipse(ringCx, ringCy, ringR, ringR * 0.45, 0, 0, Math.PI * 2);
+    ctx.strokeStyle = '#2a4a7a';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // Conveyor load indicator
+    const conveyorFill = eng.conveyor ? eng.conveyor.buffer.length / Math.max(eng.conveyor.maxBuffer, 1) : 0;
+    if (conveyorFill > 0) {
+      ctx.beginPath();
+      ctx.ellipse(ringCx, ringCy, ringR - 2, ringR * 0.45 - 2, 0, -Math.PI / 2, Math.PI / 2 * conveyorFill - Math.PI / 2);
+      ctx.strokeStyle = `rgba(233,69,96,${0.3 + conveyorFill * 0.5})`;
+      ctx.lineWidth = 8;
+      ctx.stroke();
+    }
+
+    // --- Draw pockets around the ring ---
+    const pockets = eng.pockets;
+    const numP = pockets.length;
+    const pW = 40, pH = 18;
+    const pocketR = ringR + 8;
+
+    pockets.forEach((pocket, i) => {
+      const angle = (i / numP) * Math.PI * 2 - Math.PI / 2;
+      const px = ringCx + Math.cos(angle) * pocketR;
+      const py = ringCy + Math.sin(angle) * pocketR * 0.45;
+      const fillRate = pocket.fillRate;
+      let color;
+      if (fillRate > 0.8) color = '#e94560';
+      else if (fillRate > 0.5) color = '#f0a500';
+      else color = '#0a8a5a';
+
+      ctx.fillStyle = color;
+      ctx.fillRect(px - pW / 2, py - pH / 2, pW, pH);
+      ctx.strokeStyle = '#1a4a8a';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(px - pW / 2, py - pH / 2, pW, pH);
+
+      ctx.fillStyle = '#fff';
+      ctx.font = '7px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(pocket.region.substring(0, 4), px, py - 1);
+      ctx.font = '6px sans-serif';
+      ctx.fillStyle = '#aaa';
+      ctx.fillText(`${pocket.boxes.length}`, px, py + 7);
+
+      // Tooltip check
+      if (this.mx && this.my &&
+          Math.abs(this.mx - px) < pW / 2 && Math.abs(this.my - py) < pH / 2) {
+        this.tooltip.style.display = 'block';
+        this.tooltip.style.left = (this.mx + 12) + 'px';
+        this.tooltip.style.top = (this.my - 10) + 'px';
+        this.tooltip.innerHTML = `<b>${pocket.region}</b><br>Коробок: ${pocket.boxes.length}/${pocket.capacity}<br>Загрузка: ${(fillRate * 100).toFixed(0)}%${pocket.reserve ? '<br>📌 Резервный' : ''}`;
+      }
+    });
+
+    // --- Draw animated boxes on conveyor ---
+    const conveyorBoxes = this.boxesOnConveyor;
+    conveyorBoxes.forEach((box, i) => {
+      const angle = (box.conveyorPos || (i / Math.max(conveyorBoxes.length, 1))) * Math.PI * 2;
+      const bx = ringCx + Math.cos(angle) * (ringR - 6);
+      const by = ringCy + Math.sin(angle) * (ringR * 0.45 - 6);
+      const regionIdx = REGIONS.indexOf(box.destRegion);
+      const hue = (regionIdx >= 0 ? regionIdx * 12 : 0) % 360;
+      ctx.beginPath();
+      ctx.arc(bx, by, 4, 0, Math.PI * 2);
+      ctx.fillStyle = `hsl(${hue}, 80%, 60%)`;
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    });
+
+    // --- Draw intermediate buffer ---
+    const bufX = ringCx - 30;
+    const bufY = pad;
+    const bufW = 60;
+    const bufH = 30;
+    ctx.fillStyle = '#0f3460';
+    ctx.fillRect(bufX, bufY, bufW, bufH);
+    ctx.strokeStyle = '#1a4a8a';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(bufX, bufY, bufW, bufH);
+    ctx.fillStyle = '#fff';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Буфер', bufX + bufW / 2, bufY + 12);
+    ctx.fillStyle = '#aaa';
+    ctx.font = '8px sans-serif';
+    ctx.fillText(`${eng.buffer.items.length}`, bufX + bufW / 2, bufY + bufH - 4);
+
+    // Buffer fill bar
+    const bf = eng.buffer.fillRate;
+    ctx.fillStyle = bf > 0.8 ? '#e94560' : (bf > 0.5 ? '#f0a500' : '#0a8a5a');
+    ctx.fillRect(bufX, bufY + bufH + 2, bufW * Math.min(bf, 1), 4);
+
+    // --- Draw reserve buffer ---
+    const resX = W - 55;
+    const resY = pad;
+    ctx.fillStyle = '#1a1a3e';
+    ctx.fillRect(resX, resY, 45, bufH);
+    ctx.strokeStyle = '#e94560';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(resX, resY, 45, bufH);
+    ctx.fillStyle = '#ff6b6b';
+    ctx.font = '7px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Резерв', resX + 22, resY + 10);
+    ctx.fillStyle = '#aaa';
+    ctx.font = '7px sans-serif';
+    ctx.fillText(`${eng.reserveBuffer.items.length}`, resX + 22, resY + bufH - 4);
+
+    // --- Draw load docks (right side) ---
+    const loadX = W - loadDockW - pad;
+    const loadStartY = (H - eng.loadDocks.length * loadDockH) / 2;
+    eng.loadDocks.forEach((dock, i) => {
+      const y = loadStartY + i * loadDockH;
+      const busy = dock.currentTruck !== null;
+      ctx.fillStyle = busy ? '#e94560' : (dock.queue.length > 0 ? '#f0a500' : '#0f3460');
+      ctx.fillRect(loadX, y, loadDockW, loadDockH - 2);
+      ctx.strokeStyle = '#1a4a8a';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(loadX, y, loadDockW, loadDockH - 2);
+      ctx.fillStyle = '#fff';
+      ctx.font = '9px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(`L${dock.id}`, loadX + 2, y + 10);
+    });
+
+    // --- Conveyor lines from unload docks to buffer and buffer to ring ---
+    ctx.strokeStyle = '#1a4a8a';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(unloadX + dockW, ringCy);
+    ctx.lineTo(ringCx - ringR, ringCy);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(bufX, bufY + bufH);
+    ctx.lineTo(bufX, ringCy - ringR * 0.45);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // --- Draw connections from pockets to load docks ---
+    ctx.strokeStyle = '#1a4a8a';
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.3;
+    for (let i = 0; i < Math.min(pockets.length, eng.loadDocks.length * 6); i++) {
+      const angle = (i / numP) * Math.PI * 2 - Math.PI / 2;
+      const px = ringCx + Math.cos(angle) * pocketR;
+      const py = ringCy + Math.sin(angle) * pocketR * 0.45;
+      const lx = loadX;
+      const ldIdx = Math.floor(i / 6);
+      const ly = loadStartY + Math.min(ldIdx, eng.loadDocks.length - 1) * loadDockH + loadDockH / 2;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(lx, ly);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  start() { this._loop(); }
+  stop() { if (this.animFrame) { cancelAnimationFrame(this.animFrame); this.animFrame = null; } }
+
+  _loop() {
+    this.render();
+    this.animFrame = requestAnimationFrame(this._loop.bind(this));
+  }
+}
+
+// ========================================================================
+//  SIMULATION ENGINE
+// ========================================================================
+class SimulationEngine {
+  constructor(config) {
+    this.config = { ...CONFIG, ...config };
+    this.time = 0;
+    this.speed = 1;
+    this.isRunning = false;
+    this.eventQueue = [];
+    this.totalBoxesIn = 0;
+    this.totalBoxesOut = 0;
+    this.trucksServiced = 0;
+    this.conveyorPositions = [];
+    this.stats = new StatisticsCollector();
+    this._balanceTimer = 0;
+    this._peakMode = false;
+    this._peakTimer = 0;
+    this.manualSpeedOverride = null;
+
+    this._init();
+  }
+
+  _init() {
+    const cfg = this.config;
+
+    this.unloadDocks = [];
+    for (let i = 0; i < cfg.numUnloadDocks; i++) {
+      this.unloadDocks.push(new Dock(i + 1, 'unload'));
+    }
+
+    this.loadDocks = [];
+    for (let i = 0; i < cfg.numLoadDocks; i++) {
+      this.loadDocks.push(new Dock(i + 1, 'load'));
+    }
+
+    this.pockets = [];
+    const regions = [...REGIONS];
+    for (let i = 0; i < cfg.numPockets; i++) {
+      const region = regions[i % regions.length];
+      const threshold = cfg.shipmentThreshold;
+      const pocket = new Pocket(i + 1, region, cfg.pocketCapacity, threshold);
+      pocket.reserve = i >= cfg.numPockets - 3;
+      this.pockets.push(pocket);
+    }
+
+    this.buffer = new Buffer('main', cfg.bufferCapacity);
+    this.reserveBuffer = new Buffer('reserve', cfg.reserveCapacity);
+    this.conveyor = new ConveyorBelt('main', cfg.sortingConveyorSpeed, 500);
+
+    // Workers
+    this.workers = [];
+    for (let i = 0; i < cfg.numAutoUnloaders; i++) {
+      this.workers.push(new Worker(uid(), 'unloader_auto', cfg.autoUnloadSpeed));
+    }
+    for (let i = 0; i < cfg.numManualUnloaders; i++) {
+      this.workers.push(new Worker(uid(), 'unloader_manual', cfg.manualUnloadSpeed));
+    }
+    for (let i = 0; i < cfg.numDepalletizers; i++) {
+      this.workers.push(new Worker(uid(), 'depalletizer', 200));
+    }
+    for (let i = 0; i < cfg.numLoaders; i++) {
+      this.workers.push(new Worker(uid(), 'loader', 360));
+    }
+    this.workers.push(new Worker(uid(), 'dispatcher', 0));
+
+    this.outgoingQueue = [];
+    this.incomingTruckQueue = [];
+
+    this.conveyorPositions = [];
+  }
+
+  // ---- Event scheduling ----
+  scheduleEvent(event, delay) {
+    const eventTime = this.time + delay;
+    this.eventQueue.push({ ...event, time: eventTime });
+    this.eventQueue.sort((a, b) => a.time - b.time);
+  }
+
+  scheduleIncomingTruck() {
+    const avgInterval = 3600 / Math.max(this.config.inflowIntensity, 1);
+    const interval = poissonInterval(1 / (avgInterval / 3600));
+    const isPeak = this._peakMode;
+    const actualInterval = isPeak ? interval * 0.4 : interval;
+    this.scheduleEvent({
+      type: 'ARRIVAL_TRUCK',
+      peak: isPeak
+    }, actualInterval / 3600);
+  }
+
+  generateTruckLoad() {
+    const cfg = this.config;
+    const load = [];
+    const totalItems = randInt(100, 500);
+    let palletCount = 0, boxCount = 0, itemCount = 0;
+
+    for (let i = 0; i < totalItems; i++) {
+      const r = Math.random();
+      if (r < cfg.palletRatio && i < totalItems - 5) {
+        const numBoxes = randInt(10, 40);
+        const pallet = new Pallet(numBoxes, [pick(REGIONS)]);
+        pallet.arrivalTime = this.time;
+        load.push({ type: 'pallet', data: pallet });
+        palletCount++;
+        i += numBoxes - 1;
+      } else if (r < cfg.palletRatio + cfg.itemRatio) {
+        const item = new Item();
+        item.arrivalTime = this.time;
+        load.push({ type: 'item', data: item });
+        itemCount++;
+      } else {
+        const box = new Box();
+        box.arrivalTime = this.time;
+        load.push({ type: 'box', data: box });
+        boxCount++;
+      }
+    }
+    return load;
+  }
+
+  // ---- Event handlers ----
+  handleArrival(event) {
+    const truck = new Truck('incoming');
+    truck.arrivalTime = this.time;
+    truck.load = this.generateTruckLoad();
+    this.stats.logEvent('arrival', truck.id, 'arrived', { loadSize: truck.load.length });
+
+    // Assign to dock or queue
+    let assigned = false;
+    for (const dock of this.unloadDocks) {
+      if (!dock.currentTruck && dock.active) {
+        dock.assignTruck(truck);
+        assigned = true;
+        this.stats.logEvent('dock_assign', dock.id, 'assigned', { truckId: truck.id });
+        this.scheduleUnload(truck, dock);
+        break;
+      }
+    }
+    if (!assigned) {
+      this.incomingTruckQueue.push(truck);
+    }
+
+    // Schedule next arrival
+    this.scheduleIncomingTruck();
+    this.trucksServiced++;
+  }
+
+  scheduleUnload(truck, dock) {
+    const cfg = this.config;
+    const loadItems = truck.load;
+    if (loadItems.length === 0) {
+      this.handleUnloadComplete({ truck, dock });
+      return;
+    }
+
+    let totalTime = 0;
+    let autoCount = 0, manualCount = 0;
+    const autoSpeed = cfg.autoUnloadSpeed * this._unloadSpeedFactor;
+    const manualSpeed = cfg.manualUnloadSpeed * this._unloadSpeedFactor;
+
+    for (const item of loadItems) {
+      if (item.type === 'box' || item.type === 'item') {
+        const isAuto = Math.random() < cfg.autoUnloadRatio;
+        if (isAuto) {
+          totalTime += 3600 / Math.max(autoSpeed, 1);
+          autoCount++;
+        } else {
+          totalTime += 3600 / Math.max(manualSpeed, 1);
+          manualCount++;
+        }
+      } else if (item.type === 'pallet') {
+        totalTime += 3600 / Math.max(autoSpeed, 1) + (1 / 60);
+      }
+    }
+
+    this.stats.logEvent('unload_start', truck.id, 'started', { autoCount, manualCount, totalTime });
+    this.scheduleEvent({
+      type: 'UNLOAD_COMPLETE',
+      truck, dock
+    }, totalTime);
+  }
+
+  handleUnloadComplete(event) {
+    const { truck, dock } = event;
+    const items = truck.unload();
+
+    for (const item of items) {
+      if (item.type === 'pallet') {
+        this.scheduleEvent({
+          type: 'PALLET_UNPACK',
+          pallet: item.data,
+          dock
+        }, 0);
+      } else if (item.type === 'item') {
+        item.data.arrivalTime = this.time;
+        this.buffer.add(item.data);
+        this.totalBoxesIn++;
+      } else {
+        item.data.arrivalTime = this.time;
+        this.buffer.add(item.data);
+        this.totalBoxesIn++;
+      }
+    }
+
+    dock.totalProcessed++;
+    this.stats.logEvent('unload_complete', truck.id, 'completed', { itemsCount: items.length });
+
+    dock.free();
+    // Check dock's queue first, then global queue
+    const nextFromDock = dock.queue.shift();
+    const nextTruck = nextFromDock || (this.incomingTruckQueue.length > 0 ? this.incomingTruckQueue.shift() : null);
+    if (nextTruck && dock.currentTruck === null) {
+      dock.assignTruck(nextTruck);
+      this.scheduleUnload(nextTruck, dock);
+    }
+  }
+
+  handlePalletUnpack(event) {
+    const { pallet } = event;
+    const boxes = pallet.unpack();
+    for (const box of boxes) {
+      box.arrivalTime = this.time;
+      this.buffer.add(box);
+      this.totalBoxesIn++;
+    }
+    this.stats.logEvent('pallet_unpack', pallet.id, 'unpacked', { boxesCount: boxes.length });
+  }
+
+  handleSortingStep() {
+    // Move items from buffer to conveyor
+    const effectiveSpeed = this.conveyor.speed * this._sortingSpeedFactor;
+    const toMove = Math.min(
+      Math.floor(effectiveSpeed * 0.001),
+      this.buffer.items.length
+    );
+    if (toMove > 0) {
+      const items = this.buffer.remove(toMove);
+      for (const item of items) {
+        if (this.conveyor.add(item)) {
+          const pos = Math.random();
+          this.conveyorPositions.push({ item, pos, speed: 0.01 + Math.random() * 0.02 });
+        } else {
+          // Conveyor full, try reserve
+          if (!this.reserveBuffer.add(item)) {
+            this.buffer.add(item);
+          }
+        }
+      }
+    }
+
+    // Move items on conveyor
+    this.conveyorPositions = this.conveyorPositions.filter(cp => {
+      cp.pos += cp.speed;
+      if (cp.pos >= 1) cp.pos -= 1;
+
+      // Check if item reaches its pocket
+      const item = cp.item;
+      const targetPocket = this.pockets.find(p =>
+        p.region === item.destRegion && !p.reserve && p.boxes.length < p.capacity
+      ) || this.pockets.find(p => p.region === item.destRegion) ||
+        this.pockets.find(p => p.reserve && p.boxes.length < p.capacity);
+
+      if (targetPocket && Math.random() < 0.05) {
+        targetPocket.addBox(item);
+        this.stats.logEvent('sorting', item.id, 'sorted', { pocket: targetPocket.id, region: item.destRegion });
+        return false;
+      }
+      return true;
+    });
+
+    this.conveyor.process(0.001);
+
+    // Schedule next sorting step
+    this.scheduleEvent({ type: 'SORTING_STEP' }, 0.001);
+  }
+
+  handlePocketThreshold() {
+    for (const pocket of this.pockets) {
+      if (pocket.isReadyToShip() && !pocket.reserve) {
+        this.stats.logEvent('pocket', pocket.id, 'threshold_reached', { count: pocket.boxes.length, region: pocket.region });
+
+        // Create outgoing shipment
+        const destRegion = pocket.region;
+        const truck = new Truck('outgoing', destRegion);
+        const boxesToShip = pocket.takeBoxes(Math.min(pocket.boxes.length, pocket.threshold));
+
+        // Assign to load dock
+        let assigned = false;
+        for (const dock of this.loadDocks) {
+          if (!dock.currentTruck) {
+            dock.assignTruck(truck);
+            assigned = true;
+            const loadTime = boxesToShip.length * this.config.loadTimePerBox / 3600;
+            this.scheduleEvent({
+              type: 'SHIPMENT_LOAD_COMPLETE',
+              truck, dock, boxes: boxesToShip
+            }, loadTime);
+            break;
+          }
+        }
+        if (!assigned) {
+          this.outgoingQueue.push({ truck, boxes: boxesToShip });
+        }
+
+        pocket.shipmentsFormed++;
+      }
+    }
+  }
+
+  handleShipmentLoadComplete(event) {
+    const { truck, dock, boxes } = event;
+    this.totalBoxesOut += boxes.length;
+    this.trucksServiced++;
+    this.stats.logEvent('shipment', truck.id, 'shipped', { boxesCount: boxes.length, region: truck.destRegion });
+    dock.free();
+
+    // Check dock's queue first, then global outgoing queue
+    const nextFromDock = dock.queue.shift();
+    const nextOut = nextFromDock || (this.outgoingQueue.length > 0 ? this.outgoingQueue.shift() : null);
+    if (nextOut && dock.currentTruck === null) {
+      dock.assignTruck(nextOut.truck);
+      const loadTime = nextOut.boxes.length * this.config.loadTimePerBox / 3600;
+      this.scheduleEvent({
+        type: 'SHIPMENT_LOAD_COMPLETE',
+        truck: nextOut.truck, dock, boxes: nextOut.boxes
+      }, loadTime);
+    }
+  }
+
+  handleBalanceCheck() {
+    this.balanceSystem();
+    this.scheduleEvent({ type: 'BALANCE_CHECK' }, 0.05);
+  }
+
+  // ---- Balancing ----
+  balanceSystem() {
+    const bufferFill = this.buffer.fillRate;
+    const pocketFills = this.pockets.filter(p => !p.reserve).map(p => p.fillRate);
+    const maxPocketFill = pocketFills.length ? Math.max(...pocketFills) : 0;
+    const avgPocketFill = pocketFills.length ? pocketFills.reduce((a,b) => a + b, 0) / pocketFills.length : 0;
+    const activeUnloadDocks = this.unloadDocks.filter(d => d.currentTruck !== null).length;
+    const totalUnloadDocks = this.unloadDocks.length;
+    const loadDockOccupied = this.loadDocks.filter(d => d.currentTruck !== null).length;
+    const totalLoadDocks = this.loadDocks.length;
+    const changes = [];
+
+    // Buffer management
+    if (bufferFill > 0.8) {
+      this._adjustUnloadSpeed(0.7);
+      changes.push('buffer>80%: снижена скорость разгрузки');
+    } else if (bufferFill < 0.3) {
+      this._adjustUnloadSpeed(1.0);
+      changes.push('buffer<30%: скорость разгрузки恢复正常');
+    }
+
+    // Pocket management
+    if (maxPocketFill > 0.8) {
+      this._adjustSortingSpeed(0.8);
+      this._adjustThreshold(0.5);
+      changes.push('pocket>80%: снижена сортировка, уменьшен порог');
+      if (maxPocketFill > 0.95) {
+        // Redirect to reserve
+        const overloaded = this.pockets.filter(p => p.fillRate > 0.95 && !p.reserve);
+        for (const p of overloaded) {
+          const reservePocket = this.pockets.find(rp => rp.reserve && rp.boxes.length < rp.capacity);
+          if (reservePocket) {
+            const moved = p.takeBoxes(Math.min(50, p.boxes.length - Math.floor(p.capacity * 0.5)));
+            for (const box of moved) {
+              reservePocket.addBox(box);
+            }
+            changes.push(`переполнен ${p.region} → резерв`);
+          }
+        }
+      }
+    } else {
+      this._adjustSortingSpeed(1.0);
+    }
+
+    // Load dock management
+    if (loadDockOccupied / totalLoadDocks > 0.6 &&
+        this.pockets.filter(p => p.isReadyToShip()).length > 0) {
+      changes.push('загрузка перегружена');
+    }
+
+    if (changes.length > 0) {
+      this.stats.logEvent('balance', 0, 'adjustment', { changes: changes.join('; ') });
+    }
+  }
+
+  _unloadSpeedFactor = 1;
+  _sortingSpeedFactor = 1;
+  _thresholdFactor = 1;
+
+  _adjustUnloadSpeed(factor) {
+    this._unloadSpeedFactor = factor;
+  }
+  _adjustSortingSpeed(factor) {
+    this._sortingSpeedFactor = factor;
+  }
+  _adjustThreshold(factor) {
+    this._thresholdFactor = factor;
+    for (const p of this.pockets) {
+      p.threshold = Math.floor(this.config.shipmentThreshold * this._thresholdFactor);
+    }
+  }
+
+  // ---- Peak mode ----
+  _updatePeakMode() {
+    const hour = (this.time % 24);
+    this._peakMode = (hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 19);
+  }
+
+  // ---- Main step ----
+  step() {
+    if (this.eventQueue.length === 0) return false;
+    const event = this.eventQueue.shift();
+    this.time = event.time;
+    this._updatePeakMode();
+    this.processEvent(event);
+    return true;
+  }
+
+  processEvent(event) {
+    switch (event.type) {
+      case 'ARRIVAL_TRUCK':
+        this.handleArrival(event);
+        break;
+      case 'UNLOAD_COMPLETE':
+        this.handleUnloadComplete(event);
+        break;
+      case 'PALLET_UNPACK':
+        this.handlePalletUnpack(event);
+        break;
+      case 'SORTING_STEP':
+        this.handleSortingStep();
+        break;
+      case 'POCKET_THRESHOLD':
+        this.handlePocketThreshold();
+        break;
+      case 'SHIPMENT_LOAD_COMPLETE':
+        this.handleShipmentLoadComplete(event);
+        break;
+      case 'BALANCE_CHECK':
+        this.handleBalanceCheck();
+        break;
+    }
+  }
+
+  // ---- Public API ----
+  start() {
+    if (this.isRunning) return;
+    this.isRunning = true;
+
+    // Schedule initial events
+    this.scheduleIncomingTruck();
+    this.scheduleEvent({ type: 'SORTING_STEP' }, 0.001);
+    this.scheduleEvent({ type: 'BALANCE_CHECK' }, 0.05);
+    this.scheduleEvent({ type: 'POCKET_THRESHOLD' }, 0.1);
+
+    this.stats.startTime = performance.now();
+  }
+
+  pause() {
+    this.isRunning = false;
+  }
+
+  reset() {
+    this.isRunning = false;
+    this.time = 0;
+    this.eventQueue = [];
+    this.totalBoxesIn = 0;
+    this.totalBoxesOut = 0;
+    this.trucksServiced = 0;
+    this.conveyorPositions = [];
+    this._unloadSpeedFactor = 1;
+    this._sortingSpeedFactor = 1;
+    this._thresholdFactor = 1;
+    this._peakMode = false;
+    this._balanceTimer = 0;
+    this.incomingTruckQueue = [];
+    this.outgoingQueue = [];
+    this.stats = new StatisticsCollector();
+    this.manualSpeedOverride = null;
+    _idCounter = 0;
+    this._init();
+  }
+
+  getConveyorBoxesForRender() {
+    return this.conveyorPositions.map(cp => ({
+      id: cp.item.id,
+      destRegion: cp.item.destRegion,
+      conveyorPos: cp.pos
+    }));
+  }
+
+  getPocketStats() {
+    return this.pockets.map(p => ({
+      id: p.id,
+      region: p.region,
+      count: p.boxes.length,
+      capacity: p.capacity,
+      fillRate: p.fillRate,
+      ready: p.isReadyToShip(),
+      reserve: p.reserve
+    }));
+  }
+
+  getWorkerStats() {
+    return {
+      auto: { busy: this.workers.filter(w => w.role === 'unloader_auto' && w.isBusy).length, total: this.config.numAutoUnloaders },
+      manual: { busy: this.workers.filter(w => w.role === 'unloader_manual' && w.isBusy).length, total: this.config.numManualUnloaders },
+      depal: { busy: this.workers.filter(w => w.role === 'depalletizer' && w.isBusy).length, total: this.config.numDepalletizers },
+      load: { busy: this.workers.filter(w => w.role === 'loader' && w.isBusy).length, total: this.config.numLoaders }
+    };
+  }
+}
+
+// ========================================================================
+//  MAIN APPLICATION
+// ========================================================================
+const canvas = document.getElementById('canvas');
+const tooltip = document.getElementById('tooltip');
+const vis = new Visualization(canvas, tooltip);
+let engine = new SimulationEngine(CONFIG);
+vis.setEngine(engine);
+
+let lastFrameTime = 0;
+let accumulator = 0;
+
+function updateUI() {
+  document.getElementById('sim-time').textContent = formatTime(engine.time);
+  document.getElementById('sim-day').textContent = Math.floor(engine.time / 24) + 1;
+  document.getElementById('stat-total-in').textContent = engine.totalBoxesIn;
+  document.getElementById('stat-total-out').textContent = engine.totalBoxesOut;
+  const elapsed = engine.time || 1;
+  document.getElementById('stat-throughput').textContent = (engine.totalBoxesOut / elapsed).toFixed(0);
+  document.getElementById('stat-trucks').textContent = engine.trucksServiced;
+  document.getElementById('stat-buffer').textContent = `${engine.buffer.items.length} / ${engine.buffer.maxCapacity}`;
+  document.getElementById('stat-reserve').textContent = `${engine.reserveBuffer.items.length} / ${engine.reserveBuffer.maxCapacity}`;
+  document.getElementById('stat-conveyor').textContent = `${(engine.conveyor.buffer.length / engine.conveyor.maxBuffer * 100).toFixed(0)}%`;
+  document.getElementById('stat-queue-in').textContent = engine.incomingTruckQueue.length;
+  document.getElementById('stat-queue-out').textContent = engine.outgoingQueue.length;
+
+  const wStats = engine.getWorkerStats();
+  document.getElementById('stat-workers-auto').textContent = `${wStats.auto.busy}/${wStats.auto.total}`;
+  document.getElementById('stat-workers-manual').textContent = `${wStats.manual.busy}/${wStats.manual.total}`;
+  document.getElementById('stat-workers-depal').textContent = `${wStats.depal.busy}/${wStats.depal.total}`;
+  document.getElementById('stat-workers-load').textContent = `${wStats.load.busy}/${wStats.load.total}`;
+
+  // Pocket table
+  const tbody = document.getElementById('pocket-tbody');
+  const pockets = engine.getPocketStats();
+  const readyCount = pockets.filter(p => p.ready).length;
+  document.getElementById('pocket-summary').textContent = `(${readyCount} готовы)`;
+  tbody.innerHTML = pockets.map(p => {
+    const pct = (p.fillRate * 100).toFixed(0);
+    const color = p.fillRate > 0.8 ? '#e94560' : (p.fillRate > 0.5 ? '#f0a500' : '#0a8a5a');
+    return `<tr><td>${p.region}${p.reserve ? ' 📌' : ''}</td><td>${p.count}</td><td><div style="background:#0f3460;border-radius:2px;width:50px;display:inline-block;vertical-align:middle"><div class="pct-bar" style="width:${Math.min(pct,100)}%;background:${color}"></div></div> ${pct}%</td></tr>`;
+  }).join('');
+
+  // Update conveyor boxes for visualization
+  vis.updateBoxesOnConveyor(engine.getConveyorBoxesForRender());
+}
+
+function gameLoop(timestamp) {
+  if (!lastFrameTime) lastFrameTime = timestamp;
+  const dt = Math.min((timestamp - lastFrameTime) / 1000, 0.05);
+  lastFrameTime = timestamp;
+
+  if (engine.isRunning) {
+    const simDt = dt * engine.speed;
+    const steps = Math.ceil(simDt * 100);
+    for (let i = 0; i < steps; i++) {
+      if (!engine.step()) break;
+    }
+  }
+
+  updateUI();
+  requestAnimationFrame(gameLoop);
+}
+
+// ---- Control handlers ----
+document.getElementById('btn-start').addEventListener('click', () => {
+  engine.start();
+  document.getElementById('btn-start').disabled = true;
+  document.getElementById('btn-pause').disabled = false;
+  document.getElementById('btn-pause').textContent = '⏸ Пауза';
+});
+
+document.getElementById('btn-pause').addEventListener('click', () => {
+  if (engine.isRunning) {
+    engine.pause();
+    document.getElementById('btn-pause').textContent = '▶ Возобновить';
+    document.getElementById('btn-start').disabled = false;
+  } else {
+    engine.start();
+    document.getElementById('btn-pause').textContent = '⏸ Пауза';
+    document.getElementById('btn-start').disabled = true;
+  }
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  engine.reset();
+  vis.setEngine(engine);
+  document.getElementById('btn-start').disabled = false;
+  document.getElementById('btn-pause').disabled = true;
+  document.getElementById('btn-pause').textContent = '⏸ Пауза';
+  updateUI();
+});
+
+document.getElementById('speed-slider').addEventListener('input', (e) => {
+  const val = parseInt(e.target.value);
+  document.getElementById('speed-val').textContent = val + 'x';
+  engine.speed = val;
+});
+
+// ---- Settings modal ----
+const settingsModal = document.getElementById('settings-modal');
+const settingsForm = document.getElementById('settings-form');
+
+function buildSettingsForm() {
+  const fields = [
+    { key: 'numUnloadDocks', label: 'Доки разгрузки', min: 1, max: 50 },
+    { key: 'numLoadDocks', label: 'Доки загрузки', min: 1, max: 50 },
+    { key: 'numPockets', label: 'Количество карманов', min: 5, max: 100 },
+    { key: 'pocketCapacity', label: 'Вместимость кармана', min: 50, max: 2000 },
+    { key: 'shipmentThreshold', label: 'Порог отправки', min: 10, max: 2000 },
+    { key: 'bufferCapacity', label: 'Вместимость буфера', min: 100, max: 10000 },
+    { key: 'reserveCapacity', label: 'Вместимость резерва', min: 100, max: 10000 },
+    { key: 'autoUnloadSpeed', label: 'Скорость автом. разгрузки', min: 100, max: 10000 },
+    { key: 'manualUnloadSpeed', label: 'Скорость ручной разгрузки', min: 50, max: 2000 },
+    { key: 'numAutoUnloaders', label: 'Грузчиков (авто)', min: 1, max: 50 },
+    { key: 'numManualUnloaders', label: 'Грузчиков (ручн)', min: 1, max: 50 },
+    { key: 'numDepalletizers', label: 'Операторов распаллет.', min: 1, max: 50 },
+    { key: 'numLoaders', label: 'Грузчиков на загрузке', min: 1, max: 50 },
+    { key: 'sortingConveyorSpeed', label: 'Скорость конвейера', min: 1000, max: 100000 },
+    { key: 'inflowIntensity', label: 'Интенсивность потока', min: 100, max: 10000 },
+    { key: 'palletRatio', label: 'Доля паллет', min: 0, max: 0.9, step: 0.05 },
+    { key: 'autoUnloadRatio', label: 'Доля автом. разгрузки', min: 0, max: 1, step: 0.05 },
+    { key: 'itemRatio', label: 'Доля отдельных товаров', min: 0, max: 0.5, step: 0.05 }
+  ];
+  settingsForm.innerHTML = fields.map(f => {
+    const val = engine.config[f.key] ?? CONFIG[f.key];
+    return `<div class="setting-row"><label>${f.label}</label><input type="number" data-key="${f.key}" value="${val}" min="${f.min}" max="${f.max}" step="${f.step || 1}"></div>`;
+  }).join('');
+}
+
+document.getElementById('btn-settings').addEventListener('click', () => {
+  buildSettingsForm();
+  settingsModal.classList.add('open');
+});
+document.getElementById('btn-settings-cancel').addEventListener('click', () => {
+  settingsModal.classList.remove('open');
+});
+document.getElementById('btn-settings-ok').addEventListener('click', () => {
+  const inputs = settingsForm.querySelectorAll('input[data-key]');
+  const newConfig = {};
+  inputs.forEach(inp => {
+    const key = inp.dataset.key;
+    const raw = parseFloat(inp.value);
+    newConfig[key] = raw;
+  });
+  Object.assign(CONFIG, newConfig);
+  engine.reset();
+  Object.assign(engine.config, newConfig);
+  engine._init();
+  vis.setEngine(engine);
+  updateUI();
+  settingsModal.classList.remove('open');
+});
+
+// ---- Export ----
+document.getElementById('btn-export-json').addEventListener('click', async () => {
+  const data = engine.stats.exportJSON(engine);
+  await engine.stats.saveToFile(data, 'application/json', 'json');
+});
+
+document.getElementById('btn-export-csv').addEventListener('click', async () => {
+  const data = engine.stats.exportCSV(engine);
+  await engine.stats.saveToFile(data, 'text/csv', 'csv');
+});
+
+// ---- Keyboard shortcuts ----
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.code === 'Space') {
+    e.preventDefault();
+    document.getElementById('btn-pause').click();
+  }
+  if (e.code === 'KeyR') {
+    document.getElementById('btn-reset').click();
+  }
+});
+
+// ---- Start ----
+vis.start();
+updateUI();
+requestAnimationFrame(gameLoop);
+</script>
+</body>
+</html>

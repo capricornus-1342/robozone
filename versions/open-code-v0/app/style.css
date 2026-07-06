@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #e8ecf1;
+    color: #2c3e50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #2c3e50;
+    letter-spacing: 0.5px;
+}
+
+#app-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 20px 24px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+canvas {
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+    display: block;
+    margin-bottom: 14px;
+}
+
+/* --- Control panel --- */
+#controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+#controls button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+    font-family: inherit;
+}
+
+#controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-start {
+    background: #27ae60;
+    color: #fff;
+}
+.btn-start:hover:not(:disabled) {
+    background: #219a52;
+}
+
+.btn-pause {
+    background: #f39c12;
+    color: #fff;
+}
+.btn-pause:hover:not(:disabled) {
+    background: #e08e0b;
+}
+
+.btn-reset {
+    background: #e74c3c;
+    color: #fff;
+}
+.btn-reset:hover:not(:disabled) {
+    background: #c0392b;
+}
+
+.btn-save {
+    background: #3498db;
+    color: #fff;
+}
+.btn-save:hover:not(:disabled) {
+    background: #2980b9;
+}
+
+.btn-event {
+    background: #9b59b6;
+    color: #fff;
+}
+.btn-event:hover:not(:disabled) {
+    background: #8e44ad;
+}
+
+#controls label {
+    font-size: 13px;
+    color: #555;
+    margin-left: 8px;
+}
+
+#controls input[type="range"] {
+    width: 100px;
+    vertical-align: middle;
+}
+
+#speed-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #2c3e50;
+    min-width: 30px;
+}
+
+

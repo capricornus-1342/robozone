@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Имитационная модель Сортировочного Центра</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Имитационная модель Сортировочного Центра</h1>
+
+    <div id="main-container">
+        <div id="canvas-container">
+            <canvas id="simulationCanvas" width="1200" height="800"></canvas>
+        </div>
+        
+        <div id="controls-and-stats">
+            <div id="controls">
+                <h2>Панель управления</h2>
+                <button id="startButton">Старт</button>
+                <button id="pauseButton">Пауза</button>
+                <button id="resetButton">Сброс</button>
+                <br>
+                <label for="speedSlider">Скорость:</label>
+                <input type="range" id="speedSlider" min="1" max="100" value="10">
+                <span id="speedValue">10x</span>
+                <br>
+                <button id="saveStatsButton">Сохранить статистику (JSON)</button>
+            </div>
+
+            <div id="stats">
+                <h2>Статистика</h2>
+                <p>Время симуляции: <span id="timeValue">0д 0ч 0м</span></p>
+                <p>Обработано коробок: <span id="boxesProcessedValue">0</span></p>
+                <p>Грузовиков в очереди (разгрузка): <span id="unloadQueueValue">0</span></p>
+                <p>Грузовиков в очереди (погрузка): <span id="loadQueueValue">0</span></p>
+                <p>Загрузка пром. буфера: <span id="bufferFillValue">0 / 0</span></p>
+            </div>
+
+            <div id="pockets-stats">
+                <h2>Статус карманов</h2>
+                <table id="pocketsTable">
+                    <thead>
+                        <tr>
+                            <th>Регион</th>
+                            <th>Кол-во</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Динамически заполняется -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="simulation.js"></script>
+</body>
+</html>

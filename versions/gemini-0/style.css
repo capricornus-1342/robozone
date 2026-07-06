@@ -1,0 +1,85 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f2f5;
+    margin: 0;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+#main-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+#canvas-container {
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+#controls-and-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 350px;
+}
+
+#controls, #stats, #pockets-stats {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#speedSlider {
+    width: 200px;
+}
+
+#pocketsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#pocketsTable th, #pocketsTable td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    text-align: left;
+}
+
+#pocketsTable th {
+    background-color: #f2f2f2;
+}
+
+.status-ready {
+    background-color: #d4edda; /* green */
+}
+
+.status-filling {
+    background-color: #fff3cd; /* yellow */
+}
+
+.status-full {
+    background-color: #f8d7da; /* red */
+}
