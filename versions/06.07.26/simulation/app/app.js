@@ -1,7 +1,6 @@
 (function () {
   const canvas = document.getElementById('simCanvas');
   const ctx = canvas.getContext('2d');
-  const logContainer = document.getElementById('logContainer');
 
   function resize() {
     const container = canvas.parentElement;
@@ -18,19 +17,36 @@
   }
 
   function log(msg, type) {
-    const entry = document.createElement('div');
-    entry.className = 'log-entry' + (type ? ' ' + type : '');
-    const now = new Date();
-    const ts = now.toTimeString().slice(0, 8);
-    entry.innerHTML = '<span class="time">[' + ts + ']</span><span class="event">' + msg + '</span>';
-    logContainer.appendChild(entry);
-    logContainer.scrollTop = logContainer.scrollHeight;
+    const prefix = '%c[Robozone SC]';
+    const style = type === 'system' ? 'color: #3fb950' : type === 'error' ? 'color: #f85149' : 'color: #58a6ff';
+    console.log(prefix + '%c ' + msg, 'color: #8b949e; font-weight: bold', style);
   }
 
   function draw() {
     ctx.clearRect(0, 0, CONFIG.visualization.canvasWidth, CONFIG.visualization.canvasHeight);
     Visualization.draw(ctx, CONFIG);
   }
+
+  canvas.addEventListener('click', function (e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const zone = Visualization.hitTest(x, y);
+
+    if (zone) {
+      Visualization.highlightedZoneId = zone.id;
+      log('Выбрана зона: ' + zone.label, 'system');
+    } else {
+      Visualization.highlightedZoneId = null;
+      log('Ничего не выбрано', 'system');
+    }
+    draw();
+  });
+
+  document.getElementById('btnGenEvent').addEventListener('click', function () {
+    log('Прибыл грузовик');
+  });
 
   window.addEventListener('resize', resize);
 

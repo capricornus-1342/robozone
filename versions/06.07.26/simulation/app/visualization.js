@@ -1,9 +1,39 @@
-const Visualization = {};
+const Visualization = {
+  zones: [],
+  highlightedZoneId: null,
+};
+
+Visualization.registerZone = function (id, type, label, x, y, w, h) {
+  this.zones.push({ id: id, type: type, label: label, x: x, y: y, w: w, h: h });
+};
+
+Visualization.hitTest = function (px, py) {
+  for (let i = this.zones.length - 1; i >= 0; i--) {
+    const z = this.zones[i];
+    if (px >= z.x && px <= z.x + z.w && py >= z.y && py <= z.y + z.h) return z;
+  }
+  return null;
+};
+
+Visualization.drawHighlight = function (ctx, x, y, w, h) {
+  ctx.save();
+  ctx.fillStyle = 'rgba(88, 166, 255, 0.12)';
+  ctx.strokeStyle = '#58a6ff';
+  ctx.lineWidth = 2;
+  ctx.shadowColor = 'rgba(88, 166, 255, 0.4)';
+  ctx.shadowBlur = 12;
+  ctx.fillRect(x, y, w, h);
+  ctx.strokeRect(x, y, w, h);
+  ctx.restore();
+};
 
 Visualization.draw = function (ctx, cfg) {
   const v = cfg.visualization;
   const w = v.canvasWidth;
   const h = v.canvasHeight;
+  const self = this;
+
+  self.zones = [];
 
   ctx.save();
 
@@ -33,12 +63,12 @@ Visualization.draw = function (ctx, cfg) {
   const ringRY = Math.min((h - titleAreaH - 10) * 0.38, 200);
 
   this.drawConveyorLines(ctx, ringCX, ringCY, ringRX, ringRY, w, h, cfg);
-  this.drawUnloadingDocks(ctx, cfg, ringCY, h);
-  this.drawBuffer(ctx, ringCX, ringCY, ringRX, cfg);
-  this.drawRingConveyor(ctx, ringCX, ringCY, ringRX, ringRY);
+  this.drawUnloadingDocks(ctx, cfg, ringCY, h, self);
+  this.drawBuffer(ctx, ringCX, ringCY, ringRX, cfg, self);
+  this.drawRingConveyor(ctx, ringCX, ringCY, ringRX, ringRY, self);
   this.drawPocketBlocks(ctx, ringCX, ringCY, ringRX, ringRY, cfg);
-  this.drawLoadingDocks(ctx, w, cfg, ringCY);
-  this.drawSupportZones(ctx, ringCX, ringCY, ringRX, ringRY, w, h);
+  this.drawLoadingDocks(ctx, w, cfg, ringCY, self);
+  this.drawSupportZones(ctx, ringCX, ringCY, ringRX, ringRY, w, h, self);
   this.drawLegend(ctx, w, h);
 
   ctx.restore();
@@ -112,7 +142,7 @@ Visualization.drawConveyorLines = function (ctx, ringCX, ringCY, ringRX, ringRY,
   ctx.setLineDash([]);
 };
 
-Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h) {
+Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
   const v = cfg.visualization;
   const dockW = v.dockUnloadWidth;
   const dockH = v.dockUnloadHeight;
@@ -121,9 +151,7 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h) {
   const totalH = count * (dockH + 8);
   const startY = ringCY - totalH / 2;
 
-  ctx.fillStyle = '#1c2333';
-  ctx.strokeStyle = '#30363d';
-  ctx.lineWidth = 1;
+  self.registerZone('unload-zone', 'zone-label', 'Зона разгрузки', startX, startY - 20, dockW, totalH + 20);
 
   ctx.fillStyle = '#8b949e';
   ctx.font = '10px "Segoe UI", sans-serif';
@@ -133,10 +161,17 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h) {
 
   for (let i = 0; i < count; i++) {
     const y = startY + i * (dockH + 8);
+    const zoneId = 'unload-' + i;
+
     ctx.fillStyle = '#1c2333';
     ctx.fillRect(startX, y, dockW, dockH);
     ctx.strokeStyle = '#30363d';
+    ctx.lineWidth = 1;
     ctx.strokeRect(startX, y, dockW, dockH);
+
+    if (self.highlightedZoneId === zoneId) {
+      this.drawHighlight(ctx, startX, y, dockW, dockH);
+    }
 
     ctx.fillStyle = '#3fb950';
     ctx.beginPath();
@@ -147,10 +182,12 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h) {
     ctx.font = '9px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('Док ' + (i + 1), startX + 16, y + dockH / 2 + 3);
+
+    self.registerZone(zoneId, 'unload', 'Док ' + (i + 1), startX, y, dockW, dockH);
   }
 };
 
-Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg) {
+Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
   const v = cfg.visualization;
   const bw = v.bufferWidth;
   const bh = v.bufferHeight;
@@ -167,6 +204,10 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg) {
   ctx.fill();
   ctx.stroke();
 
+  if (self.highlightedZoneId === 'buffer') {
+    this.drawHighlight(ctx, x, y, bw, bh);
+  }
+
   ctx.fillStyle = '#8b949e';
   ctx.font = '9px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
@@ -182,9 +223,11 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg) {
 
   ctx.fillStyle = 'rgba(63, 185, 80, 0.4)';
   ctx.fillRect(x + 6, y + bh - fillH - 2, (bw - 12) * 0.35, fillH - 4);
+
+  self.registerZone('buffer', 'buffer', 'Буфер приемки', x, y, bw, bh);
 };
 
-Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry) {
+Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry, self) {
   ctx.save();
 
   ctx.shadowColor = 'rgba(88, 166, 255, 0.1)';
@@ -199,11 +242,20 @@ Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry) {
   ctx.beginPath();
   ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = '#58a6ff';
-  ctx.lineWidth = 3;
-  ctx.stroke();
 
   ctx.shadowBlur = 0;
+
+  ctx.strokeStyle = '#58a6ff';
+  ctx.lineWidth = 3;
+  if (self.highlightedZoneId === 'conveyor') {
+    ctx.save();
+    ctx.lineWidth = 5;
+    ctx.shadowColor = 'rgba(88, 166, 255, 0.5)';
+    ctx.shadowBlur = 18;
+    ctx.stroke();
+    ctx.restore();
+  }
+  ctx.stroke();
 
   ctx.strokeStyle = 'rgba(88, 166, 255, 0.15)';
   ctx.lineWidth = 1;
@@ -224,6 +276,8 @@ Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry) {
   ctx.fillText('10 сортировщиков × 10 000 тов/ч', cx, cy + 28);
 
   ctx.restore();
+
+  self.registerZone('conveyor', 'conveyor', 'Кольцевой конвейер', cx - rx, cy - ry, rx * 2, ry * 2);
 };
 
 Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg) {
@@ -288,7 +342,7 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg) {
   }
 };
 
-Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY) {
+Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
   const v = cfg.visualization;
   const dockW = v.dockLoadWidth;
   const dockH = v.dockLoadHeight;
@@ -302,6 +356,8 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY) {
   const startX = w - 10 - loadingAreaW;
   const startY = ringCY - totalColH / 2;
 
+  self.registerZone('load-zone', 'zone-label', 'Зона загрузки', startX, startY - 20, loadingAreaW, totalColH + 20);
+
   ctx.fillStyle = '#8b949e';
   ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
@@ -313,12 +369,17 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY) {
     const row = i % perCol;
     const x = startX + col * gapX;
     const y = startY + row * gapY;
+    const zoneId = 'load-' + i;
 
     ctx.fillStyle = '#1c2333';
     ctx.fillRect(x, y, dockW, dockH);
     ctx.strokeStyle = '#30363d';
     ctx.lineWidth = 1;
     ctx.strokeRect(x, y, dockW, dockH);
+
+    if (self.highlightedZoneId === zoneId) {
+      this.drawHighlight(ctx, x, y, dockW, dockH);
+    }
 
     ctx.fillStyle = '#58a6ff';
     ctx.beginPath();
@@ -329,15 +390,17 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY) {
     ctx.font = '7px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('B' + (i + 1), x + 4, y + dockH / 2 + 2.5);
+
+    self.registerZone(zoneId, 'load', 'Ворота ' + (i + 1), x, y, dockW, dockH);
   }
 };
 
-Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, w, h) {
+Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, w, h, self) {
   const zones = [
-    { label: 'РАСПАЛЛЕТИРОВАНИЕ', sub: '2 поста', x: ringCX - ringRX - 75, y: ringCY - ringRY - 50, w: 60, h: 36 },
-    { label: 'NonSort', sub: 'ручная сортировка', x: ringCX + ringRX - 30, y: ringCY - ringRY - 50, w: 60, h: 36 },
-    { label: 'ПРЕСС', sub: 'утилизация КТЯ', x: ringCX + ringRX + 10, y: ringCY + ringRY + 20, w: 50, h: 30 },
-    { label: 'НОВЫЕ КТЯ', sub: 'производство', x: ringCX - ringRX - 70, y: ringCY + ringRY + 20, w: 50, h: 30 },
+    { id: 'depalletizing', label: 'РАСПАЛЛЕТИРОВАНИЕ', sub: '2 поста', x: ringCX - ringRX - 75, y: ringCY - ringRY - 50, w: 60, h: 36 },
+    { id: 'nonsort', label: 'NonSort', sub: 'ручная сортировка', x: ringCX + ringRX - 30, y: ringCY - ringRY - 50, w: 60, h: 36 },
+    { id: 'press', label: 'ПРЕСС', sub: 'утилизация КТЯ', x: ringCX + ringRX + 10, y: ringCY + ringRY + 20, w: 50, h: 30 },
+    { id: 'newContainer', label: 'НОВЫЕ КТЯ', sub: 'производство', x: ringCX - ringRX - 70, y: ringCY + ringRY + 20, w: 50, h: 30 },
   ];
 
   zones.forEach(function (z) {
@@ -347,6 +410,10 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     ctx.fillRect(z.x, z.y, z.w, z.h);
     ctx.strokeRect(z.x, z.y, z.w, z.h);
 
+    if (self.highlightedZoneId === z.id) {
+      self.drawHighlight(ctx, z.x, z.y, z.w, z.h);
+    }
+
     ctx.fillStyle = '#8b949e';
     ctx.font = 'bold 8px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
@@ -355,13 +422,9 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     ctx.fillStyle = '#484f58';
     ctx.font = '7px "Segoe UI", sans-serif';
     ctx.fillText(z.sub, z.x + z.w / 2, z.y + z.h - 6);
-  });
 
-  ctx.fillStyle = '#484f58';
-  ctx.font = '8px "Segoe UI", sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('Машина вмещает 32 палеты (16 КТЯ + 16 ролл-кейджей)', ringCX + ringRX + 150, ringCY + ringRY + 60);
-  ctx.fillText('Время загрузки: 2 часа · 24 ворот', ringCX + ringRX + 150, ringCY + ringRY + 72);
+    self.registerZone(z.id, 'support', z.label, z.x, z.y, z.w, z.h);
+  });
 };
 
 Visualization.drawLegend = function (ctx, w, h) {
