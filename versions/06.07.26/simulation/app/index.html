@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сортировочный центр — симуляция</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1><span>Robozone</span> — Сортировочный центр</h1>
+      <div id="controls">
+        <button class="primary" disabled>Старт</button>
+        <button disabled>Пауза</button>
+        <button class="danger" disabled>Сброс</button>
+      </div>
+    </header>
+    <main>
+      <div id="simulation-container">
+        <canvas id="simCanvas"></canvas>
+      </div>
+      <div id="log-panel">
+        <h3>Лог событий</h3>
+        <div id="logContainer"></div>
+      </div>
+    </main>
+    <div id="status-bar">
+      <span class="stat"><span class="dot green"></span><span class="label">Статус:</span><span class="value">Готов</span></span>
+      <span class="stat"><span class="label">Товаров:</span><span class="value">0</span></span>
+      <span class="stat"><span class="label">КТЯ:</span><span class="value">0</span></span>
+      <span class="stat"><span class="label">Палет:</span><span class="value">0</span></span>
+      <span class="stat"><span class="label">NonSort:</span><span class="value">0%</span></span>
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script src="visualization.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
