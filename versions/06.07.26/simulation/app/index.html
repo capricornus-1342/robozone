@@ -11,9 +11,9 @@
     <header>
       <h1><span>Robozone</span> — Сортировочный центр</h1>
       <div id="controls">
-        <button class="primary" disabled>Старт</button>
-        <button disabled>Пауза</button>
-        <button class="danger" disabled>Сброс</button>
+        <button class="primary" id="btnStart">Старт</button>
+        <button id="btnPause">Пауза</button>
+        <button class="danger" id="btnReset">Сброс</button>
         <span class="sep"></span>
         <button id="btnGenEvent">Сгенерировать событие</button>
       </div>
@@ -24,7 +24,8 @@
       </div>
     </main>
     <div id="status-bar">
-      <span class="stat"><span class="dot green"></span><span class="label">Статус:</span><span class="value">Готов</span></span>
+      <span class="stat"><span class="dot green"></span><span class="label">Статус:</span><span class="value" id="status-label">Готов</span></span>
+      <span class="stat"><span class="label">Время:</span><span class="value" id="status-time">0:00</span></span>
       <span class="stat"><span class="label">Товаров:</span><span class="value">0</span></span>
       <span class="stat"><span class="label">КТЯ:</span><span class="value">0</span></span>
       <span class="stat"><span class="label">Палет:</span><span class="value">0</span></span>
@@ -32,6 +33,7 @@
     </div>
   </div>
   <script src="config.js"></script>
+  <script src="classes/SimulationEngine.js"></script>
   <script src="visualization.js"></script>
   <script src="app.js"></script>
 </body>
