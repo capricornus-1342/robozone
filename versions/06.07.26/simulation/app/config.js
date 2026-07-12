@@ -1,7 +1,7 @@
 const CONFIG = {
   reception: {
     docksUnload: 10,
-    troughputPerDock: 3000,
+    throughputPerDock: 3000,
     bufferCapacity: 185,
     arrivalRate: 185,
   },
@@ -58,10 +58,6 @@ const CONFIG = {
     dockLoadHeight: 20,
     bufferWidth: 64,
     bufferHeight: 120,
-    ringCenterX: 560,
-    ringCenterY: 420,
-    ringRadiusX: 270,
-    ringRadiusY: 180,
     pocketBlockWidth: 28,
     pocketBlockHeight: 14,
     pocketOffset: 32,
