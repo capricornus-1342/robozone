@@ -80,6 +80,34 @@ header h1 span {
   color: #f85149;
 }
 
+#controls .speed-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #8b949e;
+}
+
+#controls .speed-control label {
+  white-space: nowrap;
+}
+
+#controls .speed-control input {
+  width: 52px;
+  padding: 4px 6px;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  background: #0d1117;
+  color: #f0f6fc;
+  font-size: 13px;
+  text-align: center;
+  outline: none;
+}
+
+#controls .speed-control input:focus {
+  border-color: #58a6ff;
+}
+
 #controls .sep {
   width: 1px;
   height: 24px;
