@@ -68,6 +68,10 @@
     if (Simulation.depalletizing) {
       document.getElementById('stat-empty-ct').textContent = Simulation.depalletizing.emptyContainerBuffer;
     }
+    var circulation = 0;
+    if (Simulation.depalletizing) circulation += Simulation.depalletizing.emptyContainerBuffer;
+    if (Simulation.packing) circulation += Simulation.packing.sealedCount;
+    document.getElementById('stat-circulation').textContent = circulation;
   }
 
   function draw() {

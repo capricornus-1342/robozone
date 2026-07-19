@@ -536,11 +536,28 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
   });
 
   if (dep) {
-    this.drawContainerFlowArrow(ctx, ringCX, ringCY, ringRX, ringRY, dep);
+    this.drawContainerFlowArrow(ctx, ringCX, ringCY, ringRX, ringRY, dep, pack);
+  }
+
+  if (dep && pack) {
+    var circX = ringCX - ringRX - 80;
+    var circY = ringCY + ringRY + 100;
+    ctx.fillStyle = '#1a2332';
+    ctx.strokeStyle = '#30363d';
+    ctx.lineWidth = 1;
+    ctx.fillRect(circX, circY, 55, 24);
+    ctx.strokeRect(circX, circY, 55, 24);
+    ctx.fillStyle = '#8b949e';
+    ctx.font = 'bold 8px "Segoe UI", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('КТЯ В ОБОРОТЕ', circX + 27, circY + 10);
+    ctx.fillStyle = '#58a6ff';
+    ctx.font = 'bold 12px "Segoe UI", sans-serif';
+    ctx.fillText('' + (dep.emptyContainerBuffer + pack.sealedCount), circX + 27, circY + 21);
   }
 };
 
-Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ringRY, dep) {
+Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ringRY, dep, pack) {
   var dpX = ringCX - ringRX - 45;
   var dpBot = ringCY - ringRY - 14;
   var pressX = ringCX - ringRX - 53;
@@ -559,7 +576,7 @@ Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ri
   ctx.lineTo(ringCX - ringRX - 30, ringCY);
   ctx.stroke();
   ctx.fillStyle = '#d29922';
-  ctx.fillText('КТЯ → сортировка: ' + dep.containerReuseCount, ringCX - ringRX - 15, ringCY - 6);
+  ctx.fillText('КТЯ повторно (80%): ' + dep.containerReuseCount, ringCX - ringRX - 15, ringCY - 6);
 
   ctx.strokeStyle = 'rgba(248, 81, 73, 0.6)';
   ctx.lineWidth = 1.5;
@@ -568,7 +585,7 @@ Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ri
   ctx.lineTo(pressX, pressTop - 5);
   ctx.stroke();
   ctx.fillStyle = '#f85149';
-  ctx.fillText('брак: ' + dep.containerScrapCount, (dpX + pressX) / 2, (dpBot + pressTop) / 2);
+  ctx.fillText('брак (20%): ' + dep.containerScrapCount, (dpX + pressX) / 2, (dpBot + pressTop) / 2);
 
   ctx.strokeStyle = 'rgba(88, 166, 255, 0.6)';
   ctx.lineWidth = 1.5;
