@@ -160,7 +160,7 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
 
   self.registerZone('unload-zone', 'zone-label', 'Зона разгрузки', startX, startY - 20, dockW, totalH + 20);
 
-  ctx.fillStyle = '#8b949e';
+  ctx.fillStyle = '#f0f6fc';
   ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('ЗОНА РАЗГРУЗКИ', startX + dockW / 2, startY - 14);
@@ -195,7 +195,7 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
     ctx.arc(startX + 8, y + dockH / 2, 4, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = '#484f58';
+    ctx.fillStyle = '#f0f6fc';
     ctx.font = '9px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('Док ' + (i + 1), startX + 16, y + dockH / 2 + 3);
@@ -239,7 +239,7 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
     this.drawHighlight(ctx, x, y, bw, bh);
   }
 
-  ctx.fillStyle = '#8b949e';
+  ctx.fillStyle = '#f0f6fc';
   ctx.font = '9px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('БУФЕР', x + bw / 2, y + 16);
@@ -313,11 +313,11 @@ Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry, self) {
   ctx.textBaseline = 'middle';
   ctx.fillText('КОЛЬЦЕВОЙ СОРТИРОВОЧНЫЙ', cx, cy - 10);
   ctx.fillText('КОНВЕЙЕР', cx, cy + 8);
-  ctx.fillStyle = '#8b949e';
+  ctx.fillStyle = '#f0f6fc';
   ctx.font = '11px "Segoe UI", sans-serif';
   ctx.fillText('10 сортировщиков × 10 000 тов/ч', cx, cy + 28);
 
-  ctx.fillStyle = '#484f58';
+  ctx.fillStyle = '#f0f6fc';
   ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   var arrowAngle = -15 * Math.PI / 180;
@@ -389,7 +389,7 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg, self) {
     ctx.fillStyle = fillColor;
     ctx.fillRect(bx - bw / 2 + 2, by - bh / 2 + 2, (bw - 4) * avgFill, bh - 4);
 
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = '#f0f6fc';
     ctx.font = '7px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = isTop ? 'bottom' : 'top';
@@ -463,7 +463,7 @@ Visualization.drawShippingBuffer = function (ctx, ringCX, ringCY, ringRX, w, cfg
   ctx.fillRect(bx, by, bw, bh);
   ctx.strokeRect(bx, by, bw, bh);
 
-  ctx.fillStyle = '#8b949e';
+  ctx.fillStyle = '#f0f6fc';
   ctx.font = '7px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('БУФЕР', bx + bw / 2, by + 12);
@@ -494,7 +494,7 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
 
   self.registerZone('load-zone', 'zone-label', 'Зона загрузки', startX, startY - 20, loadingAreaW, totalColH + 20);
 
-  ctx.fillStyle = '#8b949e';
+  ctx.fillStyle = '#f0f6fc';
   ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('ЗОНА ЗАГРУЗКИ', startX + loadingAreaW / 2, startY - 14);
@@ -535,7 +535,7 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
     ctx.arc(x + dockW - 7, y + dockH / 2, 3, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = '#484f58';
+    ctx.fillStyle = '#f0f6fc';
     ctx.font = '7px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('B' + (i + 1), x + 4, y + dockH / 2 + 2.5);
@@ -553,7 +553,7 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
 
   var ship = Simulation.shipping;
   if (ship) {
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = '#f0f6fc';
     ctx.font = '8px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Отгружено: ' + ship.dispatchedCount, startX + loadingAreaW / 2, startY + totalColH + 12);
@@ -585,11 +585,11 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
   var zones = [
     {
       id: 'depalletizing', label: 'РАСПАЛЛЕТИРОВАНИЕ', sub: depInfo,
-      x: ringCX - ringRX - 75, y: ringCY - ringRY - 50, w: 60, h: 36
+      x: ringCX - ringRX - 75, y: ringCY - ringRY - 35, w: 60, h: 36
     },
     {
       id: 'nonsort', label: 'NonSort', sub: backupInfo,
-      x: ringCX + ringRX - 30, y: ringCY - ringRY - 50, w: 60, h: 36
+      x: ringCX + ringRX - 30, y: ringCY - ringRY - 35, w: 60, h: 36
     },
     {
       id: 'sealing', label: 'ЗАКЛЕЙКА', sub: packInfo,
@@ -602,12 +602,12 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     {
       id: 'press', label: 'ПРЕСС',
       sub: dep ? 'утилизировано: ' + dep.containerScrapCount : 'утилизация КТЯ',
-      x: ringCX - ringRX - 80, y: ringCY + ringRY + 20, w: 55, h: 36
+      x: ringCX - ringRX - 80, y: ringCY + ringRY + 10, w: 55, h: 30
     },
     {
       id: 'newContainer', label: 'НОВЫЕ КТЯ',
       sub: dep ? 'создано: ' + dep.newContainerCount : 'производство',
-      x: ringCX - ringRX - 80, y: ringCY + ringRY + 60, w: 55, h: 36
+      x: ringCX - ringRX - 80, y: ringCY + ringRY + 42, w: 55, h: 30
     },
   ];
 
@@ -641,19 +641,19 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
 
   if (dep && pack) {
     var circX = ringCX - ringRX - 80;
-    var circY = ringCY + ringRY + 100;
+    var circY = ringCY + ringRY + 75;
     ctx.fillStyle = '#1a2332';
     ctx.strokeStyle = '#30363d';
     ctx.lineWidth = 1;
-    ctx.fillRect(circX, circY, 55, 24);
-    ctx.strokeRect(circX, circY, 55, 24);
+    ctx.fillRect(circX, circY, 55, 22);
+    ctx.strokeRect(circX, circY, 55, 22);
     ctx.fillStyle = '#8b949e';
-    ctx.font = 'bold 8px "Segoe UI", sans-serif';
+    ctx.font = 'bold 7px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('КТЯ В ОБОРОТЕ', circX + 27, circY + 10);
+    ctx.fillText('КТЯ В ОБОРОТЕ', circX + 27, circY + 9);
     ctx.fillStyle = '#58a6ff';
-    ctx.font = 'bold 12px "Segoe UI", sans-serif';
-    ctx.fillText('' + (dep.emptyContainerBuffer + pack.sealedCount), circX + 27, circY + 21);
+    ctx.font = 'bold 11px "Segoe UI", sans-serif';
+    ctx.fillText('' + (dep.emptyContainerBuffer + pack.sealedCount), circX + 27, circY + 19);
   }
 
   var adj = Simulation.adjustments;
@@ -698,7 +698,7 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
   var warns = Simulation.warnings;
   if (warns && warns.length > 0) {
     var warnX = ringCX + 100;
-    var warnY = ringCY - ringRY - 50;
+    var warnY = ringCY - ringRY - 60;
     ctx.fillStyle = 'rgba(248, 81, 73, 0.1)';
     ctx.strokeStyle = '#f85149';
     ctx.lineWidth = 1;
@@ -717,10 +717,10 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
 
 Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ringRY, dep, pack) {
   var dpX = ringCX - ringRX - 45;
-  var dpBot = ringCY - ringRY - 14;
+  var dpBot = ringCY - ringRY + 2;
   var pressX = ringCX - ringRX - 53;
-  var pressTop = ringCY + ringRY + 25;
-  var newConTop = ringCY + ringRY + 65;
+  var pressTop = ringCY + ringRY + 15;
+  var newConTop = ringCY + ringRY + 48;
   var ringLeft = ringCX - ringRX - 5;
   var ringTop = ringCY - ringRY + 5;
 

@@ -133,7 +133,7 @@ header h1 span {
 .param label {
   white-space: nowrap;
   font-size: 10px;
-  color: #484f58;
+  color: #f0f6fc;
 }
 
 .param input[type="range"] {
