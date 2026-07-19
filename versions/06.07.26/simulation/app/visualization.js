@@ -102,12 +102,12 @@ Visualization.drawBackground = function (ctx, w, h) {
 
 Visualization.drawTitle = function (ctx, w) {
   ctx.fillStyle = '#1f2328';
-  ctx.font = 'bold 22px "Segoe UI", system-ui, sans-serif';
+  ctx.font = '22px "Segoe UI", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('Схема сортировочного центра', w / 2, 34);
 
   ctx.fillStyle = '#656d76';
-  ctx.font = '12px "Segoe UI", system-ui, sans-serif';
+  ctx.font = '10px "Segoe UI", system-ui, sans-serif';
   ctx.fillText('10 доков разгрузки · 400 направлений · 10 сортировщиков · 100 000 тов/ч · 24 ворот отгрузки', w / 2, 52);
 };
 
@@ -128,7 +128,7 @@ Visualization.drawConveyorLines = function (ctx, ringCX, ringCY, ringRX, ringRY,
   }
 
   ctx.fillStyle = '#656d76';
-  ctx.font = '7px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('поток товаров', dockRightX + 20, ringCY - 4);
 
@@ -161,7 +161,7 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
   self.registerZone('unload-zone', 'zone-label', 'Зона разгрузки', startX, startY - 20, dockW, totalH + 20);
 
   ctx.fillStyle = '#1f2328';
-  ctx.font = '12px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('ЗОНА РАЗГРУЗКИ', startX + dockW / 2, startY - 16);
   ctx.fillText(count + ' доков', startX + dockW / 2, startY - 4);
@@ -196,20 +196,20 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
     ctx.fill();
 
     ctx.fillStyle = '#1f2328';
-    ctx.font = '11px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('Док ' + (i + 1), startX + 16, y + dockH / 2 + 3);
 
     if (isBusy) {
       ctx.fillStyle = '#cf222e';
-      ctx.font = '8px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText('занят', startX + dockW - 4, y + dockH / 2 + 3);
     }
     if (hasQueue) {
       var qLen = docksState[i].queue.length;
       ctx.fillStyle = '#cf222e';
-      ctx.font = 'bold 8px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText('+' + qLen, startX + dockW - 4, y + dockH - 3);
     }
@@ -240,7 +240,7 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
   }
 
   ctx.fillStyle = '#1f2328';
-  ctx.font = '9px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('БУФЕР', x + bw / 2, y + 16);
   ctx.fillText('ПРИЁМКИ', x + bw / 2, y + 26);
@@ -249,7 +249,7 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
   var bufFill = bufState ? bufState.fillRate : 0;
 
   ctx.fillStyle = '#656d76';
-  ctx.font = '9px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText(bufCount + ' / ' + cfg.reception.bufferCapacity + ' палет', x + bw / 2, y + bh - 10);
 
@@ -308,13 +308,13 @@ Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry, self) {
   ctx.setLineDash([]);
 
   ctx.fillStyle = 'rgba(9, 105, 218, 0.7)';
-  ctx.font = 'bold 13px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('КОЛЬЦЕВОЙ СОРТИРОВОЧНЫЙ', cx, cy - 10);
   ctx.fillText('КОНВЕЙЕР', cx, cy + 8);
   ctx.fillStyle = '#1f2328';
-  ctx.font = '11px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.fillText('10 сортировщиков × 10 000 тов/ч', cx, cy + 28);
 
   ctx.fillStyle = '#1f2328';
@@ -396,18 +396,18 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg, self) {
     ctx.textBaseline = isTop ? 'bottom' : 'top';
     const labelY = isTop ? by - bh / 2 - 2 : by + bh / 2 + 2;
     if (isTop) {
-      ctx.font = '9px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.fillText(endNum, bx, labelY);
-      ctx.font = '7px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.fillText('—', bx, labelY - 9);
-      ctx.font = '9px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.fillText(startNum, bx, labelY - 18);
     } else {
-      ctx.font = '9px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.fillText(startNum, bx, labelY);
-      ctx.font = '7px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.fillText('—', bx, labelY + 9);
-      ctx.font = '9px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.fillText(endNum, bx, labelY + 18);
     }
 
@@ -477,7 +477,7 @@ Visualization.drawShippingBuffer = function (ctx, ringCX, ringCY, ringRX, w, cfg
   ctx.strokeRect(bx, by, bw, bh);
 
   ctx.fillStyle = '#1f2328';
-  ctx.font = '7px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('БУФЕР', bx + bw / 2, by + 12);
   ctx.fillText('ОТГРУЗКИ', bx + bw / 2, by + 20);
@@ -485,7 +485,7 @@ Visualization.drawShippingBuffer = function (ctx, ringCX, ringCY, ringRX, w, cfg
   var ship = Simulation.shipping;
   var bufCount = ship ? ship.buffer.length : 0;
   ctx.fillStyle = bufCount >= 16 ? '#bf8700' : '#656d76';
-  ctx.font = 'bold 9px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.fillText(bufCount + ' пал', bx + bw / 2, by + bh - 6);
 
   self.registerZone('ship-buffer', 'buffer', 'Буфер отгрузки (' + bufCount + ' палет)', bx, by, bw, bh);
@@ -508,7 +508,7 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
   self.registerZone('load-zone', 'zone-label', 'Зона загрузки', startX, startY - 20, loadingAreaW, totalColH + 20);
 
   ctx.fillStyle = '#1f2328';
-  ctx.font = '12px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('ЗОНА ЗАГРУЗКИ', startX + loadingAreaW / 2, startY - 16);
   ctx.fillText(count + ' ворот', startX + loadingAreaW / 2, startY - 4);
@@ -549,14 +549,14 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
     ctx.fill();
 
     ctx.fillStyle = '#1f2328';
-    ctx.font = '9px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('B' + (i + 1), x + 4, y + dockH / 2 + 3);
 
     var label = status === 'free' ? '' : status === 'loading' ? '...' : '';
     if (label) {
       ctx.fillStyle = status === 'loading' ? '#bf8700' : '#2da44e';
-      ctx.font = '5px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText(label, x + dockW - 10, y + dockH / 2 + 2);
     }
@@ -641,12 +641,12 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     }
 
     ctx.fillStyle = '#1f2328';
-    ctx.font = 'bold 8px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(z.label, z.x + z.w / 2, z.y + 12);
 
     ctx.fillStyle = '#656d76';
-    ctx.font = '7px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.fillText(z.sub, z.x + z.w / 2, z.y + z.h - 6);
 
     self.registerZone(z.id, 'support', z.label, z.x, z.y, z.w, z.h);
@@ -665,11 +665,11 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     ctx.fillRect(circX, circY, 55, 22);
     ctx.strokeRect(circX, circY, 55, 22);
     ctx.fillStyle = '#1f2328';
-    ctx.font = 'bold 7px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('КТЯ В ОБОРОТЕ', circX + 27, circY + 9);
     ctx.fillStyle = '#0969da';
-    ctx.font = 'bold 11px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.fillText('' + (dep.emptyContainerBuffer + pack.sealedCount), circX + 27, circY + 19);
   }
 
@@ -684,7 +684,7 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     ctx.fillRect(speedX, speedY - 18, 62, 52);
     ctx.strokeRect(speedX, speedY - 18, 62, 52);
     ctx.fillStyle = '#1f2328';
-    ctx.font = 'bold 7px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('СКОРОСТИ', speedX + 31, speedY - 8);
 
@@ -699,7 +699,7 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
       ctx.lineWidth = 0.5;
       ctx.strokeRect(x, y, barW, barH);
       ctx.fillStyle = '#656d76';
-      ctx.font = '6px "Segoe UI", sans-serif';
+      ctx.font = '10px "Segoe UI", sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText(label, x, y + barH + 8);
       ctx.fillStyle = color;
@@ -719,7 +719,7 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     ctx.fillStyle = 'rgba(207, 34, 46, 0.06)';
     ctx.strokeStyle = '#cf222e';
     ctx.lineWidth = 1;
-    ctx.font = '6px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     for (var wi = 0; wi < Math.min(warns.length, 3); wi++) {
       ctx.fillStyle = 'rgba(207, 34, 46, 0.05)';
@@ -741,7 +741,7 @@ Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ri
   var ringLeft = ringCX - ringRX - 5;
   var ringTop = ringCY - ringRY + 5;
 
-  ctx.font = '7px "Segoe UI", sans-serif';
+  ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
 
   ctx.strokeStyle = 'rgba(191, 135, 0, 0.5)';
@@ -793,7 +793,7 @@ Visualization.drawLegend = function (ctx, w, h) {
     ctx.fillStyle = item.color;
     ctx.fillRect(x + 2, y + i * 16 + 4, 10, 10);
     ctx.fillStyle = '#1f2328';
-    ctx.font = '11px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(item.label, x + 16, y + i * 16 + 13);
   });
@@ -815,7 +815,7 @@ Visualization.drawLegend = function (ctx, w, h) {
     ctx.fillStyle = item.color;
     ctx.fillRect(x + 2, dockY + i * 16 + 4, 10, 10);
     ctx.fillStyle = '#1f2328';
-    ctx.font = '11px "Segoe UI", sans-serif';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(item.label, x + 16, dockY + i * 16 + 13);
   });
