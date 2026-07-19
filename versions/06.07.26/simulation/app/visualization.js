@@ -68,6 +68,7 @@ Visualization.draw = function (ctx, cfg) {
   this.drawRingConveyor(ctx, ringCX, ringCY, ringRX, ringRY, self);
   this.drawPocketBlocks(ctx, ringCX, ringCY, ringRX, ringRY, cfg);
   this.drawConveyorItems(ctx, ringCX, ringCY, ringRX, ringRY);
+  this.drawShippingBuffer(ctx, ringCX, ringCY, ringRX, w, cfg, self);
   this.drawLoadingDocks(ctx, w, cfg, ringCY, self);
   this.drawSupportZones(ctx, ringCX, ringCY, ringRX, ringRY, w, h, self);
   this.drawLegend(ctx, w, h);
@@ -199,6 +200,13 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
       ctx.font = '7px "Segoe UI", sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText('занят', startX + dockW - 4, y + dockH / 2 + 3);
+    }
+    if (hasQueue) {
+      var qLen = docksState[i].queue.length;
+      ctx.fillStyle = '#f85149';
+      ctx.font = 'bold 7px "Segoe UI", sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText('+' + qLen, startX + dockW - 4, y + dockH - 3);
     }
 
     self.registerZone(zoneId, 'unload', 'Док ' + (i + 1) + (isBusy ? ' (занят)' : ''), startX, y, dockW, dockH);
@@ -409,6 +417,41 @@ Visualization.drawConveyorItems = function (ctx, cx, cy, rx, ry) {
   ctx.restore();
 };
 
+Visualization.drawShippingBuffer = function (ctx, ringCX, ringCY, ringRX, w, cfg, self) {
+  const v = cfg.visualization;
+  const dockW = v.dockLoadWidth;
+  const loadingAreaW = dockW * 2 + 8;
+  const ringRight = ringCX + ringRX;
+  const loadLeft = w - 10 - loadingAreaW;
+  const gap = loadLeft - ringRight;
+  if (gap < 30) return;
+
+  const bx = ringRight + gap * 0.15;
+  const bw = 36;
+  const bh = 40;
+  const by = ringCY - bh / 2;
+
+  ctx.fillStyle = '#1c2333';
+  ctx.strokeStyle = '#30363d';
+  ctx.lineWidth = 1;
+  ctx.fillRect(bx, by, bw, bh);
+  ctx.strokeRect(bx, by, bw, bh);
+
+  ctx.fillStyle = '#8b949e';
+  ctx.font = '7px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('БУФЕР', bx + bw / 2, by + 12);
+  ctx.fillText('ОТГРУЗКИ', bx + bw / 2, by + 20);
+
+  var ship = Simulation.shipping;
+  var bufCount = ship ? ship.buffer.length : 0;
+  ctx.fillStyle = bufCount >= 16 ? '#d29922' : '#484f58';
+  ctx.font = 'bold 9px "Segoe UI", sans-serif';
+  ctx.fillText(bufCount + ' пал', bx + bw / 2, by + bh - 6);
+
+  self.registerZone('ship-buffer', 'buffer', 'Буфер отгрузки (' + bufCount + ' палет)', bx, by, bw, bh);
+};
+
 Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
   const v = cfg.visualization;
   const dockW = v.dockLoadWidth;
@@ -431,6 +474,8 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
   ctx.fillText('ЗОНА ЗАГРУЗКИ', startX + loadingAreaW / 2, startY - 14);
   ctx.fillText(count + ' ворот', startX + loadingAreaW / 2, startY - 4);
 
+  var docksState = Simulation.shipping ? Simulation.shipping.docks : null;
+
   for (let i = 0; i < count; i++) {
     const col = Math.floor(i / perCol);
     const row = i % perCol;
@@ -438,17 +483,28 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
     const y = startY + row * gapY;
     const zoneId = 'load-' + i;
 
-    ctx.fillStyle = '#1c2333';
+    var status = docksState && docksState[i] ? docksState[i].status : 'free';
+    var isHighlight = self.highlightedZoneId === zoneId;
+
+    if (status === 'free') {
+      ctx.fillStyle = '#1c2333';
+    } else if (status === 'loading') {
+      ctx.fillStyle = '#2d1f0a';
+    } else {
+      ctx.fillStyle = '#1a2d1a';
+    }
     ctx.fillRect(x, y, dockW, dockH);
-    ctx.strokeStyle = '#30363d';
-    ctx.lineWidth = 1;
+
+    ctx.strokeStyle = isHighlight ? '#58a6ff' : status === 'free' ? '#30363d' : status === 'loading' ? '#d29922' : '#3fb950';
+    ctx.lineWidth = isHighlight ? 2 : status === 'free' ? 1 : 1.5;
     ctx.strokeRect(x, y, dockW, dockH);
 
-    if (self.highlightedZoneId === zoneId) {
+    if (isHighlight) {
       this.drawHighlight(ctx, x, y, dockW, dockH);
     }
 
-    ctx.fillStyle = '#58a6ff';
+    var dotColor = status === 'free' ? '#3fb950' : status === 'loading' ? '#d29922' : '#58a6ff';
+    ctx.fillStyle = dotColor;
     ctx.beginPath();
     ctx.arc(x + dockW - 7, y + dockH / 2, 3, 0, Math.PI * 2);
     ctx.fill();
@@ -458,7 +514,23 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
     ctx.textAlign = 'left';
     ctx.fillText('B' + (i + 1), x + 4, y + dockH / 2 + 2.5);
 
-    self.registerZone(zoneId, 'load', 'Ворота ' + (i + 1), x, y, dockW, dockH);
+    var label = status === 'free' ? '' : status === 'loading' ? '...' : '';
+    if (label) {
+      ctx.fillStyle = status === 'loading' ? '#d29922' : '#3fb950';
+      ctx.font = '5px "Segoe UI", sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(label, x + dockW - 10, y + dockH / 2 + 2);
+    }
+
+    self.registerZone(zoneId, 'load', 'Ворота ' + (i + 1) + ' (' + status + ')', x, y, dockW, dockH);
+  }
+
+  var ship = Simulation.shipping;
+  if (ship) {
+    ctx.fillStyle = '#8b949e';
+    ctx.font = '8px "Segoe UI", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Отгружено: ' + ship.dispatchedCount, startX + loadingAreaW / 2, startY + totalColH + 12);
   }
 };
 
@@ -602,7 +674,7 @@ Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ri
 Visualization.drawLegend = function (ctx, w, h) {
   const x = w - 150;
   const y = 65;
-  const items = [
+  const pocketItems = [
     { color: '#3fb950', label: 'Карман <50%' },
     { color: '#d29922', label: 'Карман 50–80%' },
     { color: '#f85149', label: 'Карман >80%' },
@@ -611,16 +683,38 @@ Visualization.drawLegend = function (ctx, w, h) {
   ctx.fillStyle = 'rgba(22, 27, 34, 0.85)';
   ctx.strokeStyle = '#30363d';
   ctx.lineWidth = 1;
-  ctx.fillRect(x - 8, y - 6, 138, items.length * 16 + 10);
-  ctx.strokeRect(x - 8, y - 6, 138, items.length * 16 + 10);
+  ctx.fillRect(x - 8, y - 6, 138, pocketItems.length * 16 + 10);
+  ctx.strokeRect(x - 8, y - 6, 138, pocketItems.length * 16 + 10);
 
-  items.forEach(function (item, i) {
+  pocketItems.forEach(function (item, i) {
     ctx.fillStyle = item.color;
     ctx.fillRect(x + 2, y + i * 16 + 4, 10, 10);
     ctx.fillStyle = '#8b949e';
     ctx.font = '11px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(item.label, x + 16, y + i * 16 + 13);
+  });
+
+  const dockY = y + pocketItems.length * 16 + 14;
+  const dockItems = [
+    { color: '#3fb950', label: 'Док свободен' },
+    { color: '#d29922', label: 'Док занят' },
+    { color: '#f85149', label: 'Док занят + очередь' },
+  ];
+
+  ctx.fillStyle = 'rgba(22, 27, 34, 0.85)';
+  ctx.strokeStyle = '#30363d';
+  ctx.lineWidth = 1;
+  ctx.fillRect(x - 8, dockY - 6, 138, dockItems.length * 16 + 10);
+  ctx.strokeRect(x - 8, dockY - 6, 138, dockItems.length * 16 + 10);
+
+  dockItems.forEach(function (item, i) {
+    ctx.fillStyle = item.color;
+    ctx.fillRect(x + 2, dockY + i * 16 + 4, 10, 10);
+    ctx.fillStyle = '#8b949e';
+    ctx.font = '11px "Segoe UI", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(item.label, x + 16, dockY + i * 16 + 13);
   });
 };
 

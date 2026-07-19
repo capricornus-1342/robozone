@@ -6,6 +6,7 @@ const Simulation = {
   depalletizing: null,
   sorting: null,
   packing: null,
+  shipping: null,
 
   init: function () {
     this._buildWeights(CONFIG.sorting.pockets);
@@ -15,6 +16,7 @@ const Simulation = {
     this.initDepalletizing();
     this.initSorting();
     this.initPacking();
+    this.initShipping();
   },
 
   reset: function () {
@@ -110,6 +112,24 @@ const Simulation = {
       sealedCount: 0,
       palletCount: 0,
       lastProcessedPocket: 0
+    };
+  },
+
+  initShipping: function () {
+    var docks = [];
+    for (var i = 0; i < CONFIG.shipping.docksLoad; i++) {
+      docks.push({ id: i, status: 'free', currentTruck: null });
+    }
+    this.shipping = {
+      buffer: [],
+      docks: docks,
+      dispatchedCount: 0,
+      findFreeDock: function () {
+        for (var j = 0; j < this.docks.length; j++) {
+          if (this.docks[j].status === 'free') return this.docks[j];
+        }
+        return null;
+      }
     };
   },
 

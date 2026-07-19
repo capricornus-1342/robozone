@@ -68,6 +68,15 @@
     if (Simulation.depalletizing) {
       document.getElementById('stat-empty-ct').textContent = Simulation.depalletizing.emptyContainerBuffer;
     }
+    if (Simulation.shipping) {
+      document.getElementById('stat-ship-buffer').textContent = Simulation.shipping.buffer.length;
+      document.getElementById('stat-dispatched').textContent = Simulation.shipping.dispatchedCount;
+      var loadingCount = 0;
+      for (var di = 0; di < Simulation.shipping.docks.length; di++) {
+        if (Simulation.shipping.docks[di].status === 'loading') loadingCount++;
+      }
+      document.getElementById('stat-loading-docks').textContent = loadingCount + '/' + CONFIG.shipping.docksLoad;
+    }
     var circulation = 0;
     if (Simulation.depalletizing) circulation += Simulation.depalletizing.emptyContainerBuffer;
     if (Simulation.packing) circulation += Simulation.packing.sealedCount;
@@ -260,10 +269,44 @@
 
       if (pack.sealedCount % 16 === 0) {
         pack.palletCount++;
+        Simulation.shipping.buffer.push({ id: pack.palletCount, containers: 16, createdAt: engine.simTime });
       }
 
       _packingBatchCount++;
     }
+  }
+
+  function scheduleShippingStep() {
+    var interval = 1.0;
+    engine.scheduleEvent(interval, function (time) {
+      processShipping();
+      scheduleShippingStep();
+    });
+  }
+
+  function processShipping() {
+    var ship = Simulation.shipping;
+    if (!ship) return;
+
+    var dock = ship.findFreeDock();
+    if (!dock) return;
+    if (ship.buffer.length < 16) return;
+
+    var pallets = ship.buffer.splice(0, 16);
+    var truckId = Simulation._nextId.truck++;
+    dock.status = 'loading';
+    dock.currentTruck = { id: truckId, pallets: pallets, rollCages: 16, startTime: engine.simTime };
+
+    var loadTime = CONFIG.shipping.loadTimeHours * 60;
+    log('Машина #' + truckId + ' → ворота ' + (dock.id + 1) + ' (16 палет КТЯ + 16 ролл-кейджей, загрузка ' + loadTime + ' мин)', 'system');
+
+    engine.scheduleEvent(loadTime, function (t) {
+      ship.dispatchedCount++;
+      log('Машина #' + dock.currentTruck.id + ' отправлена от ворот ' + (dock.id + 1) + ' (' + (pallets.length * 16) + ' КТЯ, 16 ролл-кейджей)', 'system');
+      dock.status = 'free';
+      dock.currentTruck = null;
+      draw();
+    });
   }
 
   function getTotalQueueLength() {
@@ -315,8 +358,14 @@
         dock.assignTruck(truck);
         startUnload(dock, truck);
       } else {
-        Simulation.reception.docks[0].queue.push(truck);
-        log('Все доки заняты — грузовик #' + truck.id + ' в очереди (всего ' + getTotalQueueLength() + ' в очереди)', 'error');
+        var bestDock = Simulation.reception.docks[0];
+        for (var di = 1; di < Simulation.reception.docks.length; di++) {
+          if (Simulation.reception.docks[di].queue.length < bestDock.queue.length) {
+            bestDock = Simulation.reception.docks[di];
+          }
+        }
+        bestDock.queue.push(truck);
+        log('Все доки заняты — грузовик #' + truck.id + ' в очередь к доку ' + (bestDock.id + 1) + ' (всего ' + getTotalQueueLength() + ' в очереди)', 'error');
       }
 
       draw();
@@ -337,6 +386,7 @@
     scheduleTruckArrival();
     scheduleSortingStep();
     schedulePackingStep();
+    scheduleShippingStep();
     engine.run();
     log('Симуляция запущена (замедлитель ' + coeff + '×)', 'system');
     updateButtons();
