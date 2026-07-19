@@ -395,7 +395,7 @@
 
     var hist = StatisticsCollector.history;
     if (hist.length < 2) {
-      ctx.fillStyle = '#484f58';
+      ctx.fillStyle = '#656d76';
       ctx.font = '11px "Segoe UI", sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('Накопление данных...', w / 2, h / 2);
@@ -411,14 +411,14 @@
     }
     if (maxVal < 100) maxVal = 100;
 
-    ctx.strokeStyle = '#30363d';
+    ctx.strokeStyle = '#d0d7de';
     ctx.lineWidth = 0.5;
     ctx.beginPath();
     ctx.moveTo(pad.l, pad.t + ch * 0.5);
     ctx.lineTo(pad.l + cw, pad.t + ch * 0.5);
     ctx.stroke();
 
-    ctx.fillStyle = '#484f58';
+    ctx.fillStyle = '#656d76';
     ctx.font = '6px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(Math.round(maxVal / 1000) + 'k', pad.l, pad.t + 8);
@@ -427,7 +427,7 @@
     ctx.fillText('т/ч', pad.l + cw, pad.t + 8);
 
     var step = Math.max(1, Math.floor(hist.length / (cw / 2)));
-    var color = '#58a6ff';
+    var color = '#0969da';
     ctx.strokeStyle = color;
     ctx.lineWidth = 1.5;
     ctx.beginPath();

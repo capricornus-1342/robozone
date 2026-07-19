@@ -6,8 +6,8 @@
 
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: #0f1117;
-  color: #e1e4e8;
+  background: #ffffff;
+  color: #1f2328;
   overflow: hidden;
   height: 100vh;
 }
@@ -23,20 +23,20 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
+  background: #ffffff;
+  border-bottom: 1px solid #d0d7de;
   flex-shrink: 0;
 }
 
 header h1 {
   font-size: 18px;
   font-weight: 600;
-  color: #f0f6fc;
+  color: #1f2328;
   letter-spacing: 0.3px;
 }
 
 header h1 span {
-  color: #58a6ff;
+  color: #0969da;
 }
 
 #controls {
@@ -46,10 +46,10 @@ header h1 span {
 
 #controls button {
   padding: 6px 18px;
-  border: 1px solid #30363d;
+  border: 1px solid #d0d7de;
   border-radius: 6px;
-  background: #21262d;
-  color: #c9d1d9;
+  background: #f6f8fa;
+  color: #1f2328;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -57,8 +57,8 @@ header h1 span {
 }
 
 #controls button:hover:not(:disabled) {
-  background: #30363d;
-  border-color: #58a6ff;
+  background: #e8eaed;
+  border-color: #0969da;
 }
 
 #controls button:disabled {
@@ -67,17 +67,17 @@ header h1 span {
 }
 
 #controls button.primary {
-  background: #1f6feb;
-  border-color: #1f6feb;
+  background: #0969da;
+  border-color: #0969da;
   color: #fff;
 }
 
 #controls button.primary:hover:not(:disabled) {
-  background: #388bfd;
+  background: #0550ae;
 }
 
 #controls button.danger {
-  color: #f85149;
+  color: #cf222e;
 }
 
 #controls .speed-control {
@@ -85,7 +85,7 @@ header h1 span {
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #8b949e;
+  color: #656d76;
 }
 
 #controls .speed-control label {
@@ -95,22 +95,22 @@ header h1 span {
 #controls .speed-control input {
   width: 52px;
   padding: 4px 6px;
-  border: 1px solid #30363d;
+  border: 1px solid #d0d7de;
   border-radius: 4px;
-  background: #0d1117;
-  color: #f0f6fc;
+  background: #ffffff;
+  color: #1f2328;
   font-size: 13px;
   text-align: center;
   outline: none;
 }
 
 #controls .speed-control input:focus {
-  border-color: #58a6ff;
+  border-color: #0969da;
 }
 
 #settings {
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
+  background: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
   padding: 6px 20px;
   flex-shrink: 0;
 }
@@ -127,13 +127,13 @@ header h1 span {
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  color: #8b949e;
+  color: #656d76;
 }
 
 .param label {
   white-space: nowrap;
   font-size: 10px;
-  color: #f0f6fc;
+  color: #1f2328;
 }
 
 .param input[type="range"] {
@@ -141,7 +141,7 @@ header h1 span {
   height: 4px;
   -webkit-appearance: none;
   appearance: none;
-  background: #30363d;
+  background: #d0d7de;
   border-radius: 2px;
   outline: none;
   cursor: pointer;
@@ -153,13 +153,13 @@ header h1 span {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #58a6ff;
+  background: #0969da;
   cursor: pointer;
 }
 
 .param-val {
   font-weight: 600;
-  color: #f0f6fc;
+  color: #1f2328;
   font-size: 11px;
   min-width: 28px;
   text-align: right;
@@ -167,50 +167,51 @@ header h1 span {
 
 .scenario {
   padding: 4px 12px;
-  border: 1px solid #30363d;
+  border: 1px solid #d0d7de;
   border-radius: 4px;
-  background: #21262d;
-  color: #c9d1d9;
+  background: #f6f8fa;
+  color: #1f2328;
   font-size: 11px;
   cursor: pointer;
 }
 
 .scenario:hover {
-  border-color: #58a6ff;
-  background: #30363d;
+  border-color: #0969da;
+  background: #e8eaed;
 }
 
 .scenario.active {
-  border-color: #58a6ff;
-  background: #1f3a5f;
-  color: #58a6ff;
+  border-color: #0969da;
+  background: #ddf4ff;
+  color: #0969da;
 }
 
 #btnApply {
   padding: 4px 16px;
-  border: 1px solid #1f6feb;
+  border: 1px solid #0969da;
   border-radius: 4px;
-  background: #1f6feb;
+  background: #0969da;
   color: #fff;
   font-size: 11px;
   cursor: pointer;
 }
 
 #btnApply:hover {
-  background: #388bfd;
+  background: #0550ae;
 }
 
 #tooltip {
   position: fixed;
-  background: #1c2333;
-  border: 1px solid #30363d;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
   border-radius: 4px;
   padding: 4px 8px;
   font-size: 10px;
-  color: #f0f6fc;
+  color: #1f2328;
   pointer-events: none;
   z-index: 100;
   white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 #controls .speed-control input[type="range"] {
@@ -218,7 +219,7 @@ header h1 span {
   height: 4px;
   -webkit-appearance: none;
   appearance: none;
-  background: #30363d;
+  background: #d0d7de;
   border-radius: 2px;
   outline: none;
   cursor: pointer;
@@ -231,13 +232,13 @@ header h1 span {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #58a6ff;
+  background: #0969da;
   cursor: pointer;
 }
 
 .speed-val {
   font-weight: 600;
-  color: #f0f6fc;
+  color: #1f2328;
   font-size: 12px;
   min-width: 30px;
 }
@@ -245,7 +246,7 @@ header h1 span {
 #controls .sep {
   width: 1px;
   height: 24px;
-  background: #30363d;
+  background: #d0d7de;
   margin: 0 6px;
   align-self: center;
   flex-shrink: 0;
@@ -261,7 +262,7 @@ main {
   flex: 1;
   position: relative;
   overflow: hidden;
-  background: #0d1117;
+  background: #ffffff;
 }
 
 #simulation-container canvas {
@@ -275,10 +276,10 @@ main {
   align-items: center;
   gap: 16px;
   padding: 6px 20px;
-  background: #161b22;
-  border-top: 1px solid #30363d;
+  background: #f6f8fa;
+  border-top: 1px solid #d0d7de;
   font-size: 12px;
-  color: #8b949e;
+  color: #656d76;
   flex-shrink: 0;
 }
 
@@ -289,11 +290,11 @@ main {
 }
 
 #status-bar .stat .label {
-  color: #484f58;
+  color: #656d76;
 }
 
 #status-bar .stat .value {
-  color: #f0f6fc;
+  color: #1f2328;
   font-weight: 500;
 }
 
@@ -305,23 +306,23 @@ main {
 }
 
 #status-bar .dot.green {
-  background: #3fb950;
+  background: #2da44e;
 }
 
 #status-bar .dot.yellow {
-  background: #d29922;
+  background: #bf8700;
 }
 
 #status-bar .dot.red {
-  background: #f85149;
+  background: #cf222e;
 }
 
 #dashboard {
   display: flex;
   gap: 12px;
   padding: 8px 20px;
-  background: #161b22;
-  border-top: 1px solid #30363d;
+  background: #f6f8fa;
+  border-top: 1px solid #d0d7de;
   flex-shrink: 0;
   height: 110px;
 }
@@ -342,12 +343,12 @@ main {
 }
 
 .dash-label {
-  color: #484f58;
+  color: #656d76;
   white-space: nowrap;
 }
 
 .dash-value {
-  color: #f0f6fc;
+  color: #1f2328;
   font-weight: 600;
   font-size: 12px;
 }
@@ -361,7 +362,7 @@ main {
 .dash-chart-area canvas {
   width: 100%;
   height: 100%;
-  border: 1px solid #30363d;
+  border: 1px solid #d0d7de;
   border-radius: 4px;
-  background: #0d1117;
+  background: #ffffff;
 }

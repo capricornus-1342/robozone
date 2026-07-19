@@ -17,10 +17,10 @@ Visualization.hitTest = function (px, py) {
 
 Visualization.drawHighlight = function (ctx, x, y, w, h) {
   ctx.save();
-  ctx.fillStyle = 'rgba(88, 166, 255, 0.12)';
-  ctx.strokeStyle = '#58a6ff';
+  ctx.fillStyle = 'rgba(9, 105, 218, 0.08)';
+  ctx.strokeStyle = '#0969da';
   ctx.lineWidth = 2;
-  ctx.shadowColor = 'rgba(88, 166, 255, 0.4)';
+  ctx.shadowColor = 'rgba(9, 105, 218, 0.3)';
   ctx.shadowBlur = 12;
   ctx.fillRect(x, y, w, h);
   ctx.strokeRect(x, y, w, h);
@@ -60,7 +60,7 @@ Visualization.draw = function (ctx, cfg) {
 
   const titleAreaH = 65;
   const ringCY = titleAreaH + (h - titleAreaH - 10) * 0.5;
-  const ringRY = Math.min((h - titleAreaH - 10) * 0.38, 200);
+  const ringRY = Math.min((h - titleAreaH - 10) * 0.34, 200);
 
   this.drawConveyorLines(ctx, ringCX, ringCY, ringRX, ringRY, w, h, cfg);
   this.drawUnloadingDocks(ctx, cfg, ringCY, h, self);
@@ -78,13 +78,13 @@ Visualization.draw = function (ctx, cfg) {
 
 Visualization.drawBackground = function (ctx, w, h) {
   const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.6);
-  grad.addColorStop(0, '#161b22');
-  grad.addColorStop(1, '#0d1117');
+  grad.addColorStop(0, '#f0f3f6');
+  grad.addColorStop(1, '#ffffff');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, w, h);
 
   const gridSize = 40;
-  ctx.strokeStyle = 'rgba(48, 54, 61, 0.3)';
+  ctx.strokeStyle = 'rgba(208, 215, 222, 0.4)';
   ctx.lineWidth = 0.5;
   for (let x = 0; x <= w; x += gridSize) {
     ctx.beginPath();
@@ -101,18 +101,18 @@ Visualization.drawBackground = function (ctx, w, h) {
 };
 
 Visualization.drawTitle = function (ctx, w) {
-  ctx.fillStyle = '#f0f6fc';
+  ctx.fillStyle = '#1f2328';
   ctx.font = 'bold 22px "Segoe UI", system-ui, sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('Схема сортировочного центра', w / 2, 34);
 
-  ctx.fillStyle = '#8b949e';
+  ctx.fillStyle = '#656d76';
   ctx.font = '12px "Segoe UI", system-ui, sans-serif';
   ctx.fillText('10 доков разгрузки · 400 направлений · 10 сортировщиков · 100 000 тов/ч · 24 ворот отгрузки', w / 2, 52);
 };
 
 Visualization.drawConveyorLines = function (ctx, ringCX, ringCY, ringRX, ringRY, w, h, cfg) {
-  ctx.strokeStyle = '#58a6ff';
+  ctx.strokeStyle = '#0969da';
   ctx.lineWidth = 2;
   ctx.setLineDash([5, 4]);
 
@@ -127,7 +127,7 @@ Visualization.drawConveyorLines = function (ctx, ringCX, ringCY, ringRX, ringRY,
     ctx.stroke();
   }
 
-  ctx.fillStyle = '#30363d';
+  ctx.fillStyle = '#656d76';
   ctx.font = '7px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('поток товаров', dockRightX + 20, ringCY - 4);
@@ -160,10 +160,10 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
 
   self.registerZone('unload-zone', 'zone-label', 'Зона разгрузки', startX, startY - 20, dockW, totalH + 20);
 
-  ctx.fillStyle = '#f0f6fc';
-  ctx.font = '10px "Segoe UI", sans-serif';
+  ctx.fillStyle = '#1f2328';
+  ctx.font = '12px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('ЗОНА РАЗГРУЗКИ', startX + dockW / 2, startY - 14);
+  ctx.fillText('ЗОНА РАЗГРУЗКИ', startX + dockW / 2, startY - 16);
   ctx.fillText(count + ' доков', startX + dockW / 2, startY - 4);
 
   var docksState = Simulation.reception ? Simulation.reception.docks : null;
@@ -175,10 +175,10 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
     var isBusy = docksState && docksState[i] ? docksState[i].isBusy : false;
     var hasQueue = docksState && docksState[i] ? docksState[i].queue.length > 0 : false;
 
-    ctx.fillStyle = isBusy ? '#2d1f1f' : '#1c2333';
+    ctx.fillStyle = isBusy ? '#fde8e8' : '#f6f8fa';
     ctx.fillRect(startX, y, dockW, dockH);
 
-    ctx.strokeStyle = isBusy ? '#f85149' : '#30363d';
+    ctx.strokeStyle = isBusy ? '#cf222e' : '#d0d7de';
     ctx.lineWidth = isBusy ? 1.5 : 1;
     ctx.strokeRect(startX, y, dockW, dockH);
 
@@ -187,29 +187,29 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
     }
 
     if (isBusy) {
-      ctx.fillStyle = hasQueue ? '#f85149' : '#d29922';
+      ctx.fillStyle = hasQueue ? '#cf222e' : '#bf8700';
     } else {
-      ctx.fillStyle = '#3fb950';
+      ctx.fillStyle = '#2da44e';
     }
     ctx.beginPath();
     ctx.arc(startX + 8, y + dockH / 2, 4, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = '#f0f6fc';
-    ctx.font = '9px "Segoe UI", sans-serif';
+    ctx.fillStyle = '#1f2328';
+    ctx.font = '11px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText('Док ' + (i + 1), startX + 16, y + dockH / 2 + 3);
 
     if (isBusy) {
-      ctx.fillStyle = '#f85149';
-      ctx.font = '7px "Segoe UI", sans-serif';
+      ctx.fillStyle = '#cf222e';
+      ctx.font = '8px "Segoe UI", sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText('занят', startX + dockW - 4, y + dockH / 2 + 3);
     }
     if (hasQueue) {
       var qLen = docksState[i].queue.length;
-      ctx.fillStyle = '#f85149';
-      ctx.font = 'bold 7px "Segoe UI", sans-serif';
+      ctx.fillStyle = '#cf222e';
+      ctx.font = 'bold 8px "Segoe UI", sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText('+' + qLen, startX + dockW - 4, y + dockH - 3);
     }
@@ -226,10 +226,10 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
   const y = ringCY - bh / 2;
 
   const grad = ctx.createLinearGradient(x, y, x, y + bh);
-  grad.addColorStop(0, '#1f2937');
-  grad.addColorStop(1, '#111827');
+  grad.addColorStop(0, '#e8eaed');
+  grad.addColorStop(1, '#d0d7de');
   ctx.fillStyle = grad;
-  ctx.strokeStyle = '#30363d';
+  ctx.strokeStyle = '#d0d7de';
   ctx.lineWidth = 2;
   this.roundRect(ctx, x, y, bw, bh, 6);
   ctx.fill();
@@ -239,7 +239,7 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
     this.drawHighlight(ctx, x, y, bw, bh);
   }
 
-  ctx.fillStyle = '#f0f6fc';
+  ctx.fillStyle = '#1f2328';
   ctx.font = '9px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('БУФЕР', x + bw / 2, y + 16);
@@ -248,7 +248,7 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
   var bufCount = bufState ? bufState.count : 0;
   var bufFill = bufState ? bufState.fillRate : 0;
 
-  ctx.fillStyle = '#8b949e';
+  ctx.fillStyle = '#656d76';
   ctx.font = '9px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText(bufCount + ' / ' + cfg.reception.bufferCapacity + ' палет', x + bw / 2, y + bh - 10);
@@ -256,8 +256,8 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
   var fillH = Math.max(bh * Math.min(bufFill, 1), 4);
   if (fillH > bh) fillH = bh;
 
-  var backColor = bufFill > 0.8 ? 'rgba(248, 81, 73, 0.15)' : bufFill > 0.5 ? 'rgba(210, 153, 34, 0.15)' : 'rgba(63, 185, 80, 0.15)';
-  var fillColor = bufFill > 0.8 ? 'rgba(248, 81, 73, 0.5)' : bufFill > 0.5 ? 'rgba(210, 153, 34, 0.5)' : 'rgba(63, 185, 80, 0.5)';
+  var backColor = bufFill > 0.8 ? 'rgba(207, 34, 46, 0.1)' : bufFill > 0.5 ? 'rgba(191, 135, 0, 0.1)' : 'rgba(45, 164, 78, 0.1)';
+  var fillColor = bufFill > 0.8 ? 'rgba(207, 34, 46, 0.4)' : bufFill > 0.5 ? 'rgba(191, 135, 0, 0.4)' : 'rgba(45, 164, 78, 0.4)';
 
   ctx.fillStyle = backColor;
   this.roundRect(ctx, x + 4, y + bh - fillH - 4, bw - 8, fillH, 3);
@@ -272,13 +272,13 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
 Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry, self) {
   ctx.save();
 
-  ctx.shadowColor = 'rgba(88, 166, 255, 0.1)';
+  ctx.shadowColor = 'rgba(9, 105, 218, 0.08)';
   ctx.shadowBlur = 20;
 
   const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(rx, ry));
-  grad.addColorStop(0, '#1a2332');
-  grad.addColorStop(0.7, '#0f1923');
-  grad.addColorStop(1, '#0a1018');
+  grad.addColorStop(0, '#f0f3f6');
+  grad.addColorStop(0.7, '#e8eaed');
+  grad.addColorStop(1, '#e0e2e5');
 
   ctx.fillStyle = grad;
   ctx.beginPath();
@@ -287,19 +287,19 @@ Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry, self) {
 
   ctx.shadowBlur = 0;
 
-  ctx.strokeStyle = '#58a6ff';
+  ctx.strokeStyle = '#0969da';
   ctx.lineWidth = 3;
   if (self.highlightedZoneId === 'conveyor') {
     ctx.save();
     ctx.lineWidth = 5;
-    ctx.shadowColor = 'rgba(88, 166, 255, 0.5)';
+    ctx.shadowColor = 'rgba(9, 105, 218, 0.4)';
     ctx.shadowBlur = 18;
     ctx.stroke();
     ctx.restore();
   }
   ctx.stroke();
 
-  ctx.strokeStyle = 'rgba(88, 166, 255, 0.15)';
+  ctx.strokeStyle = 'rgba(9, 105, 218, 0.12)';
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 8]);
   ctx.beginPath();
@@ -307,24 +307,24 @@ Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry, self) {
   ctx.stroke();
   ctx.setLineDash([]);
 
-  ctx.fillStyle = 'rgba(88, 166, 255, 0.6)';
+  ctx.fillStyle = 'rgba(9, 105, 218, 0.7)';
   ctx.font = 'bold 13px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('КОЛЬЦЕВОЙ СОРТИРОВОЧНЫЙ', cx, cy - 10);
   ctx.fillText('КОНВЕЙЕР', cx, cy + 8);
-  ctx.fillStyle = '#f0f6fc';
+  ctx.fillStyle = '#1f2328';
   ctx.font = '11px "Segoe UI", sans-serif';
   ctx.fillText('10 сортировщиков × 10 000 тов/ч', cx, cy + 28);
 
-  ctx.fillStyle = '#f0f6fc';
+  ctx.fillStyle = '#1f2328';
   ctx.font = '10px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   var arrowAngle = -15 * Math.PI / 180;
   var arrowX = cx + rx * 0.75 * Math.cos(arrowAngle);
   var arrowY = cy + ry * 0.75 * Math.sin(arrowAngle);
   ctx.fillText('→ направление движения', arrowX, arrowY - 14);
-  ctx.fillStyle = '#30363d';
+  ctx.fillStyle = '#656d76';
   ctx.font = '20px "Segoe UI", sans-serif';
   var arrowAngles = [0.3, 1.0, 2.7, 4.8];
   for (var ai = 0; ai < arrowAngles.length; ai++) {
@@ -358,7 +358,7 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg, self) {
     const bx = cx + (rx + offset) * Math.cos(angle);
     const by = cy + (ry + offset) * Math.sin(angle);
 
-    ctx.strokeStyle = 'rgba(88, 166, 255, 0.2)';
+    ctx.strokeStyle = 'rgba(9, 105, 218, 0.15)';
     ctx.lineWidth = 1;
     ctx.setLineDash([2, 3]);
     ctx.beginPath();
@@ -367,8 +367,8 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg, self) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    ctx.fillStyle = '#1a2744';
-    ctx.strokeStyle = '#30363d';
+    ctx.fillStyle = '#f6f8fa';
+    ctx.strokeStyle = '#d0d7de';
     ctx.lineWidth = 1;
     ctx.fillRect(bx - bw / 2, by - bh / 2, bw, bh);
     ctx.strokeRect(bx - bw / 2, by - bh / 2, bw, bh);
@@ -385,18 +385,31 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg, self) {
       avgFill = cnt > 0 ? total / cnt : 0;
     }
 
-    var fillColor = avgFill > 0.8 ? '#f85149' : avgFill > 0.5 ? '#d29922' : '#3fb950';
+    var fillColor = avgFill > 0.8 ? '#cf222e' : avgFill > 0.5 ? '#bf8700' : '#2da44e';
     ctx.fillStyle = fillColor;
     ctx.fillRect(bx - bw / 2 + 2, by - bh / 2 + 2, (bw - 4) * avgFill, bh - 4);
 
-    ctx.fillStyle = '#f0f6fc';
-    ctx.font = '7px "Segoe UI", sans-serif';
+    const startNum = index * perBlock + 1;
+    const endNum = Math.min((index + 1) * perBlock, cfg.sorting.pockets);
+    ctx.fillStyle = '#1f2328';
     ctx.textAlign = 'center';
     ctx.textBaseline = isTop ? 'bottom' : 'top';
     const labelY = isTop ? by - bh / 2 - 2 : by + bh / 2 + 2;
-    const startNum = index * perBlock + 1;
-    const endNum = Math.min((index + 1) * perBlock, cfg.sorting.pockets);
-    ctx.fillText(startNum + '—' + endNum, bx, labelY);
+    if (isTop) {
+      ctx.font = '9px "Segoe UI", sans-serif';
+      ctx.fillText(endNum, bx, labelY);
+      ctx.font = '7px "Segoe UI", sans-serif';
+      ctx.fillText('—', bx, labelY - 9);
+      ctx.font = '9px "Segoe UI", sans-serif';
+      ctx.fillText(startNum, bx, labelY - 18);
+    } else {
+      ctx.font = '9px "Segoe UI", sans-serif';
+      ctx.fillText(startNum, bx, labelY);
+      ctx.font = '7px "Segoe UI", sans-serif';
+      ctx.fillText('—', bx, labelY + 9);
+      ctx.font = '9px "Segoe UI", sans-serif';
+      ctx.fillText(endNum, bx, labelY + 18);
+    }
 
     var fillPct = Math.round(avgFill * 100);
     var tip = 'Карманы ' + startNum + '–' + endNum + ': ' + fillPct + '% заполнены';
@@ -424,9 +437,9 @@ Visualization.drawConveyorItems = function (ctx, cx, cy, rx, ry) {
   if (!sort || !sort.conveyorItems || sort.conveyorItems.length === 0) return;
 
   ctx.save();
-  ctx.shadowColor = 'rgba(88, 166, 255, 0.4)';
+  ctx.shadowColor = 'rgba(9, 105, 218, 0.3)';
   ctx.shadowBlur = 6;
-  ctx.fillStyle = '#58a6ff';
+  ctx.fillStyle = '#0969da';
 
   var items = sort.conveyorItems;
   for (var i = 0; i < items.length; i++) {
@@ -457,13 +470,13 @@ Visualization.drawShippingBuffer = function (ctx, ringCX, ringCY, ringRX, w, cfg
   const bh = 40;
   const by = ringCY - bh / 2;
 
-  ctx.fillStyle = '#1c2333';
-  ctx.strokeStyle = '#30363d';
+  ctx.fillStyle = '#f6f8fa';
+  ctx.strokeStyle = '#d0d7de';
   ctx.lineWidth = 1;
   ctx.fillRect(bx, by, bw, bh);
   ctx.strokeRect(bx, by, bw, bh);
 
-  ctx.fillStyle = '#f0f6fc';
+  ctx.fillStyle = '#1f2328';
   ctx.font = '7px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('БУФЕР', bx + bw / 2, by + 12);
@@ -471,7 +484,7 @@ Visualization.drawShippingBuffer = function (ctx, ringCX, ringCY, ringRX, w, cfg
 
   var ship = Simulation.shipping;
   var bufCount = ship ? ship.buffer.length : 0;
-  ctx.fillStyle = bufCount >= 16 ? '#d29922' : '#484f58';
+  ctx.fillStyle = bufCount >= 16 ? '#bf8700' : '#656d76';
   ctx.font = 'bold 9px "Segoe UI", sans-serif';
   ctx.fillText(bufCount + ' пал', bx + bw / 2, by + bh - 6);
 
@@ -494,10 +507,10 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
 
   self.registerZone('load-zone', 'zone-label', 'Зона загрузки', startX, startY - 20, loadingAreaW, totalColH + 20);
 
-  ctx.fillStyle = '#f0f6fc';
-  ctx.font = '10px "Segoe UI", sans-serif';
+  ctx.fillStyle = '#1f2328';
+  ctx.font = '12px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('ЗОНА ЗАГРУЗКИ', startX + loadingAreaW / 2, startY - 14);
+  ctx.fillText('ЗОНА ЗАГРУЗКИ', startX + loadingAreaW / 2, startY - 16);
   ctx.fillText(count + ' ворот', startX + loadingAreaW / 2, startY - 4);
 
   var docksState = Simulation.shipping ? Simulation.shipping.docks : null;
@@ -513,15 +526,15 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
     var isHighlight = self.highlightedZoneId === zoneId;
 
     if (status === 'free') {
-      ctx.fillStyle = '#1c2333';
+      ctx.fillStyle = '#f6f8fa';
     } else if (status === 'loading') {
-      ctx.fillStyle = '#2d1f0a';
+      ctx.fillStyle = '#fef2e0';
     } else {
-      ctx.fillStyle = '#1a2d1a';
+      ctx.fillStyle = '#e6f4ea';
     }
     ctx.fillRect(x, y, dockW, dockH);
 
-    ctx.strokeStyle = isHighlight ? '#58a6ff' : status === 'free' ? '#30363d' : status === 'loading' ? '#d29922' : '#3fb950';
+    ctx.strokeStyle = isHighlight ? '#0969da' : status === 'free' ? '#d0d7de' : status === 'loading' ? '#bf8700' : '#2da44e';
     ctx.lineWidth = isHighlight ? 2 : status === 'free' ? 1 : 1.5;
     ctx.strokeRect(x, y, dockW, dockH);
 
@@ -529,20 +542,20 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
       this.drawHighlight(ctx, x, y, dockW, dockH);
     }
 
-    var dotColor = status === 'free' ? '#3fb950' : status === 'loading' ? '#d29922' : '#58a6ff';
+    var dotColor = status === 'free' ? '#2da44e' : status === 'loading' ? '#bf8700' : '#0969da';
     ctx.fillStyle = dotColor;
     ctx.beginPath();
     ctx.arc(x + dockW - 7, y + dockH / 2, 3, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = '#f0f6fc';
-    ctx.font = '7px "Segoe UI", sans-serif';
+    ctx.fillStyle = '#1f2328';
+    ctx.font = '9px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('B' + (i + 1), x + 4, y + dockH / 2 + 2.5);
+    ctx.fillText('B' + (i + 1), x + 4, y + dockH / 2 + 3);
 
     var label = status === 'free' ? '' : status === 'loading' ? '...' : '';
     if (label) {
-      ctx.fillStyle = status === 'loading' ? '#d29922' : '#3fb950';
+      ctx.fillStyle = status === 'loading' ? '#bf8700' : '#2da44e';
       ctx.font = '5px "Segoe UI", sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText(label, x + dockW - 10, y + dockH / 2 + 2);
@@ -553,10 +566,10 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
 
   var ship = Simulation.shipping;
   if (ship) {
-    ctx.fillStyle = '#f0f6fc';
-    ctx.font = '8px "Segoe UI", sans-serif';
+    ctx.fillStyle = '#1f2328';
+    ctx.font = '10px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Отгружено: ' + ship.dispatchedCount, startX + loadingAreaW / 2, startY + totalColH + 12);
+    ctx.fillText('Отгружено: ' + ship.dispatchedCount, startX + loadingAreaW / 2, startY + totalColH + 14);
   }
 };
 
@@ -576,9 +589,9 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
   }
 
   var sort = Simulation.sorting;
+  var backupVal = sort ? sort.backupBuffer.length : 0;
   var packInfo = pack ? 'заклеено: ' + pack.sealedCount : 'заклейка КТЯ';
   var palletInfo = pack ? 'палет: ' + pack.palletCount : 'паллетирование';
-  var backupInfo = sort ? 'буфер: ' + sort.backupBuffer.length : '';
 
   var ringXright = ringCX + ringRX;
 
@@ -588,8 +601,12 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
       x: ringCX - ringRX - 75, y: ringCY - ringRY - 35, w: 60, h: 36
     },
     {
-      id: 'nonsort', label: 'NonSort', sub: backupInfo,
+      id: 'nonsort', label: 'NonSort', sub: 'ручная сортировка',
       x: ringCX + ringRX - 30, y: ringCY - ringRY - 35, w: 60, h: 36
+    },
+    {
+      id: 'backup', label: 'РЕЗЕРВ', sub: backupVal + ' тов',
+      x: ringCX + ringRX - 30, y: ringCY - ringRY + 5, w: 60, h: 26
     },
     {
       id: 'sealing', label: 'ЗАКЛЕЙКА', sub: packInfo,
@@ -602,19 +619,19 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     {
       id: 'press', label: 'ПРЕСС',
       sub: dep ? 'утилизировано: ' + dep.containerScrapCount : 'утилизация КТЯ',
-      x: ringCX - ringRX - 80, y: ringCY + ringRY + 10, w: 55, h: 30
+      x: ringCX - ringRX - 80, y: ringCY + ringRY - 8, w: 55, h: 26
     },
     {
       id: 'newContainer', label: 'НОВЫЕ КТЯ',
       sub: dep ? 'создано: ' + dep.newContainerCount : 'производство',
-      x: ringCX - ringRX - 80, y: ringCY + ringRY + 42, w: 55, h: 30
+      x: ringCX - ringRX - 80, y: ringCY + ringRY + 20, w: 55, h: 26
     },
   ];
 
   zones.forEach(function (z) {
     var isActive = z.id === 'depalletizing' && busyCount > 0;
-    ctx.fillStyle = isActive ? '#1f2d1a' : '#1a2332';
-    ctx.strokeStyle = z.id === 'depalletizing' && busyCount === dep.stations.length ? '#f85149' : isActive ? '#3fb950' : '#30363d';
+    ctx.fillStyle = isActive ? '#e6f4ea' : '#f0f3f6';
+    ctx.strokeStyle = z.id === 'depalletizing' && busyCount === dep.stations.length ? '#cf222e' : isActive ? '#2da44e' : '#d0d7de';
     ctx.lineWidth = 1;
     ctx.fillRect(z.x, z.y, z.w, z.h);
     ctx.strokeRect(z.x, z.y, z.w, z.h);
@@ -623,12 +640,12 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
       self.drawHighlight(ctx, z.x, z.y, z.w, z.h);
     }
 
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = '#1f2328';
     ctx.font = 'bold 8px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(z.label, z.x + z.w / 2, z.y + 12);
 
-    ctx.fillStyle = '#484f58';
+    ctx.fillStyle = '#656d76';
     ctx.font = '7px "Segoe UI", sans-serif';
     ctx.fillText(z.sub, z.x + z.w / 2, z.y + z.h - 6);
 
@@ -641,17 +658,17 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
 
   if (dep && pack) {
     var circX = ringCX - ringRX - 80;
-    var circY = ringCY + ringRY + 75;
-    ctx.fillStyle = '#1a2332';
-    ctx.strokeStyle = '#30363d';
+    var circY = ringCY + ringRY + 48;
+    ctx.fillStyle = '#f0f3f6';
+    ctx.strokeStyle = '#d0d7de';
     ctx.lineWidth = 1;
     ctx.fillRect(circX, circY, 55, 22);
     ctx.strokeRect(circX, circY, 55, 22);
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = '#1f2328';
     ctx.font = 'bold 7px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('КТЯ В ОБОРОТЕ', circX + 27, circY + 9);
-    ctx.fillStyle = '#58a6ff';
+    ctx.fillStyle = '#0969da';
     ctx.font = 'bold 11px "Segoe UI", sans-serif';
     ctx.fillText('' + (dep.emptyContainerBuffer + pack.sealedCount), circX + 27, circY + 19);
   }
@@ -661,12 +678,12 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     var speedX = ringCX + ringRX + 100;
     var speedY = ringCY + ringRY + 10;
 
-    ctx.fillStyle = '#1a2332';
-    ctx.strokeStyle = '#30363d';
+    ctx.fillStyle = '#f0f3f6';
+    ctx.strokeStyle = '#d0d7de';
     ctx.lineWidth = 1;
     ctx.fillRect(speedX, speedY - 18, 62, 52);
     ctx.strokeRect(speedX, speedY - 18, 62, 52);
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = '#1f2328';
     ctx.font = 'bold 7px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('СКОРОСТИ', speedX + 31, speedY - 8);
@@ -674,14 +691,14 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     var drawSpeedBar = function(x, y, label, factor, color) {
       var barW = 50;
       var barH = 6;
-      ctx.fillStyle = '#0d1117';
+      ctx.fillStyle = '#e0e2e5';
       ctx.fillRect(x, y, barW, barH);
       ctx.fillStyle = color;
       ctx.fillRect(x, y, barW * Math.max(0.05, factor), barH);
-      ctx.strokeStyle = '#30363d';
+      ctx.strokeStyle = '#d0d7de';
       ctx.lineWidth = 0.5;
       ctx.strokeRect(x, y, barW, barH);
-      ctx.fillStyle = '#484f58';
+      ctx.fillStyle = '#656d76';
       ctx.font = '6px "Segoe UI", sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText(label, x, y + barH + 8);
@@ -690,26 +707,26 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
       ctx.fillText(Math.round(factor * 100) + '%', x + barW, y + barH + 8);
     };
 
-    drawSpeedBar(speedX + 6, speedY + 2, 'Разгр', adj.unloadSpeedFactor, '#3fb950');
-    drawSpeedBar(speedX + 6, speedY + 16, 'Сорт', adj.sortSpeedFactor, '#58a6ff');
-    drawSpeedBar(speedX + 6, speedY + 30, 'Конв', adj.conveyorSpeedFactor, '#d29922');
+    drawSpeedBar(speedX + 6, speedY + 2, 'Разгр', adj.unloadSpeedFactor, '#2da44e');
+    drawSpeedBar(speedX + 6, speedY + 16, 'Сорт', adj.sortSpeedFactor, '#0969da');
+    drawSpeedBar(speedX + 6, speedY + 30, 'Конв', adj.conveyorSpeedFactor, '#bf8700');
   }
 
   var warns = Simulation.warnings;
   if (warns && warns.length > 0) {
     var warnX = ringCX + 100;
     var warnY = ringCY - ringRY - 60;
-    ctx.fillStyle = 'rgba(248, 81, 73, 0.1)';
-    ctx.strokeStyle = '#f85149';
+    ctx.fillStyle = 'rgba(207, 34, 46, 0.06)';
+    ctx.strokeStyle = '#cf222e';
     ctx.lineWidth = 1;
     ctx.font = '6px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     for (var wi = 0; wi < Math.min(warns.length, 3); wi++) {
-      ctx.fillStyle = 'rgba(248, 81, 73, 0.08)';
+      ctx.fillStyle = 'rgba(207, 34, 46, 0.05)';
       ctx.fillRect(warnX - 4, warnY + wi * 12 - 2, 190, 10);
-      ctx.strokeStyle = 'rgba(248, 81, 73, 0.3)';
+      ctx.strokeStyle = 'rgba(207, 34, 46, 0.2)';
       ctx.strokeRect(warnX - 4, warnY + wi * 12 - 2, 190, 10);
-      ctx.fillStyle = '#f85149';
+      ctx.fillStyle = '#cf222e';
       ctx.fillText('⚠ ' + warns[wi], warnX, warnY + wi * 12 + 6);
     }
   }
@@ -719,33 +736,33 @@ Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ri
   var dpX = ringCX - ringRX - 45;
   var dpBot = ringCY - ringRY + 2;
   var pressX = ringCX - ringRX - 53;
-  var pressTop = ringCY + ringRY + 15;
-  var newConTop = ringCY + ringRY + 48;
+  var pressTop = ringCY + ringRY - 3;
+  var newConTop = ringCY + ringRY + 26;
   var ringLeft = ringCX - ringRX - 5;
   var ringTop = ringCY - ringRY + 5;
 
   ctx.font = '7px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
 
-  ctx.strokeStyle = 'rgba(210, 153, 34, 0.6)';
+  ctx.strokeStyle = 'rgba(191, 135, 0, 0.5)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(ringCX - ringRX, ringCY);
   ctx.lineTo(ringCX - ringRX - 30, ringCY);
   ctx.stroke();
-  ctx.fillStyle = '#d29922';
+  ctx.fillStyle = '#bf8700';
   ctx.fillText('КТЯ повторно (80%): ' + dep.containerReuseCount, ringCX - ringRX - 15, ringCY - 6);
 
-  ctx.strokeStyle = 'rgba(248, 81, 73, 0.6)';
+  ctx.strokeStyle = 'rgba(207, 34, 46, 0.5)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(dpX, dpBot + 5);
   ctx.lineTo(pressX, pressTop - 5);
   ctx.stroke();
-  ctx.fillStyle = '#f85149';
+  ctx.fillStyle = '#cf222e';
   ctx.fillText('брак (20%): ' + dep.containerScrapCount, (dpX + pressX) / 2, (dpBot + pressTop) / 2);
 
-  ctx.strokeStyle = 'rgba(88, 166, 255, 0.6)';
+  ctx.strokeStyle = 'rgba(9, 105, 218, 0.5)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.setLineDash([3, 3]);
@@ -753,7 +770,7 @@ Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ri
   ctx.lineTo(pressX, newConTop - 5);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = '#58a6ff';
+  ctx.fillStyle = '#0969da';
   ctx.fillText('новых: ' + dep.newContainerCount, pressX + 30, (pressTop + newConTop) / 2);
 };
 
@@ -761,13 +778,13 @@ Visualization.drawLegend = function (ctx, w, h) {
   const x = w - 150;
   const y = 65;
   const pocketItems = [
-    { color: '#3fb950', label: 'Карман <50%' },
-    { color: '#d29922', label: 'Карман 50–80%' },
-    { color: '#f85149', label: 'Карман >80%' },
+    { color: '#2da44e', label: 'Карман <50%' },
+    { color: '#bf8700', label: 'Карман 50–80%' },
+    { color: '#cf222e', label: 'Карман >80%' },
   ];
 
-  ctx.fillStyle = 'rgba(22, 27, 34, 0.85)';
-  ctx.strokeStyle = '#30363d';
+  ctx.fillStyle = 'rgba(246, 248, 250, 0.9)';
+  ctx.strokeStyle = '#d0d7de';
   ctx.lineWidth = 1;
   ctx.fillRect(x - 8, y - 6, 138, pocketItems.length * 16 + 10);
   ctx.strokeRect(x - 8, y - 6, 138, pocketItems.length * 16 + 10);
@@ -775,7 +792,7 @@ Visualization.drawLegend = function (ctx, w, h) {
   pocketItems.forEach(function (item, i) {
     ctx.fillStyle = item.color;
     ctx.fillRect(x + 2, y + i * 16 + 4, 10, 10);
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = '#1f2328';
     ctx.font = '11px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(item.label, x + 16, y + i * 16 + 13);
@@ -783,13 +800,13 @@ Visualization.drawLegend = function (ctx, w, h) {
 
   const dockY = y + pocketItems.length * 16 + 14;
   const dockItems = [
-    { color: '#3fb950', label: 'Док свободен' },
-    { color: '#d29922', label: 'Док занят' },
-    { color: '#f85149', label: 'Док занят + очередь' },
+    { color: '#2da44e', label: 'Док свободен' },
+    { color: '#bf8700', label: 'Док занят' },
+    { color: '#cf222e', label: 'Док занят + очередь' },
   ];
 
-  ctx.fillStyle = 'rgba(22, 27, 34, 0.85)';
-  ctx.strokeStyle = '#30363d';
+  ctx.fillStyle = 'rgba(246, 248, 250, 0.9)';
+  ctx.strokeStyle = '#d0d7de';
   ctx.lineWidth = 1;
   ctx.fillRect(x - 8, dockY - 6, 138, dockItems.length * 16 + 10);
   ctx.strokeRect(x - 8, dockY - 6, 138, dockItems.length * 16 + 10);
@@ -797,7 +814,7 @@ Visualization.drawLegend = function (ctx, w, h) {
   dockItems.forEach(function (item, i) {
     ctx.fillStyle = item.color;
     ctx.fillRect(x + 2, dockY + i * 16 + 4, 10, 10);
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = '#1f2328';
     ctx.font = '11px "Segoe UI", sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(item.label, x + 16, dockY + i * 16 + 13);
