@@ -159,21 +159,31 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
   ctx.fillText('ЗОНА РАЗГРУЗКИ', startX + dockW / 2, startY - 14);
   ctx.fillText(count + ' доков', startX + dockW / 2, startY - 4);
 
+  var docksState = Simulation.reception ? Simulation.reception.docks : null;
+
   for (let i = 0; i < count; i++) {
     const y = startY + i * (dockH + 8);
     const zoneId = 'unload-' + i;
 
-    ctx.fillStyle = '#1c2333';
+    var isBusy = docksState && docksState[i] ? docksState[i].isBusy : false;
+    var hasQueue = docksState && docksState[i] ? docksState[i].queue.length > 0 : false;
+
+    ctx.fillStyle = isBusy ? '#2d1f1f' : '#1c2333';
     ctx.fillRect(startX, y, dockW, dockH);
-    ctx.strokeStyle = '#30363d';
-    ctx.lineWidth = 1;
+
+    ctx.strokeStyle = isBusy ? '#f85149' : '#30363d';
+    ctx.lineWidth = isBusy ? 1.5 : 1;
     ctx.strokeRect(startX, y, dockW, dockH);
 
     if (self.highlightedZoneId === zoneId) {
       this.drawHighlight(ctx, startX, y, dockW, dockH);
     }
 
-    ctx.fillStyle = '#3fb950';
+    if (isBusy) {
+      ctx.fillStyle = hasQueue ? '#f85149' : '#d29922';
+    } else {
+      ctx.fillStyle = '#3fb950';
+    }
     ctx.beginPath();
     ctx.arc(startX + 8, y + dockH / 2, 4, 0, Math.PI * 2);
     ctx.fill();
@@ -183,7 +193,14 @@ Visualization.drawUnloadingDocks = function (ctx, cfg, ringCY, h, self) {
     ctx.textAlign = 'left';
     ctx.fillText('Док ' + (i + 1), startX + 16, y + dockH / 2 + 3);
 
-    self.registerZone(zoneId, 'unload', 'Док ' + (i + 1), startX, y, dockW, dockH);
+    if (isBusy) {
+      ctx.fillStyle = '#f85149';
+      ctx.font = '7px "Segoe UI", sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText('занят', startX + dockW - 4, y + dockH / 2 + 3);
+    }
+
+    self.registerZone(zoneId, 'unload', 'Док ' + (i + 1) + (isBusy ? ' (занят)' : ''), startX, y, dockW, dockH);
   }
 };
 
@@ -213,16 +230,27 @@ Visualization.drawBuffer = function (ctx, ringCX, ringCY, ringRX, cfg, self) {
   ctx.textAlign = 'center';
   ctx.fillText('БУФЕР', x + bw / 2, y + 16);
   ctx.fillText('ПРИЁМКИ', x + bw / 2, y + 26);
-  ctx.fillStyle = '#484f58';
-  ctx.fillText(cfg.reception.bufferCapacity + ' палет', x + bw / 2, y + bh - 10);
+  var bufState = Simulation.reception ? Simulation.reception.buffer : null;
+  var bufCount = bufState ? bufState.count : 0;
+  var bufFill = bufState ? bufState.fillRate : 0;
 
-  const fillH = bh * 0.35;
-  ctx.fillStyle = 'rgba(63, 185, 80, 0.15)';
+  ctx.fillStyle = '#8b949e';
+  ctx.font = '9px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(bufCount + ' / ' + cfg.reception.bufferCapacity + ' палет', x + bw / 2, y + bh - 10);
+
+  var fillH = Math.max(bh * Math.min(bufFill, 1), 4);
+  if (fillH > bh) fillH = bh;
+
+  var backColor = bufFill > 0.8 ? 'rgba(248, 81, 73, 0.15)' : bufFill > 0.5 ? 'rgba(210, 153, 34, 0.15)' : 'rgba(63, 185, 80, 0.15)';
+  var fillColor = bufFill > 0.8 ? 'rgba(248, 81, 73, 0.5)' : bufFill > 0.5 ? 'rgba(210, 153, 34, 0.5)' : 'rgba(63, 185, 80, 0.5)';
+
+  ctx.fillStyle = backColor;
   this.roundRect(ctx, x + 4, y + bh - fillH - 4, bw - 8, fillH, 3);
   ctx.fill();
 
-  ctx.fillStyle = 'rgba(63, 185, 80, 0.4)';
-  ctx.fillRect(x + 6, y + bh - fillH - 2, (bw - 12) * 0.35, fillH - 4);
+  ctx.fillStyle = fillColor;
+  ctx.fillRect(x + 6, y + bh - fillH - 2, (bw - 12) * bufFill, fillH - 4);
 
   self.registerZone('buffer', 'buffer', 'Буфер приемки', x, y, bw, bh);
 };

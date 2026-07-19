@@ -47,6 +47,11 @@
     statPallets.textContent = s.pallets;
     var nsPct = s.items > 0 ? Math.round(s.nonsort / s.items * 100) : 0;
     statNonsort.textContent = nsPct + '%';
+    if (Simulation.reception) {
+      document.getElementById('stat-buffer').textContent = Simulation.reception.buffer.count;
+      document.getElementById('stat-buffer-max').textContent = CONFIG.reception.bufferCapacity;
+      document.getElementById('stat-queue').textContent = getTotalQueueLength();
+    }
   }
 
   function draw() {
@@ -69,13 +74,58 @@
     }
   }
 
+  function getTotalQueueLength() {
+    var total = 0;
+    if (!Simulation.reception) return 0;
+    for (var di = 0; di < Simulation.reception.docks.length; di++) {
+      total += Simulation.reception.docks[di].queue.length;
+    }
+    return total;
+  }
+
+  function startUnload(dock, truck) {
+    var unloadDuration = truck.totalItems / CONFIG.reception.throughputPerDock * 60;
+    if (unloadDuration < 0.1) unloadDuration = 0.1;
+    log('Грузовик #' + truck.id + ' → док ' + (dock.id + 1) + ' (разгрузка ' + Math.round(unloadDuration) + ' мин, ' + truck.totalItems + ' тов.)', 'system');
+    Visualization.highlightedZoneId = 'unload-' + dock.id;
+
+    engine.scheduleEvent(unloadDuration, function (t) {
+      var added = 0;
+      for (var p = 0; p < truck.load.length; p++) {
+        if (Simulation.reception.buffer.add(truck.load[p])) {
+          added++;
+        } else {
+          log('Буфер приемки переполнен! Палета #' + truck.load[p].id + ' не поместилась', 'error');
+        }
+      }
+      log('Разгрузка грузовика #' + truck.id + ' завершена (' + added + ' палет в буфер, всего: ' + Simulation.reception.buffer.count + '/' + CONFIG.reception.bufferCapacity + ')');
+      dock.free();
+
+      if (dock.queue.length > 0) {
+        var nextTruck = dock.queue.shift();
+        dock.assignTruck(nextTruck);
+        startUnload(dock, nextTruck);
+      }
+
+      draw();
+    });
+  }
+
   function scheduleTruckArrival() {
     var delay = 0.5 + Math.random() * 1.0;
     engine.scheduleEvent(delay, function (time) {
       var truck = Simulation.generateTruck(time);
-      var dockIndex = Math.floor(Math.random() * CONFIG.reception.docksUnload);
-      Visualization.highlightedZoneId = 'unload-' + dockIndex;
-      log('Прибыл грузовик #' + truck.id + ' (' + truck.palletCount + ' палет, ' + truck.totalItems + ' тов., док ' + (dockIndex + 1) + ', t=' + formatTime(time) + ')');
+      log('Прибыл грузовик #' + truck.id + ' (' + truck.palletCount + ' палет, ' + truck.totalItems + ' тов.)', 'system');
+
+      var dock = Simulation.reception.findFreeDock();
+      if (dock) {
+        dock.assignTruck(truck);
+        startUnload(dock, truck);
+      } else {
+        Simulation.reception.docks[0].queue.push(truck);
+        log('Все доки заняты — грузовик #' + truck.id + ' в очереди (всего ' + getTotalQueueLength() + ' в очереди)', 'error');
+      }
+
       draw();
       scheduleTruckArrival();
     });
