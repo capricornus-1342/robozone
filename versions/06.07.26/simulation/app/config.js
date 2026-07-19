@@ -3,7 +3,7 @@ const CONFIG = {
     docksUnload: 10,
     throughputPerDock: 3000,
     bufferCapacity: 185,
-    arrivalRate: 185,
+    truckArrivalRate: 45,
   },
   depalletizing: {
     stations: 2,

@@ -8,6 +8,7 @@ body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   background: #ffffff;
   color: #1f2328;
+  font-size: 13px;
   overflow: hidden;
   height: 100vh;
 }
@@ -29,7 +30,7 @@ header {
 }
 
 header h1 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #1f2328;
   letter-spacing: 0.3px;
@@ -50,8 +51,6 @@ header h1 span {
   border-radius: 6px;
   background: #f6f8fa;
   color: #1f2328;
-  font-size: 13px;
-  font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
 }
@@ -84,7 +83,6 @@ header h1 span {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
   color: #656d76;
 }
 
@@ -99,7 +97,6 @@ header h1 span {
   border-radius: 4px;
   background: #ffffff;
   color: #1f2328;
-  font-size: 13px;
   text-align: center;
   outline: none;
 }
@@ -126,13 +123,13 @@ header h1 span {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: inherit;
   color: #656d76;
 }
 
 .param label {
   white-space: nowrap;
-  font-size: 10px;
+  font-size: inherit;
   color: #1f2328;
 }
 
@@ -160,7 +157,7 @@ header h1 span {
 .param-val {
   font-weight: 600;
   color: #1f2328;
-  font-size: 11px;
+  font-size: inherit;
   min-width: 28px;
   text-align: right;
 }
@@ -171,7 +168,7 @@ header h1 span {
   border-radius: 4px;
   background: #f6f8fa;
   color: #1f2328;
-  font-size: 11px;
+  font-size: inherit;
   cursor: pointer;
 }
 
@@ -192,7 +189,7 @@ header h1 span {
   border-radius: 4px;
   background: #0969da;
   color: #fff;
-  font-size: 11px;
+  font-size: inherit;
   cursor: pointer;
 }
 
@@ -206,7 +203,7 @@ header h1 span {
   border: 1px solid #d0d7de;
   border-radius: 4px;
   padding: 4px 8px;
-  font-size: 10px;
+  font-size: inherit;
   color: #1f2328;
   pointer-events: none;
   z-index: 100;
@@ -239,7 +236,7 @@ header h1 span {
 .speed-val {
   font-weight: 600;
   color: #1f2328;
-  font-size: 12px;
+  font-size: inherit;
   min-width: 30px;
 }
 
@@ -273,20 +270,24 @@ main {
 
 #status-bar {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 6px 20px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 1px 14px;
+  padding: 4px 20px;
   background: #f6f8fa;
   border-top: 1px solid #d0d7de;
-  font-size: 12px;
+  font-size: inherit;
   color: #656d76;
   flex-shrink: 0;
+  max-height: 64px;
+  overflow-y: auto;
 }
 
 #status-bar .stat {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
+  white-space: nowrap;
 }
 
 #status-bar .stat .label {
@@ -295,7 +296,6 @@ main {
 
 #status-bar .stat .value {
   color: #1f2328;
-  font-weight: 500;
 }
 
 #status-bar .dot {
@@ -339,7 +339,7 @@ main {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: inherit;
 }
 
 .dash-label {
@@ -350,7 +350,7 @@ main {
 .dash-value {
   color: #1f2328;
   font-weight: 600;
-  font-size: 12px;
+  font-size: inherit;
 }
 
 .dash-chart-area {

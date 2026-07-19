@@ -36,9 +36,10 @@
   }
 
   function formatTime(minutes) {
-    const h = Math.floor(minutes / 60);
+    const d = Math.floor(minutes / 1440);
+    const h = Math.floor((minutes % 1440) / 60);
     const m = Math.floor(minutes % 60);
-    return h + ':' + (m < 10 ? '0' : '') + m;
+    return d + 'д ' + h + ':' + (m < 10 ? '0' : '') + m;
   }
 
   function updateStats() {
@@ -396,7 +397,7 @@
     var hist = StatisticsCollector.history;
     if (hist.length < 2) {
       ctx.fillStyle = '#656d76';
-      ctx.font = '11px "Segoe UI", sans-serif';
+      ctx.font = '11px "Segoe UI", system-ui, -apple-system, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('Накопление данных...', w / 2, h / 2);
       return;
@@ -419,7 +420,7 @@
     ctx.stroke();
 
     ctx.fillStyle = '#656d76';
-    ctx.font = '6px "Segoe UI", sans-serif';
+    ctx.font = '6px "Segoe UI", system-ui, -apple-system, sans-serif';
     ctx.textAlign = 'left';
     ctx.fillText(Math.round(maxVal / 1000) + 'k', pad.l, pad.t + 8);
     ctx.fillText('0', pad.l, pad.t + ch + 12);
@@ -481,7 +482,10 @@
 
   function scheduleTruckArrival() {
     var paused = Simulation.adjustments && Simulation.adjustments.unloadPaused;
-    var delay = (paused ? 3.0 : 0.5) + Math.random() * 1.0;
+    var rate = CONFIG.reception.truckArrivalRate;
+    if (paused) rate = Math.min(rate, 20);
+    var mean = 60 / rate;
+    var delay = -Math.log(Math.random()) * mean;
     engine.scheduleEvent(delay, function (time) {
       var truck = Simulation.generateTruck(time);
       log('Прибыл грузовик #' + truck.id + ' (' + truck.palletCount + ' палет, ' + truck.totalItems + ' тов.)', 'system');
@@ -512,18 +516,23 @@
     CONFIG.items.nonsortRate = parseInt(document.getElementById('paramNonsort').value) / 100;
     CONFIG.depalletizing.containerScrap = parseInt(document.getElementById('paramScrap').value) / 100;
     CONFIG.sorting.pocketThreshold = parseInt(document.getElementById('paramThreshold').value);
-    var speedVal = parseFloat(document.getElementById('speedSlider').value);
+    CONFIG.reception.truckArrivalRate = parseInt(document.getElementById('paramArrival').value) / 10;
+    var exp10 = parseInt(document.getElementById('speedSlider').value);
+    var speedVal = exp10 < 0 ? Math.pow(10, exp10 / 10) : Math.round(Math.pow(10, exp10 / 10));
+    if (speedVal < 0.001) speedVal = 0.001;
     engine.speed = speedVal;
-    document.getElementById('speedDisplay').textContent = (speedVal < 1 ? speedVal.toFixed(1) : Math.round(speedVal)) + '×';
+    var disp = speedVal < 1 ? parseFloat(speedVal.toFixed(3)) + '' : Math.round(speedVal) + '';
+    document.getElementById('speedDisplay').textContent = disp + '×';
     document.getElementById('paramSortersVal').textContent = CONFIG.sorting.sorterCount;
     document.getElementById('paramThroughputVal').textContent = (CONFIG.sorting.sorterThroughput / 1000) + 'k';
     document.getElementById('paramNonsortVal').textContent = Math.round(CONFIG.items.nonsortRate * 100) + '%';
     document.getElementById('paramScrapVal').textContent = Math.round(CONFIG.depalletizing.containerScrap * 100) + '%';
     document.getElementById('paramThresholdVal').textContent = CONFIG.sorting.pocketThreshold;
+    document.getElementById('paramArrivalVal').textContent = CONFIG.reception.truckArrivalRate.toFixed(1);
   }
 
   function setupSliders() {
-    var sliderIds = ['speedSlider','paramSorters','paramThroughput','paramNonsort','paramScrap','paramThreshold'];
+    var sliderIds = ['speedSlider','paramSorters','paramThroughput','paramNonsort','paramScrap','paramThreshold','paramArrival'];
     for (var si = 0; si < sliderIds.length; si++) {
       document.getElementById(sliderIds[si]).addEventListener('input', syncParamsFromUI);
     }
@@ -541,6 +550,7 @@
         document.getElementById('paramNonsort').value = 5;
         document.getElementById('paramScrap').value = 20;
         document.getElementById('paramThreshold').value = 400;
+        document.getElementById('paramArrival').value = 450;
         break;
       case 'peak':
         document.getElementById('paramSorters').value = 12;
@@ -548,7 +558,7 @@
         document.getElementById('paramNonsort').value = 5;
         document.getElementById('paramScrap').value = 20;
         document.getElementById('paramThreshold').value = 400;
-        CONFIG.reception.arrivalRate = 220;
+        document.getElementById('paramArrival').value = 600;
         break;
       case 'emergency':
         document.getElementById('paramSorters').value = 8;
@@ -556,6 +566,7 @@
         document.getElementById('paramNonsort').value = 10;
         document.getElementById('paramScrap').value = 25;
         document.getElementById('paramThreshold').value = 300;
+        document.getElementById('paramArrival').value = 200;
         break;
       case 'manual':
         document.getElementById('paramSorters').value = 4;
@@ -563,6 +574,7 @@
         document.getElementById('paramNonsort').value = 8;
         document.getElementById('paramScrap').value = 20;
         document.getElementById('paramThreshold').value = 400;
+        document.getElementById('paramArrival').value = 450;
         break;
     }
     syncParamsFromUI();
