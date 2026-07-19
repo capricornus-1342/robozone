@@ -21,6 +21,9 @@
         </div>
         <span class="sep"></span>
         <button id="btnGenEvent">Сгенерировать событие</button>
+        <span class="sep"></span>
+        <button id="btnExport">Экспорт JSON</button>
+        <button id="btnToggleDash">Дашборд</button>
       </div>
     </header>
     <main>
@@ -28,6 +31,23 @@
         <canvas id="simCanvas"></canvas>
       </div>
     </main>
+    <div id="dashboard" style="display:none">
+      <div class="dash-metrics">
+        <div class="dash-metric"><span class="dash-label">Товаров/ч</span><span class="dash-value" id="dash-throughput">0</span></div>
+        <div class="dash-metric"><span class="dash-label">КТЯ/ч</span><span class="dash-value" id="dash-cti-rate">0</span></div>
+        <div class="dash-metric"><span class="dash-label">Палет/ч</span><span class="dash-value" id="dash-pallet-rate">0</span></div>
+        <div class="dash-metric"><span class="dash-label">NonSort %</span><span class="dash-value" id="dash-nonsort-pct">0%</span></div>
+        <div class="dash-metric"><span class="dash-label">Буфер приёмки</span><span class="dash-value" id="dash-buf-fill">0%</span></div>
+        <div class="dash-metric"><span class="dash-label">Очередь инфида</span><span class="dash-value" id="dash-infeed">0</span></div>
+        <div class="dash-metric"><span class="dash-label">Карманы (средн)</span><span class="dash-value" id="dash-pocket-avg">0%</span></div>
+        <div class="dash-metric"><span class="dash-label">Отгружено машин</span><span class="dash-value" id="dash-dispatched">0</span></div>
+        <div class="dash-metric"><span class="dash-label">Занято доков разгр</span><span class="dash-value" id="dash-unload-busy">0/10</span></div>
+        <div class="dash-metric"><span class="dash-label">Занято ворот загр</span><span class="dash-value" id="dash-load-busy">0/24</span></div>
+      </div>
+      <div class="dash-chart-area">
+        <canvas id="chartCanvas"></canvas>
+      </div>
+    </div>
     <div id="status-bar">
       <span class="stat"><span class="dot green"></span><span class="label">Статус:</span><span class="value" id="status-label">Готов</span></span>
       <span class="stat"><span class="label">Время:</span><span class="value" id="status-time">0:00</span></span>
@@ -67,6 +87,7 @@
   <script src="classes/Pocket.js"></script>
   <script src="classes/ConveyorBelt.js"></script>
   <script src="simulation.js"></script>
+  <script src="statistics.js"></script>
   <script src="visualization.js"></script>
   <script src="app.js"></script>
 </body>

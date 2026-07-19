@@ -13,6 +13,7 @@
 
   const engine = new SimulationEngine();
   engine.speed = 1;
+  var dashVisible = false;
 
   function resize() {
     const container = canvas.parentElement;
@@ -323,6 +324,92 @@
     });
   }
 
+  function scheduleStatistics() {
+    var interval = StatisticsCollector._snapshotInterval;
+    engine.scheduleEvent(interval, function (time) {
+      StatisticsCollector.takeSnapshot(time);
+      updateDashboard();
+      scheduleStatistics();
+    });
+  }
+
+  function updateDashboard() {
+    if (!dashVisible) return;
+    var snap = StatisticsCollector.getLatest();
+    if (!snap) return;
+    var s = Simulation.stats;
+    document.getElementById('dash-throughput').textContent = snap.itemsPerHour;
+    document.getElementById('dash-cti-rate').textContent = snap.containersPerHour;
+    document.getElementById('dash-pallet-rate').textContent = snap.palletsPerHour;
+    document.getElementById('dash-nonsort-pct').textContent = Math.round(s.nonsort / Math.max(1, s.items) * 100) + '%';
+    document.getElementById('dash-buf-fill').textContent = Math.round(snap.bufferFill * 100) + '%';
+    document.getElementById('dash-infeed').textContent = snap.infeedLength;
+    document.getElementById('dash-pocket-avg').textContent = Math.round(snap.avgPocketFill * 100) + '%';
+    document.getElementById('dash-dispatched').textContent = Simulation.shipping ? Simulation.shipping.dispatchedCount : 0;
+    document.getElementById('dash-unload-busy').textContent = snap.unloadDocksBusy + '/' + CONFIG.reception.docksUnload;
+    document.getElementById('dash-load-busy').textContent = snap.loadingDocksBusy + '/' + CONFIG.shipping.docksLoad;
+    drawChart();
+  }
+
+  function drawChart() {
+    var cvs = document.getElementById('chartCanvas');
+    if (!cvs) return;
+    var rect = cvs.parentElement.getBoundingClientRect();
+    var dpr = window.devicePixelRatio || 1;
+    cvs.width = rect.width * dpr;
+    cvs.height = rect.height * dpr;
+    var ctx = cvs.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var w = rect.width, h = rect.height;
+    ctx.clearRect(0, 0, w, h);
+
+    var hist = StatisticsCollector.history;
+    if (hist.length < 2) {
+      ctx.fillStyle = '#484f58';
+      ctx.font = '11px "Segoe UI", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Накопление данных...', w / 2, h / 2);
+      return;
+    }
+
+    var pad = { t: 8, r: 8, b: 16, l: 8 };
+    var cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
+
+    var maxVal = 0;
+    for (var i = 0; i < hist.length; i++) {
+      if (hist[i].itemsPerHour > maxVal) maxVal = hist[i].itemsPerHour;
+    }
+    if (maxVal < 100) maxVal = 100;
+
+    ctx.strokeStyle = '#30363d';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(pad.l, pad.t + ch * 0.5);
+    ctx.lineTo(pad.l + cw, pad.t + ch * 0.5);
+    ctx.stroke();
+
+    ctx.fillStyle = '#484f58';
+    ctx.font = '6px "Segoe UI", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(Math.round(maxVal / 1000) + 'k', pad.l, pad.t + 8);
+    ctx.fillText('0', pad.l, pad.t + ch + 12);
+    ctx.textAlign = 'right';
+    ctx.fillText('т/ч', pad.l + cw, pad.t + 8);
+
+    var step = Math.max(1, Math.floor(hist.length / (cw / 2)));
+    var color = '#58a6ff';
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (var i = 0; i < hist.length; i += step) {
+      var x = pad.l + (i / (hist.length - 1)) * cw;
+      var y = pad.t + ch - (hist[i].itemsPerHour / maxVal) * ch;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
   function getTotalQueueLength() {
     var total = 0;
     if (!Simulation.reception) return 0;
@@ -404,6 +491,7 @@
     schedulePackingStep();
     scheduleShippingStep();
     scheduleBalancing();
+    scheduleStatistics();
     engine.run();
     log('Симуляция запущена (замедлитель ' + coeff + '×)', 'system');
     updateButtons();
@@ -420,6 +508,7 @@
     engine.reset();
     Simulation.reset();
     Simulation.initAdjustments();
+    StatisticsCollector.init();
     Visualization.highlightedZoneId = null;
     log('Симуляция сброшена', 'system');
     statusLabel.textContent = 'Готов';
@@ -464,7 +553,26 @@
   btnReset.addEventListener('click', onReset);
   window.addEventListener('resize', resize);
 
+  document.getElementById('btnExport').addEventListener('click', function () {
+    if (StatisticsCollector.history.length === 0) {
+      log('Нет данных для экспорта — запустите симуляцию', 'error');
+      return;
+    }
+    StatisticsCollector.exportFile();
+    log('Экспорт статистики завершён', 'system');
+  });
+
+  document.getElementById('btnToggleDash').addEventListener('click', function () {
+    dashVisible = !dashVisible;
+    var dash = document.getElementById('dashboard');
+    dash.style.display = dashVisible ? 'flex' : 'none';
+    if (dashVisible) updateDashboard();
+    draw();
+  });
+
   Simulation.init();
+  StatisticsCollector.init();
+  StatisticsCollector.takeSnapshot(0);
   resize();
   updateButtons();
   log('Схема сортировочного центра загружена', 'system');
