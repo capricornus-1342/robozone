@@ -16,8 +16,9 @@
         <button class="danger" id="btnReset">Сброс</button>
         <span class="sep"></span>
         <div class="speed-control">
-          <label for="slowdown">Замедлитель:</label>
-          <input type="number" id="slowdown" value="1" min="0.1" step="0.1">
+          <label for="speedSlider">Скорость:</label>
+          <input type="range" id="speedSlider" min="0.1" max="120" value="1" step="0.1">
+          <span class="speed-val" id="speedDisplay">1×</span>
         </div>
         <span class="sep"></span>
         <button id="btnGenEvent">Сгенерировать событие</button>
@@ -26,6 +27,24 @@
         <button id="btnToggleDash">Дашборд</button>
       </div>
     </header>
+    <div id="settings">
+      <div class="settings-row">
+        <div class="param"><label>Сортировщики</label><input type="range" id="paramSorters" min="4" max="20" value="10" step="1"><span class="param-val" id="paramSortersVal">10</span></div>
+        <div class="param"><label>Товаров/ч ×1000</label><input type="range" id="paramThroughput" min="2" max="20" value="10" step="1"><span class="param-val" id="paramThroughputVal">10k</span></div>
+        <div class="param"><label>NonSort %</label><input type="range" id="paramNonsort" min="1" max="10" value="5" step="1"><span class="param-val" id="paramNonsortVal">5%</span></div>
+        <div class="param"><label>Брак КТЯ %</label><input type="range" id="paramScrap" min="10" max="30" value="20" step="1"><span class="param-val" id="paramScrapVal">20%</span></div>
+        <div class="param"><label>Порог кармана</label><input type="range" id="paramThreshold" min="100" max="500" value="400" step="10"><span class="param-val" id="paramThresholdVal">400</span></div>
+      </div>
+      <div class="settings-row">
+        <button class="scenario" data-scenario="base">Базовый</button>
+        <button class="scenario" data-scenario="peak">Пиковый</button>
+        <button class="scenario" data-scenario="emergency">Аварийный</button>
+        <button class="scenario" data-scenario="manual">Ручной</button>
+        <span class="sep"></span>
+        <button id="btnApply">Применить</button>
+      </div>
+    </div>
+    <div id="tooltip" style="display:none"></div>
     <main>
       <div id="simulation-container">
         <canvas id="simCanvas"></canvas>

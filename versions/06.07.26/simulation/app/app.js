@@ -476,15 +476,72 @@
     });
   }
 
-  function getSlowdownCoeff() {
-    var val = parseFloat(document.getElementById('slowdown').value);
-    return val > 0 ? val : 1;
+  function syncParamsFromUI() {
+    CONFIG.sorting.sorterCount = parseInt(document.getElementById('paramSorters').value);
+    CONFIG.sorting.sorterThroughput = parseInt(document.getElementById('paramThroughput').value) * 1000;
+    CONFIG.items.nonsortRate = parseInt(document.getElementById('paramNonsort').value) / 100;
+    CONFIG.depalletizing.containerScrap = parseInt(document.getElementById('paramScrap').value) / 100;
+    CONFIG.sorting.pocketThreshold = parseInt(document.getElementById('paramThreshold').value);
+    var speedVal = parseFloat(document.getElementById('speedSlider').value);
+    engine.speed = speedVal;
+    document.getElementById('speedDisplay').textContent = (speedVal < 1 ? speedVal.toFixed(1) : Math.round(speedVal)) + '×';
+    document.getElementById('paramSortersVal').textContent = CONFIG.sorting.sorterCount;
+    document.getElementById('paramThroughputVal').textContent = (CONFIG.sorting.sorterThroughput / 1000) + 'k';
+    document.getElementById('paramNonsortVal').textContent = Math.round(CONFIG.items.nonsortRate * 100) + '%';
+    document.getElementById('paramScrapVal').textContent = Math.round(CONFIG.depalletizing.containerScrap * 100) + '%';
+    document.getElementById('paramThresholdVal').textContent = CONFIG.sorting.pocketThreshold;
+  }
+
+  function setupSliders() {
+    var sliderIds = ['speedSlider','paramSorters','paramThroughput','paramNonsort','paramScrap','paramThreshold'];
+    for (var si = 0; si < sliderIds.length; si++) {
+      document.getElementById(sliderIds[si]).addEventListener('input', syncParamsFromUI);
+    }
+  }
+
+  function applyScenario(name) {
+    var scList = document.querySelectorAll('.scenario');
+    for (var si = 0; si < scList.length; si++) {
+      scList[si].classList.toggle('active', scList[si].dataset.scenario === name);
+    }
+    switch (name) {
+      case 'base':
+        document.getElementById('paramSorters').value = 10;
+        document.getElementById('paramThroughput').value = 10;
+        document.getElementById('paramNonsort').value = 5;
+        document.getElementById('paramScrap').value = 20;
+        document.getElementById('paramThreshold').value = 400;
+        break;
+      case 'peak':
+        document.getElementById('paramSorters').value = 12;
+        document.getElementById('paramThroughput').value = 10;
+        document.getElementById('paramNonsort').value = 5;
+        document.getElementById('paramScrap').value = 20;
+        document.getElementById('paramThreshold').value = 400;
+        CONFIG.reception.arrivalRate = 220;
+        break;
+      case 'emergency':
+        document.getElementById('paramSorters').value = 8;
+        document.getElementById('paramThroughput').value = 10;
+        document.getElementById('paramNonsort').value = 10;
+        document.getElementById('paramScrap').value = 25;
+        document.getElementById('paramThreshold').value = 300;
+        break;
+      case 'manual':
+        document.getElementById('paramSorters').value = 4;
+        document.getElementById('paramThroughput').value = 5;
+        document.getElementById('paramNonsort').value = 8;
+        document.getElementById('paramScrap').value = 20;
+        document.getElementById('paramThreshold').value = 400;
+        break;
+    }
+    syncParamsFromUI();
+    log('Сценарий: ' + name, 'system');
   }
 
   function onStart() {
     if (engine.isRunning) return;
-    var coeff = getSlowdownCoeff();
-    engine.speed = 1 / coeff;
+    syncParamsFromUI();
     _lastSortTime = 0;
     scheduleTruckArrival();
     scheduleSortingStep();
@@ -493,7 +550,7 @@
     scheduleBalancing();
     scheduleStatistics();
     engine.run();
-    log('Симуляция запущена (замедлитель ' + coeff + '×)', 'system');
+    log('Симуляция запущена (скорость ' + engine.speed + '×)', 'system');
     updateButtons();
   }
 
@@ -570,9 +627,65 @@
     draw();
   });
 
+  document.getElementById('btnApply').addEventListener('click', function () {
+    if (engine.isRunning) {
+      log('Остановите симуляцию перед применением параметров', 'error');
+      return;
+    }
+    syncParamsFromUI();
+    onReset();
+    log('Параметры применены', 'system');
+  });
+
+  setupSliders();
+
+  var scList = document.querySelectorAll('.scenario');
+  for (var si = 0; si < scList.length; si++) {
+    scList[si].addEventListener('click', function () {
+      applyScenario(this.dataset.scenario);
+    });
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (engine.isRunning) onPause(); else onStart();
+    } else if (e.code === 'KeyR') {
+      e.preventDefault();
+      onReset();
+    }
+  });
+
+  var tooltipEl = document.getElementById('tooltip');
+  canvas.addEventListener('mousemove', function (e) {
+    var rect = canvas.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+    var zone = Visualization.hitTest(x, y);
+    if (zone && zone.type === 'pocket') {
+      tooltipEl.style.display = 'block';
+      tooltipEl.style.left = (e.clientX + 12) + 'px';
+      tooltipEl.style.top = (e.clientY - 10) + 'px';
+      tooltipEl.textContent = zone.tip || zone.label;
+    } else if (zone && zone.type === 'pocket-block') {
+      tooltipEl.style.display = 'block';
+      tooltipEl.style.left = (e.clientX + 12) + 'px';
+      tooltipEl.style.top = (e.clientY - 10) + 'px';
+      tooltipEl.textContent = zone.tip || zone.label;
+    } else {
+      tooltipEl.style.display = 'none';
+    }
+  });
+
+  canvas.addEventListener('mouseleave', function () {
+    document.getElementById('tooltip').style.display = 'none';
+  });
+
   Simulation.init();
   StatisticsCollector.init();
   StatisticsCollector.takeSnapshot(0);
+  syncParamsFromUI();
   resize();
   updateButtons();
   log('Схема сортировочного центра загружена', 'system');

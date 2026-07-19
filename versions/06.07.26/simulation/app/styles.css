@@ -108,6 +108,140 @@ header h1 span {
   border-color: #58a6ff;
 }
 
+#settings {
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  padding: 6px 20px;
+  flex-shrink: 0;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0;
+}
+
+.param {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #8b949e;
+}
+
+.param label {
+  white-space: nowrap;
+  font-size: 10px;
+  color: #484f58;
+}
+
+.param input[type="range"] {
+  width: 80px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #30363d;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.param input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #58a6ff;
+  cursor: pointer;
+}
+
+.param-val {
+  font-weight: 600;
+  color: #f0f6fc;
+  font-size: 11px;
+  min-width: 28px;
+  text-align: right;
+}
+
+.scenario {
+  padding: 4px 12px;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  background: #21262d;
+  color: #c9d1d9;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.scenario:hover {
+  border-color: #58a6ff;
+  background: #30363d;
+}
+
+.scenario.active {
+  border-color: #58a6ff;
+  background: #1f3a5f;
+  color: #58a6ff;
+}
+
+#btnApply {
+  padding: 4px 16px;
+  border: 1px solid #1f6feb;
+  border-radius: 4px;
+  background: #1f6feb;
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+#btnApply:hover {
+  background: #388bfd;
+}
+
+#tooltip {
+  position: fixed;
+  background: #1c2333;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 10px;
+  color: #f0f6fc;
+  pointer-events: none;
+  z-index: 100;
+  white-space: nowrap;
+}
+
+#controls .speed-control input[type="range"] {
+  width: 70px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #30363d;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+#controls .speed-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #58a6ff;
+  cursor: pointer;
+}
+
+.speed-val {
+  font-weight: 600;
+  color: #f0f6fc;
+  font-size: 12px;
+  min-width: 30px;
+}
+
 #controls .sep {
   width: 1px;
   height: 24px;

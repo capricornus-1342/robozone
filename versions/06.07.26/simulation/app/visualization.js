@@ -66,7 +66,7 @@ Visualization.draw = function (ctx, cfg) {
   this.drawUnloadingDocks(ctx, cfg, ringCY, h, self);
   this.drawBuffer(ctx, ringCX, ringCY, ringRX, cfg, self);
   this.drawRingConveyor(ctx, ringCX, ringCY, ringRX, ringRY, self);
-  this.drawPocketBlocks(ctx, ringCX, ringCY, ringRX, ringRY, cfg);
+  this.drawPocketBlocks(ctx, ringCX, ringCY, ringRX, ringRY, cfg, self);
   this.drawConveyorItems(ctx, ringCX, ringCY, ringRX, ringRY);
   this.drawShippingBuffer(ctx, ringCX, ringCY, ringRX, w, cfg, self);
   this.drawLoadingDocks(ctx, w, cfg, ringCY, self);
@@ -317,7 +317,7 @@ Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry, self) {
   self.registerZone('conveyor', 'conveyor', 'Кольцевой конвейер', cx - rx, cy - ry, rx * 2, ry * 2);
 };
 
-Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg) {
+Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg, self) {
   const v = cfg.visualization;
   const blocks = cfg.sorting.pocketBlocks;
   const perBlock = cfg.sorting.pocketsPerBlock;
@@ -375,6 +375,10 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg) {
     const startNum = index * perBlock + 1;
     const endNum = Math.min((index + 1) * perBlock, cfg.sorting.pockets);
     ctx.fillText(startNum + '—' + endNum, bx, labelY);
+
+    var fillPct = Math.round(avgFill * 100);
+    var tip = 'Карманы ' + startNum + '–' + endNum + ': ' + fillPct + '% заполнены';
+    self.registerZone('pocket-block-' + index, 'pocket-block', tip, bx - bw / 2, by - bh / 2, bw, bh);
   }
 
   const topBlocks = Math.floor(blocks / 2);
