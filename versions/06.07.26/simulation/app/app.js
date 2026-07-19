@@ -61,6 +61,13 @@
       document.getElementById('stat-sorted').textContent = Simulation.sorting.processedCount;
       document.getElementById('stat-onsorter').textContent = Simulation.sorting.conveyorItems.length;
     }
+    if (Simulation.packing) {
+      document.getElementById('stat-sealed').textContent = Simulation.packing.sealedCount;
+      document.getElementById('stat-pallets-out').textContent = Simulation.packing.palletCount;
+    }
+    if (Simulation.depalletizing) {
+      document.getElementById('stat-empty-ct').textContent = Simulation.depalletizing.emptyContainerBuffer;
+    }
   }
 
   function draw() {
@@ -126,9 +133,10 @@
         Simulation.depalletizing.containerScrapCount++;
         Simulation.depalletizing.newContainerCount++;
       }
+      Simulation.depalletizing.emptyContainerBuffer++;
     }
 
-    log('Распаллетизация палеты #' + pallet.id + ' завершена: ' + itemsCount + ' тов. в инфид, КТЯ повторно: ' + Simulation.depalletizing.containerReuseCount + ', брак: ' + Simulation.depalletizing.containerScrapCount, 'system');
+    log('Распаллетизация палеты #' + pallet.id + ' завершена: ' + itemsCount + ' тов. в инфид, КТЯ повторно: ' + Simulation.depalletizing.containerReuseCount + ', брак: ' + Simulation.depalletizing.containerScrapCount + ', пустых КТЯ: ' + Simulation.depalletizing.emptyContainerBuffer, 'system');
 
     station.busy = false;
     station.currentPallet = null;
@@ -209,6 +217,51 @@
     }
   }
 
+  var _packingBatchCount = 0;
+
+  function schedulePackingStep() {
+    var interval = 0.2;
+    _packingBatchCount = 0;
+    engine.scheduleEvent(interval, function (time) {
+      processPackingBatch();
+      schedulePackingStep();
+    });
+  }
+
+  function processPackingBatch() {
+    var sort = Simulation.sorting;
+    var pack = Simulation.packing;
+    var depal = Simulation.depalletizing;
+    if (!sort || !pack || !depal) return;
+
+    var pockets = sort.pockets;
+    var maxPockets = 15;
+
+    for (var c = 0; c < maxPockets; c++) {
+      var idx = pack.lastProcessedPocket;
+      pack.lastProcessedPocket = (pack.lastProcessedPocket + 1) % pockets.length;
+
+      var pocket = pockets[idx];
+      if (pocket.count < 27) continue;
+      if (depal.emptyContainerBuffer <= 0) break;
+
+      var taken = 0;
+      while (taken < 27 && pocket.count > 0) {
+        pocket.items.shift();
+        taken++;
+      }
+
+      depal.emptyContainerBuffer--;
+      pack.sealedCount++;
+
+      if (pack.sealedCount % 16 === 0) {
+        pack.palletCount++;
+      }
+
+      _packingBatchCount++;
+    }
+  }
+
   function getTotalQueueLength() {
     var total = 0;
     if (!Simulation.reception) return 0;
@@ -279,6 +332,7 @@
     _lastSortTime = 0;
     scheduleTruckArrival();
     scheduleSortingStep();
+    schedulePackingStep();
     engine.run();
     log('Симуляция запущена (замедлитель ' + coeff + '×)', 'system');
     updateButtons();

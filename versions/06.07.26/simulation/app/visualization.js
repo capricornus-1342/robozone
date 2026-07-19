@@ -464,6 +464,7 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
 
 Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, w, h, self) {
   var dep = Simulation.depalletizing;
+  var pack = Simulation.packing;
 
   var depInfo = '';
   var busyCount = 0;
@@ -476,6 +477,11 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     depInfo = CONFIG.depalletizing.stations + ' поста';
   }
 
+  var packInfo = pack ? 'заклеено: ' + pack.sealedCount : 'заклейка КТЯ';
+  var palletInfo = pack ? 'палет: ' + pack.palletCount : 'паллетирование';
+
+  var ringXright = ringCX + ringRX;
+
   var zones = [
     {
       id: 'depalletizing', label: 'РАСПАЛЛЕТИРОВАНИЕ', sub: depInfo,
@@ -486,14 +492,22 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
       x: ringCX + ringRX - 30, y: ringCY - ringRY - 50, w: 60, h: 36
     },
     {
+      id: 'sealing', label: 'ЗАКЛЕЙКА', sub: packInfo,
+      x: ringXright + 20, y: ringCY - 20, w: 55, h: 30
+    },
+    {
+      id: 'palletizing', label: 'ПАЛЛЕТЫ', sub: palletInfo,
+      x: ringXright + 20, y: ringCY + 15, w: 55, h: 30
+    },
+    {
       id: 'press', label: 'ПРЕСС',
       sub: dep ? 'утилизировано: ' + dep.containerScrapCount : 'утилизация КТЯ',
-      x: ringCX + ringRX + 10, y: ringCY + ringRY + 20, w: 55, h: 36
+      x: ringCX - ringRX - 80, y: ringCY + ringRY + 20, w: 55, h: 36
     },
     {
       id: 'newContainer', label: 'НОВЫЕ КТЯ',
       sub: dep ? 'создано: ' + dep.newContainerCount : 'производство',
-      x: ringCX - ringRX - 75, y: ringCY + ringRY + 20, w: 55, h: 36
+      x: ringCX - ringRX - 80, y: ringCY + ringRY + 60, w: 55, h: 36
     },
   ];
 
@@ -527,14 +541,13 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
 };
 
 Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ringRY, dep) {
-  var dpX = ringCX - ringRX - 75 + 30;
-  var dpY = ringCY - ringRY - 50 + 36;
-  var pressX = ringCX + ringRX + 10 + 27;
-  var pressY = ringCY + ringRY + 20 + 5;
-  var newConX = ringCX - ringRX - 75 + 27;
-  var newConY = ringCY + ringRY + 20 + 5;
-  var ringCXpos = ringCX;
-  var ringCYtop = ringCY - ringRY - 5;
+  var dpX = ringCX - ringRX - 45;
+  var dpBot = ringCY - ringRY - 14;
+  var pressX = ringCX - ringRX - 53;
+  var pressTop = ringCY + ringRY + 25;
+  var newConTop = ringCY + ringRY + 65;
+  var ringLeft = ringCX - ringRX - 5;
+  var ringTop = ringCY - ringRY + 5;
 
   ctx.font = '7px "Segoe UI", sans-serif';
   ctx.textAlign = 'center';
@@ -542,31 +555,31 @@ Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ri
   ctx.strokeStyle = 'rgba(210, 153, 34, 0.6)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(dpX, dpY);
-  ctx.lineTo(ringCXpos - 5, ringCYtop);
+  ctx.moveTo(ringCX - ringRX, ringCY);
+  ctx.lineTo(ringCX - ringRX - 30, ringCY);
   ctx.stroke();
   ctx.fillStyle = '#d29922';
-  ctx.fillText('КТЯ повторно: ' + dep.containerReuseCount, (dpX + ringCXpos - 5) / 2, (dpY + ringCYtop) / 2 - 6);
+  ctx.fillText('КТЯ → сортировка: ' + dep.containerReuseCount, ringCX - ringRX - 15, ringCY - 6);
 
   ctx.strokeStyle = 'rgba(248, 81, 73, 0.6)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(dpX, ringCYtop + 20);
-  ctx.lineTo(pressX, pressY);
+  ctx.moveTo(dpX, dpBot + 5);
+  ctx.lineTo(pressX, pressTop - 5);
   ctx.stroke();
   ctx.fillStyle = '#f85149';
-  ctx.fillText('брак: ' + dep.containerScrapCount, (dpX + pressX) / 2, (dpY + pressY) / 2 + 6);
+  ctx.fillText('брак: ' + dep.containerScrapCount, (dpX + pressX) / 2, (dpBot + pressTop) / 2);
 
   ctx.strokeStyle = 'rgba(88, 166, 255, 0.6)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.setLineDash([3, 3]);
-  ctx.moveTo(pressX + 28, pressY);
-  ctx.lineTo(newConX + 28, newConY);
+  ctx.moveTo(pressX, pressTop + 18);
+  ctx.lineTo(pressX, newConTop - 5);
   ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = '#58a6ff';
-  ctx.fillText('новых: ' + dep.newContainerCount, (pressX + newConX + 56) / 2, (pressY + newConY) / 2 - 6);
+  ctx.fillText('новых: ' + dep.newContainerCount, pressX + 30, (pressTop + newConTop) / 2);
 };
 
 Visualization.drawLegend = function (ctx, w, h) {

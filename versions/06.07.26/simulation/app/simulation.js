@@ -5,6 +5,7 @@ const Simulation = {
   reception: null,
   depalletizing: null,
   sorting: null,
+  packing: null,
 
   init: function () {
     this._buildWeights(CONFIG.sorting.pockets);
@@ -13,6 +14,7 @@ const Simulation = {
     this.initReception();
     this.initDepalletizing();
     this.initSorting();
+    this.initPacking();
   },
 
   reset: function () {
@@ -44,6 +46,7 @@ const Simulation = {
     this.depalletizing = {
       stations: stations,
       infeedQueue: [],
+      emptyContainerBuffer: 0,
       containerReuseCount: 0,
       containerScrapCount: 0,
       newContainerCount: 0,
@@ -99,6 +102,14 @@ const Simulation = {
         if (angle >= 2 * Math.PI) angle -= 2 * Math.PI;
         return angle;
       }
+    };
+  },
+
+  initPacking: function () {
+    this.packing = {
+      sealedCount: 0,
+      palletCount: 0,
+      lastProcessedPocket: 0
     };
   },
 
