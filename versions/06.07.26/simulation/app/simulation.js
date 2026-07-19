@@ -7,6 +7,8 @@ const Simulation = {
   sorting: null,
   packing: null,
   shipping: null,
+  adjustments: null,
+  warnings: [],
 
   init: function () {
     this._buildWeights(CONFIG.sorting.pockets);
@@ -17,6 +19,7 @@ const Simulation = {
     this.initSorting();
     this.initPacking();
     this.initShipping();
+    this.initAdjustments();
   },
 
   reset: function () {
@@ -131,6 +134,91 @@ const Simulation = {
         return null;
       }
     };
+  },
+
+  initAdjustments: function () {
+    this.adjustments = {
+      unloadSpeedFactor: 1.0,
+      sortSpeedFactor: 1.0,
+      conveyorSpeedFactor: 1.0,
+      pocketThresholdFactor: 1.0,
+      unloadPaused: false
+    };
+    this.warnings = [];
+  },
+
+  balanceSystem: function (logFn) {
+    var adj = this.adjustments;
+    if (!adj) return;
+    var warns = [];
+    var buf = this.reception ? this.reception.buffer : null;
+    var dep = this.depalletizing;
+    var sort = this.sorting;
+    var ship = this.shipping;
+
+    if (buf) {
+      var bufFill = buf.fillRate;
+      if (bufFill > 0.9) {
+        if (!adj.unloadPaused) warns.push('Буфер приемки >90% — разгрузка приостановлена');
+        adj.unloadPaused = true;
+        adj.unloadSpeedFactor = Math.max(0.3, adj.unloadSpeedFactor * 0.9);
+      } else if (bufFill > 0.8) {
+        if (adj.unloadPaused) warns.push('Буфер приемки <90% — разгрузка возобновлена');
+        adj.unloadPaused = false;
+        adj.unloadSpeedFactor = Math.max(0.3, adj.unloadSpeedFactor * 0.9);
+        if (bufFill > 0.8) warns.push('Буфер >80% — скорость разгрузки снижена');
+      } else if (bufFill < 0.3) {
+        adj.unloadSpeedFactor = Math.min(1.0, adj.unloadSpeedFactor * 1.1);
+        warns.push('Буфер <30% — скорость разгрузки увеличена');
+        adj.unloadPaused = false;
+      } else {
+        adj.unloadSpeedFactor = Math.min(1.0, adj.unloadSpeedFactor * 1.02);
+        adj.unloadPaused = false;
+      }
+    }
+
+    if (sort && sort.pockets) {
+      var totalFill = 0;
+      var maxFill = 0;
+      var over95 = 0;
+      for (var pi = 0; pi < sort.pockets.length; pi++) {
+        var fr = sort.pockets[pi].fillRate;
+        totalFill += fr;
+        if (fr > maxFill) maxFill = fr;
+        if (fr > 0.95) over95++;
+      }
+      var avgFill = totalFill / sort.pockets.length;
+
+      if (maxFill > 0.95) {
+        adj.sortSpeedFactor = Math.max(0.3, adj.sortSpeedFactor * 0.85);
+        adj.conveyorSpeedFactor = Math.max(0.2, adj.conveyorSpeedFactor * 0.8);
+        warns.push('Карманы >95% (' + over95 + ' шт) — скорость сортировки и конвейера снижена');
+      } else if (avgFill > 0.8) {
+        adj.sortSpeedFactor = Math.max(0.3, adj.sortSpeedFactor * 0.9);
+        adj.pocketThresholdFactor = Math.max(0.5, adj.pocketThresholdFactor * 0.9);
+        warns.push('Средняя заполненность карманов >80% — скорость сортировки снижена');
+      } else if (avgFill < 0.4 && adj.sortSpeedFactor < 1.0) {
+        adj.sortSpeedFactor = Math.min(1.0, adj.sortSpeedFactor * 1.1);
+        adj.conveyorSpeedFactor = Math.min(1.0, adj.conveyorSpeedFactor * 1.05);
+        warns.push('Карманы освобождаются — скорость восстанавливается');
+      }
+    }
+
+    if (dep && dep.infeedQueue.length > 200 && adj.sortSpeedFactor < 0.7) {
+      adj.unloadSpeedFactor = Math.max(0.3, adj.unloadSpeedFactor * 0.9);
+      warns.push('Каскад: очередь инфида >200 + сортировка замедлена → разгрузка снижена');
+    }
+
+    if (buf && buf.fillRate > 0.85 && dep && dep.infeedQueue.length > 150) {
+      warns.push('Критично: буфер >85% и инфид >150 — цепочка заблокирована');
+    }
+
+    this.warnings = warns;
+    if (logFn && warns.length > 0) {
+      for (var wi = 0; wi < warns.length; wi++) {
+        logFn(warns[wi]);
+      }
+    }
   },
 
   _buildWeights: function (count) {

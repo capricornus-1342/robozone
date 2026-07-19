@@ -627,6 +627,64 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     ctx.font = 'bold 12px "Segoe UI", sans-serif';
     ctx.fillText('' + (dep.emptyContainerBuffer + pack.sealedCount), circX + 27, circY + 21);
   }
+
+  var adj = Simulation.adjustments;
+  if (adj) {
+    var speedX = ringCX + ringRX + 100;
+    var speedY = ringCY + ringRY + 10;
+
+    ctx.fillStyle = '#1a2332';
+    ctx.strokeStyle = '#30363d';
+    ctx.lineWidth = 1;
+    ctx.fillRect(speedX, speedY - 18, 62, 52);
+    ctx.strokeRect(speedX, speedY - 18, 62, 52);
+    ctx.fillStyle = '#8b949e';
+    ctx.font = 'bold 7px "Segoe UI", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('СКОРОСТИ', speedX + 31, speedY - 8);
+
+    var drawSpeedBar = function(x, y, label, factor, color) {
+      var barW = 50;
+      var barH = 6;
+      ctx.fillStyle = '#0d1117';
+      ctx.fillRect(x, y, barW, barH);
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, barW * Math.max(0.05, factor), barH);
+      ctx.strokeStyle = '#30363d';
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(x, y, barW, barH);
+      ctx.fillStyle = '#484f58';
+      ctx.font = '6px "Segoe UI", sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(label, x, y + barH + 8);
+      ctx.fillStyle = color;
+      ctx.textAlign = 'right';
+      ctx.fillText(Math.round(factor * 100) + '%', x + barW, y + barH + 8);
+    };
+
+    drawSpeedBar(speedX + 6, speedY + 2, 'Разгр', adj.unloadSpeedFactor, '#3fb950');
+    drawSpeedBar(speedX + 6, speedY + 16, 'Сорт', adj.sortSpeedFactor, '#58a6ff');
+    drawSpeedBar(speedX + 6, speedY + 30, 'Конв', adj.conveyorSpeedFactor, '#d29922');
+  }
+
+  var warns = Simulation.warnings;
+  if (warns && warns.length > 0) {
+    var warnX = ringCX + 100;
+    var warnY = ringCY - ringRY - 50;
+    ctx.fillStyle = 'rgba(248, 81, 73, 0.1)';
+    ctx.strokeStyle = '#f85149';
+    ctx.lineWidth = 1;
+    ctx.font = '6px "Segoe UI", sans-serif';
+    ctx.textAlign = 'left';
+    for (var wi = 0; wi < Math.min(warns.length, 3); wi++) {
+      ctx.fillStyle = 'rgba(248, 81, 73, 0.08)';
+      ctx.fillRect(warnX - 4, warnY + wi * 12 - 2, 190, 10);
+      ctx.strokeStyle = 'rgba(248, 81, 73, 0.3)';
+      ctx.strokeRect(warnX - 4, warnY + wi * 12 - 2, 190, 10);
+      ctx.fillStyle = '#f85149';
+      ctx.fillText('⚠ ' + warns[wi], warnX, warnY + wi * 12 + 6);
+    }
+  }
 };
 
 Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ringRY, dep, pack) {

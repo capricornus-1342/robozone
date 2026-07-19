@@ -170,8 +170,6 @@
 
 ---
 
----
-
 ## ✅ Шаг 7 — Упаковка: заполнение КТЯ, заклейка, паллетирование
 
 **Файлы:** `simulation.js`, `visualization.js`, `app.js`, `index.html`
@@ -216,8 +214,6 @@
 
 ---
 
----
-
 ## ✅ Шаг 9 — Отгрузка: буфер, ворота, загрузка машин
 
 **Файлы:** `simulation.js`, `visualization.js`, `app.js`, `index.html`
@@ -241,4 +237,32 @@
 
 ---
 
-> *Текущий статус: реализованы шаги 0–9. Следующий шаг: Шаг 10 — Интеграция NonSort.*
+## ✅ Шаг 10 — Балансировщик потоков (WMS-регулятор)
+
+**Файлы:** `simulation.js`, `visualization.js`, `app.js`, `index.html`
+
+**Реализовано:**
+- **Состояние регулятора** (`simulation.js`):
+  - `Simulation.adjustments` — unloadSpeedFactor, sortSpeedFactor, conveyorSpeedFactor, pocketThresholdFactor, unloadPaused
+  - `Simulation.balanceSystem(logFn)` — вызывается каждые 3 мин модельного времени
+- **Правила регулировки**:
+  - Буфер >90% → разгрузка приостановлена (unloadPaused=true, arrivals rate снижен)
+  - Буфер >80% → unloadSpeedFactor ×0.9 (мин 0.3)
+  - Буфер <30% → unloadSpeedFactor ×1.1 (макс 1.0)
+  - Карманы >95% → sortSpeedFactor ×0.85, conveyorSpeedFactor ×0.8
+  - Средняя заполненность карманов >80% → sortSpeedFactor ×0.9
+  - Каскад: инфид >200 + сортировка <0.7 → разгрузка ×0.9
+  - Все изменения логируются в консоль
+- **Применение факторов** (`app.js`):
+  - `startUnload()` — throughput скорректирован на unloadSpeedFactor
+  - `processSortingBatch()` — throughput скорректирован на sortSpeedFactor
+  - `updateConveyor()` — скорость конвейера скорректирована на conveyorSpeedFactor
+  - `scheduleTruckArrival()` — при unloadPaused интервал увеличен до 3–4 мин
+- **Визуализация** (`visualization.js`):
+  - Индикаторы скорости (Разгр, Сорт, Конв) в виде шкал справа от кольца
+  - Предупреждения регулятора (до 3 шт, красные) над кольцом
+- **Статус-бар**: Разгр, Сорт, Конв в процентах
+
+---
+
+> *Текущий статус: реализованы шаги 0–10. Следующий шаг: Шаг 11 — Метрики, дашборд, графики.*

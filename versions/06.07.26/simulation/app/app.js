@@ -77,6 +77,11 @@
       }
       document.getElementById('stat-loading-docks').textContent = loadingCount + '/' + CONFIG.shipping.docksLoad;
     }
+    if (Simulation.adjustments) {
+      document.getElementById('stat-unload-speed').textContent = Math.round(Simulation.adjustments.unloadSpeedFactor * 100) + '%';
+      document.getElementById('stat-sort-speed').textContent = Math.round(Simulation.adjustments.sortSpeedFactor * 100) + '%';
+      document.getElementById('stat-conv-speed').textContent = Math.round(Simulation.adjustments.conveyorSpeedFactor * 100) + '%';
+    }
     var circulation = 0;
     if (Simulation.depalletizing) circulation += Simulation.depalletizing.emptyContainerBuffer;
     if (Simulation.packing) circulation += Simulation.packing.sealedCount;
@@ -173,7 +178,8 @@
     var infeed = Simulation.depalletizing ? Simulation.depalletizing.infeedQueue : null;
     if (!sort || !infeed || infeed.length === 0) return;
 
-    var throughput = sort.conveyor.throughput * CONFIG.sorting.efficiencyFactor;
+    var effFactor = CONFIG.sorting.efficiencyFactor * (Simulation.adjustments ? Simulation.adjustments.sortSpeedFactor : 1.0);
+    var throughput = sort.conveyor.throughput * effFactor;
     var batchSize = Math.ceil(throughput * 0.1 / 60);
     if (batchSize > infeed.length) batchSize = infeed.length;
 
@@ -221,7 +227,7 @@
   function updateConveyor(deltaMin) {
     var items = Simulation.sorting ? Simulation.sorting.conveyorItems : null;
     if (!items || items.length === 0) return;
-    var speed = 0.4;
+    var speed = 0.4 * (Simulation.adjustments ? Simulation.adjustments.conveyorSpeedFactor : 1.0);
     for (var i = items.length - 1; i >= 0; i--) {
       items[i].progress += speed * deltaMin;
       if (items[i].progress >= 1) {
@@ -309,6 +315,14 @@
     });
   }
 
+  function scheduleBalancing() {
+    var interval = 3.0;
+    engine.scheduleEvent(interval, function (time) {
+      Simulation.balanceSystem(log);
+      scheduleBalancing();
+    });
+  }
+
   function getTotalQueueLength() {
     var total = 0;
     if (!Simulation.reception) return 0;
@@ -319,7 +333,8 @@
   }
 
   function startUnload(dock, truck) {
-    var unloadDuration = truck.totalItems / CONFIG.reception.throughputPerDock * 60;
+    var speedFactor = Simulation.adjustments ? Simulation.adjustments.unloadSpeedFactor : 1.0;
+    var unloadDuration = truck.totalItems / (CONFIG.reception.throughputPerDock * speedFactor) * 60;
     if (unloadDuration < 0.1) unloadDuration = 0.1;
     log('Грузовик #' + truck.id + ' → док ' + (dock.id + 1) + ' (разгрузка ' + Math.round(unloadDuration) + ' мин, ' + truck.totalItems + ' тов.)', 'system');
     Visualization.highlightedZoneId = 'unload-' + dock.id;
@@ -348,7 +363,8 @@
   }
 
   function scheduleTruckArrival() {
-    var delay = 0.5 + Math.random() * 1.0;
+    var paused = Simulation.adjustments && Simulation.adjustments.unloadPaused;
+    var delay = (paused ? 3.0 : 0.5) + Math.random() * 1.0;
     engine.scheduleEvent(delay, function (time) {
       var truck = Simulation.generateTruck(time);
       log('Прибыл грузовик #' + truck.id + ' (' + truck.palletCount + ' палет, ' + truck.totalItems + ' тов.)', 'system');
@@ -387,6 +403,7 @@
     scheduleSortingStep();
     schedulePackingStep();
     scheduleShippingStep();
+    scheduleBalancing();
     engine.run();
     log('Симуляция запущена (замедлитель ' + coeff + '×)', 'system');
     updateButtons();
@@ -402,6 +419,7 @@
   function onReset() {
     engine.reset();
     Simulation.reset();
+    Simulation.initAdjustments();
     Visualization.highlightedZoneId = null;
     log('Симуляция сброшена', 'system');
     statusLabel.textContent = 'Готов';
@@ -410,10 +428,14 @@
   }
 
   engine.onTick = function (simTime) {
-    var delta = simTime - _lastSortTime;
-    _lastSortTime = simTime;
-    updateConveyor(delta);
-    draw();
+    try {
+      var delta = simTime - _lastSortTime;
+      _lastSortTime = simTime;
+      updateConveyor(delta);
+      draw();
+    } catch (e) {
+      log('Ошибка отрисовки: ' + e.message, 'error');
+    }
   };
 
   canvas.addEventListener('click', function (e) {
