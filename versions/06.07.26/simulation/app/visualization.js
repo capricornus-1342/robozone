@@ -127,6 +127,11 @@ Visualization.drawConveyorLines = function (ctx, ringCX, ringCY, ringRX, ringRY,
     ctx.stroke();
   }
 
+  ctx.fillStyle = '#30363d';
+  ctx.font = '7px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('поток товаров', dockRightX + 20, ringCY - 4);
+
   const bufferRightX = ringCX - ringRX - 20;
   const ringLeftX = ringCX - ringRX + 10;
   ctx.beginPath();
@@ -311,6 +316,23 @@ Visualization.drawRingConveyor = function (ctx, cx, cy, rx, ry, self) {
   ctx.fillStyle = '#8b949e';
   ctx.font = '11px "Segoe UI", sans-serif';
   ctx.fillText('10 сортировщиков × 10 000 тов/ч', cx, cy + 28);
+
+  ctx.fillStyle = '#484f58';
+  ctx.font = '10px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  var arrowAngle = -15 * Math.PI / 180;
+  var arrowX = cx + rx * 0.75 * Math.cos(arrowAngle);
+  var arrowY = cy + ry * 0.75 * Math.sin(arrowAngle);
+  ctx.fillText('→ направление движения', arrowX, arrowY - 14);
+  ctx.fillStyle = '#30363d';
+  ctx.font = '20px "Segoe UI", sans-serif';
+  var arrowAngles = [0.3, 1.0, 2.7, 4.8];
+  for (var ai = 0; ai < arrowAngles.length; ai++) {
+    var a = arrowAngles[ai];
+    var ax = cx + rx * 0.88 * Math.cos(a);
+    var ay = cy + ry * 0.88 * Math.sin(a);
+    ctx.fillText('▸', ax, ay + 5);
+  }
 
   ctx.restore();
 
@@ -553,8 +575,10 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     depInfo = CONFIG.depalletizing.stations + ' поста';
   }
 
+  var sort = Simulation.sorting;
   var packInfo = pack ? 'заклеено: ' + pack.sealedCount : 'заклейка КТЯ';
   var palletInfo = pack ? 'палет: ' + pack.palletCount : 'паллетирование';
+  var backupInfo = sort ? 'буфер: ' + sort.backupBuffer.length : '';
 
   var ringXright = ringCX + ringRX;
 
@@ -564,7 +588,7 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
       x: ringCX - ringRX - 75, y: ringCY - ringRY - 50, w: 60, h: 36
     },
     {
-      id: 'nonsort', label: 'NonSort', sub: 'ручная сортировка',
+      id: 'nonsort', label: 'NonSort', sub: backupInfo,
       x: ringCX + ringRX - 30, y: ringCY - ringRY - 50, w: 60, h: 36
     },
     {

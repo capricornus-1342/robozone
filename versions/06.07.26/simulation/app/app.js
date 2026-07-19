@@ -61,6 +61,7 @@
     if (Simulation.sorting) {
       document.getElementById('stat-sorted').textContent = Simulation.sorting.processedCount;
       document.getElementById('stat-onsorter').textContent = Simulation.sorting.conveyorItems.length;
+      document.getElementById('stat-backup').textContent = Simulation.sorting.backupBuffer.length;
     }
     if (Simulation.packing) {
       document.getElementById('stat-sealed').textContent = Simulation.packing.sealedCount;
@@ -206,7 +207,7 @@
         if (!pocket.isFull) {
           pocket.addItem(item);
         } else {
-          sort.nonsortCount++;
+          sort.backupBuffer.push(item);
         }
       }
       sort.processedCount++;
@@ -316,10 +317,39 @@
     });
   }
 
+  function processBackupBuffer() {
+    var sort = Simulation.sorting;
+    if (!sort || sort.backupBuffer.length === 0) return;
+    var maxItems = 20;
+    var moved = 0;
+    for (var i = sort.backupBuffer.length - 1; i >= 0 && moved < maxItems; i--) {
+      var item = sort.backupBuffer[i];
+      var pIdx = item.destId - 1;
+      if (pIdx >= 0 && pIdx < sort.pockets.length && !sort.pockets[pIdx].isFull) {
+        sort.pockets[pIdx].addItem(item);
+        sort.backupBuffer.splice(i, 1);
+        moved++;
+      }
+    }
+  }
+
+  var _lastDrawTime = 0;
+  var _drawThrottleMs = 50;
+  var _logTimers = {};
+
+  function throttleLog(key, msg, type, minIntervalSec) {
+    var now = performance.now();
+    var interval = (minIntervalSec || 10) * 1000;
+    if (_logTimers[key] && now - _logTimers[key] < interval) return;
+    _logTimers[key] = now;
+    log(msg, type);
+  }
+
   function scheduleBalancing() {
     var interval = 3.0;
     engine.scheduleEvent(interval, function (time) {
-      Simulation.balanceSystem(log);
+      Simulation.balanceSystem(function (msg) { throttleLog('balance:' + msg.substring(0, 40), msg, 'system', 15); });
+      processBackupBuffer();
       scheduleBalancing();
     });
   }
@@ -567,6 +597,8 @@
     Simulation.initAdjustments();
     StatisticsCollector.init();
     Visualization.highlightedZoneId = null;
+    _lastDrawTime = 0;
+    _logTimers = {};
     log('Симуляция сброшена', 'system');
     statusLabel.textContent = 'Готов';
     draw();
@@ -578,7 +610,11 @@
       var delta = simTime - _lastSortTime;
       _lastSortTime = simTime;
       updateConveyor(delta);
-      draw();
+      var now = performance.now();
+      if (now - _lastDrawTime >= _drawThrottleMs) {
+        _lastDrawTime = now;
+        draw();
+      }
     } catch (e) {
       log('Ошибка отрисовки: ' + e.message, 'error');
     }

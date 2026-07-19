@@ -71,6 +71,7 @@ const Simulation = {
     }
     this.sorting = {
       pockets: pockets,
+      backupBuffer: [],
       conveyorItems: [],
       conveyor: new ConveyorBelt(0, CONFIG.sorting.sorterCount * CONFIG.sorting.sorterThroughput),
       processedCount: 0,
