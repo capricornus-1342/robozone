@@ -424,16 +424,44 @@ Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
 };
 
 Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, w, h, self) {
-  const zones = [
-    { id: 'depalletizing', label: 'РАСПАЛЛЕТИРОВАНИЕ', sub: '2 поста', x: ringCX - ringRX - 75, y: ringCY - ringRY - 50, w: 60, h: 36 },
-    { id: 'nonsort', label: 'NonSort', sub: 'ручная сортировка', x: ringCX + ringRX - 30, y: ringCY - ringRY - 50, w: 60, h: 36 },
-    { id: 'press', label: 'ПРЕСС', sub: 'утилизация КТЯ', x: ringCX + ringRX + 10, y: ringCY + ringRY + 20, w: 50, h: 30 },
-    { id: 'newContainer', label: 'НОВЫЕ КТЯ', sub: 'производство', x: ringCX - ringRX - 70, y: ringCY + ringRY + 20, w: 50, h: 30 },
+  var dep = Simulation.depalletizing;
+
+  var depInfo = '';
+  var busyCount = 0;
+  if (dep) {
+    for (var si = 0; si < dep.stations.length; si++) {
+      if (dep.stations[si].busy) busyCount++;
+    }
+    depInfo = dep.stations.length + ' постов, занято: ' + busyCount;
+  } else {
+    depInfo = CONFIG.depalletizing.stations + ' поста';
+  }
+
+  var zones = [
+    {
+      id: 'depalletizing', label: 'РАСПАЛЛЕТИРОВАНИЕ', sub: depInfo,
+      x: ringCX - ringRX - 75, y: ringCY - ringRY - 50, w: 60, h: 36
+    },
+    {
+      id: 'nonsort', label: 'NonSort', sub: 'ручная сортировка',
+      x: ringCX + ringRX - 30, y: ringCY - ringRY - 50, w: 60, h: 36
+    },
+    {
+      id: 'press', label: 'ПРЕСС',
+      sub: dep ? 'утилизировано: ' + dep.containerScrapCount : 'утилизация КТЯ',
+      x: ringCX + ringRX + 10, y: ringCY + ringRY + 20, w: 55, h: 36
+    },
+    {
+      id: 'newContainer', label: 'НОВЫЕ КТЯ',
+      sub: dep ? 'создано: ' + dep.newContainerCount : 'производство',
+      x: ringCX - ringRX - 75, y: ringCY + ringRY + 20, w: 55, h: 36
+    },
   ];
 
   zones.forEach(function (z) {
-    ctx.fillStyle = '#1a2332';
-    ctx.strokeStyle = '#30363d';
+    var isActive = z.id === 'depalletizing' && busyCount > 0;
+    ctx.fillStyle = isActive ? '#1f2d1a' : '#1a2332';
+    ctx.strokeStyle = z.id === 'depalletizing' && busyCount === dep.stations.length ? '#f85149' : isActive ? '#3fb950' : '#30363d';
     ctx.lineWidth = 1;
     ctx.fillRect(z.x, z.y, z.w, z.h);
     ctx.strokeRect(z.x, z.y, z.w, z.h);
@@ -445,7 +473,7 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
     ctx.fillStyle = '#8b949e';
     ctx.font = 'bold 8px "Segoe UI", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(z.label, z.x + z.w / 2, z.y + 14);
+    ctx.fillText(z.label, z.x + z.w / 2, z.y + 12);
 
     ctx.fillStyle = '#484f58';
     ctx.font = '7px "Segoe UI", sans-serif';
@@ -453,6 +481,53 @@ Visualization.drawSupportZones = function (ctx, ringCX, ringCY, ringRX, ringRY, 
 
     self.registerZone(z.id, 'support', z.label, z.x, z.y, z.w, z.h);
   });
+
+  if (dep) {
+    this.drawContainerFlowArrow(ctx, ringCX, ringCY, ringRX, ringRY, dep);
+  }
+};
+
+Visualization.drawContainerFlowArrow = function (ctx, ringCX, ringCY, ringRX, ringRY, dep) {
+  var dpX = ringCX - ringRX - 75 + 30;
+  var dpY = ringCY - ringRY - 50 + 36;
+  var pressX = ringCX + ringRX + 10 + 27;
+  var pressY = ringCY + ringRY + 20 + 5;
+  var newConX = ringCX - ringRX - 75 + 27;
+  var newConY = ringCY + ringRY + 20 + 5;
+  var ringCXpos = ringCX;
+  var ringCYtop = ringCY - ringRY - 5;
+
+  ctx.font = '7px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+
+  ctx.strokeStyle = 'rgba(210, 153, 34, 0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(dpX, dpY);
+  ctx.lineTo(ringCXpos - 5, ringCYtop);
+  ctx.stroke();
+  ctx.fillStyle = '#d29922';
+  ctx.fillText('КТЯ повторно: ' + dep.containerReuseCount, (dpX + ringCXpos - 5) / 2, (dpY + ringCYtop) / 2 - 6);
+
+  ctx.strokeStyle = 'rgba(248, 81, 73, 0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(dpX, ringCYtop + 20);
+  ctx.lineTo(pressX, pressY);
+  ctx.stroke();
+  ctx.fillStyle = '#f85149';
+  ctx.fillText('брак: ' + dep.containerScrapCount, (dpX + pressX) / 2, (dpY + pressY) / 2 + 6);
+
+  ctx.strokeStyle = 'rgba(88, 166, 255, 0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.setLineDash([3, 3]);
+  ctx.moveTo(pressX + 28, pressY);
+  ctx.lineTo(newConX + 28, newConY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#58a6ff';
+  ctx.fillText('новых: ' + dep.newContainerCount, (pressX + newConX + 56) / 2, (pressY + newConY) / 2 - 6);
 };
 
 Visualization.drawLegend = function (ctx, w, h) {

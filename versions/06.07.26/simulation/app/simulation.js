@@ -3,12 +3,14 @@ const Simulation = {
   _destWeights: null,
   stats: { items: 0, containers: 0, pallets: 0, trucks: 0, nonsort: 0 },
   reception: null,
+  depalletizing: null,
 
   init: function () {
     this._buildWeights(CONFIG.sorting.pockets);
     this._nextId = { item: 1, container: 1, pallet: 1, truck: 1 };
     this.stats = { items: 0, containers: 0, pallets: 0, trucks: 0, nonsort: 0 };
     this.initReception();
+    this.initDepalletizing();
   },
 
   reset: function () {
@@ -26,6 +28,26 @@ const Simulation = {
       findFreeDock: function () {
         for (var j = 0; j < this.docks.length; j++) {
           if (!this.docks[j].isBusy) return this.docks[j];
+        }
+        return null;
+      }
+    };
+  },
+
+  initDepalletizing: function () {
+    var stations = [];
+    for (var i = 0; i < CONFIG.depalletizing.stations; i++) {
+      stations.push({ id: i, busy: false, currentPallet: null });
+    }
+    this.depalletizing = {
+      stations: stations,
+      infeedQueue: [],
+      containerReuseCount: 0,
+      containerScrapCount: 0,
+      newContainerCount: 0,
+      findFreeStation: function () {
+        for (var j = 0; j < this.stations.length; j++) {
+          if (!this.stations[j].busy) return this.stations[j];
         }
         return null;
       }

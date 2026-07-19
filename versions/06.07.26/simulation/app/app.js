@@ -52,6 +52,11 @@
       document.getElementById('stat-buffer-max').textContent = CONFIG.reception.bufferCapacity;
       document.getElementById('stat-queue').textContent = getTotalQueueLength();
     }
+    if (Simulation.depalletizing) {
+      document.getElementById('stat-infeed').textContent = Simulation.depalletizing.infeedQueue.length;
+      document.getElementById('stat-reuse').textContent = Simulation.depalletizing.containerReuseCount;
+      document.getElementById('stat-scrap').textContent = Simulation.depalletizing.containerScrapCount;
+    }
   }
 
   function draw() {
@@ -72,6 +77,60 @@
       btnPause.disabled = true;
       btnReset.disabled = engine.simTime === 0;
     }
+  }
+
+  function checkDepalletizing() {
+    var buf = Simulation.reception ? Simulation.reception.buffer : null;
+    var dep = Simulation.depalletizing;
+    if (!buf || !dep) return;
+
+    while (buf.count > 0) {
+      let station = dep.findFreeStation();
+      if (!station) break;
+      let pallet = buf.remove();
+      if (!pallet) break;
+
+      station.busy = true;
+      station.currentPallet = pallet;
+
+      var duration = CONFIG.depalletizing.timePerPalletSec / 60;
+      if (duration < 0.01) duration = 0.01;
+      log('Палета #' + pallet.id + ' → станция распаллетизации ' + (station.id + 1) + ' (' + Math.round(duration * 60) + ' сек)', 'system');
+
+      engine.scheduleEvent(duration, function (t) {
+        processDepalletizingStation(station, pallet);
+      });
+    }
+  }
+
+  function processDepalletizingStation(station, pallet) {
+    var containers = pallet.containers;
+    var itemsCount = 0;
+
+    for (var c = 0; c < containers.length; c++) {
+      var container = containers[c];
+      var isReusable = Math.random() < CONFIG.depalletizing.containerReuse;
+
+      for (var it = 0; it < container.items.length; it++) {
+        Simulation.depalletizing.infeedQueue.push(container.items[it]);
+        itemsCount++;
+      }
+
+      if (isReusable) {
+        Simulation.depalletizing.containerReuseCount++;
+      } else {
+        Simulation.depalletizing.containerScrapCount++;
+        Simulation.depalletizing.newContainerCount++;
+      }
+    }
+
+    log('Распаллетизация палеты #' + pallet.id + ' завершена: ' + itemsCount + ' тов. в инфид, КТЯ повторно: ' + Simulation.depalletizing.containerReuseCount + ', брак: ' + Simulation.depalletizing.containerScrapCount, 'system');
+
+    station.busy = false;
+    station.currentPallet = null;
+
+    checkDepalletizing();
+    draw();
   }
 
   function getTotalQueueLength() {
@@ -99,6 +158,7 @@
         }
       }
       log('Разгрузка грузовика #' + truck.id + ' завершена (' + added + ' палет в буфер, всего: ' + Simulation.reception.buffer.count + '/' + CONFIG.reception.bufferCapacity + ')');
+      checkDepalletizing();
       dock.free();
 
       if (dock.queue.length > 0) {

@@ -37,6 +37,9 @@
       <span class="stat"><span class="label">NonSort:</span><span class="value" id="stat-nonsort">0%</span></span>
       <span class="stat"><span class="label">Буфер:</span><span class="value" id="stat-buffer">0</span><span class="label">/</span><span class="value" id="stat-buffer-max">0</span></span>
       <span class="stat"><span class="label">Очередь доков:</span><span class="value" id="stat-queue">0</span></span>
+      <span class="stat"><span class="label">Инфид:</span><span class="value" id="stat-infeed">0</span></span>
+      <span class="stat"><span class="dot yellow"></span><span class="label">КТЯ повторно:</span><span class="value" id="stat-reuse">0</span></span>
+      <span class="stat"><span class="dot red"></span><span class="label">брак:</span><span class="value" id="stat-scrap">0</span></span>
     </div>
   </div>
   <script src="config.js"></script>
@@ -48,6 +51,7 @@
   <script src="classes/SimulationEngine.js"></script>
   <script src="classes/Dock.js"></script>
   <script src="classes/Buffer.js"></script>
+  <script src="classes/Worker.js"></script>
   <script src="simulation.js"></script>
   <script src="visualization.js"></script>
   <script src="app.js"></script>
