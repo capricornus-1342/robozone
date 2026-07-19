@@ -57,6 +57,10 @@
       document.getElementById('stat-reuse').textContent = Simulation.depalletizing.containerReuseCount;
       document.getElementById('stat-scrap').textContent = Simulation.depalletizing.containerScrapCount;
     }
+    if (Simulation.sorting) {
+      document.getElementById('stat-sorted').textContent = Simulation.sorting.processedCount;
+      document.getElementById('stat-onsorter').textContent = Simulation.sorting.conveyorItems.length;
+    }
   }
 
   function draw() {
@@ -133,6 +137,78 @@
     draw();
   }
 
+  var _lastSortTime = 0;
+
+  function scheduleSortingStep() {
+    var interval = 0.1;
+    engine.scheduleEvent(interval, function (time) {
+      processSortingBatch();
+      scheduleSortingStep();
+    });
+  }
+
+  function processSortingBatch() {
+    var sort = Simulation.sorting;
+    var infeed = Simulation.depalletizing ? Simulation.depalletizing.infeedQueue : null;
+    if (!sort || !infeed || infeed.length === 0) return;
+
+    var throughput = sort.conveyor.throughput * CONFIG.sorting.efficiencyFactor;
+    var batchSize = Math.ceil(throughput * 0.1 / 60);
+    if (batchSize > infeed.length) batchSize = infeed.length;
+
+    var visualItems = [];
+    var visualInterval = Math.max(1, Math.floor(batchSize / 20));
+
+    for (var i = 0; i < batchSize; i++) {
+      var item = infeed.shift();
+      if (!item) break;
+
+      var isNonsort = item.type === 'nonsort' || Math.random() >= CONFIG.sorting.scannerSuccessRate;
+
+      if (isNonsort) {
+        sort.nonsortCount++;
+        sort.scannedFailCount++;
+        continue;
+      }
+
+      sort.scannedOkCount++;
+      var pocketIndex = item.destId - 1;
+      if (pocketIndex >= 0 && pocketIndex < sort.pockets.length) {
+        var pocket = sort.pockets[pocketIndex];
+        if (!pocket.isFull) {
+          pocket.addItem(item);
+        } else {
+          sort.nonsortCount++;
+        }
+      }
+      sort.processedCount++;
+
+      if (i % visualInterval === 0) {
+        visualItems.push({
+          destPocketIndex: pocketIndex,
+          progress: 0
+        });
+      }
+    }
+
+    sort.conveyorItems.push.apply(sort.conveyorItems, visualItems);
+    while (sort.conveyorItems.length > 600) {
+      sort.conveyorItems.splice(0, sort.conveyorItems.length - 600);
+    }
+  }
+
+  function updateConveyor(deltaMin) {
+    var items = Simulation.sorting ? Simulation.sorting.conveyorItems : null;
+    if (!items || items.length === 0) return;
+    var speed = 0.4;
+    for (var i = items.length - 1; i >= 0; i--) {
+      items[i].progress += speed * deltaMin;
+      if (items[i].progress >= 1) {
+        items.splice(i, 1);
+      }
+    }
+  }
+
   function getTotalQueueLength() {
     var total = 0;
     if (!Simulation.reception) return 0;
@@ -200,7 +276,9 @@
     if (engine.isRunning) return;
     var coeff = getSlowdownCoeff();
     engine.speed = 1 / coeff;
+    _lastSortTime = 0;
     scheduleTruckArrival();
+    scheduleSortingStep();
     engine.run();
     log('Симуляция запущена (замедлитель ' + coeff + '×)', 'system');
     updateButtons();
@@ -223,7 +301,10 @@
     updateButtons();
   }
 
-  engine.onTick = function () {
+  engine.onTick = function (simTime) {
+    var delta = simTime - _lastSortTime;
+    _lastSortTime = simTime;
+    updateConveyor(delta);
     draw();
   };
 

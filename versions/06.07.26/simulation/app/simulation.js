@@ -4,6 +4,7 @@ const Simulation = {
   stats: { items: 0, containers: 0, pallets: 0, trucks: 0, nonsort: 0 },
   reception: null,
   depalletizing: null,
+  sorting: null,
 
   init: function () {
     this._buildWeights(CONFIG.sorting.pockets);
@@ -11,6 +12,7 @@ const Simulation = {
     this.stats = { items: 0, containers: 0, pallets: 0, trucks: 0, nonsort: 0 };
     this.initReception();
     this.initDepalletizing();
+    this.initSorting();
   },
 
   reset: function () {
@@ -50,6 +52,52 @@ const Simulation = {
           if (!this.stations[j].busy) return this.stations[j];
         }
         return null;
+      }
+    };
+  },
+
+  initSorting: function () {
+    var pockets = [];
+    for (var i = 0; i < CONFIG.sorting.pockets; i++) {
+      pockets.push(new Pocket(i, CONFIG.sorting.pocketCapacity, CONFIG.sorting.pocketThreshold));
+    }
+    this.sorting = {
+      pockets: pockets,
+      conveyorItems: [],
+      conveyor: new ConveyorBelt(0, CONFIG.sorting.sorterCount * CONFIG.sorting.sorterThroughput),
+      processedCount: 0,
+      nonsortCount: 0,
+      scannedOkCount: 0,
+      scannedFailCount: 0,
+      getPocketAngle: function (pocketIndex) {
+        var perBlock = CONFIG.sorting.pocketsPerBlock;
+        var blockIndex = Math.floor(pocketIndex / perBlock);
+        var topStart = 25 * Math.PI / 180;
+        var topEnd = 155 * Math.PI / 180;
+        var bottomStart = 205 * Math.PI / 180;
+        var bottomEnd = 335 * Math.PI / 180;
+        if (blockIndex < 20) {
+          var t = blockIndex / 19;
+          return topStart + t * (topEnd - topStart);
+        } else {
+          var t = (blockIndex - 20) / 19;
+          return bottomStart + t * (bottomEnd - bottomStart);
+        }
+      },
+      getInfeedAngle: function () {
+        return Math.PI;
+      },
+      getClockwiseDistance: function (fromAngle, toAngle) {
+        if (toAngle >= fromAngle) return toAngle - fromAngle;
+        return (2 * Math.PI - fromAngle) + toAngle;
+      },
+      getConveyorItemAngle: function (destPocketIndex, progress) {
+        var startAngle = this.getInfeedAngle();
+        var destAngle = this.getPocketAngle(destPocketIndex);
+        var dist = this.getClockwiseDistance(startAngle, destAngle);
+        var angle = startAngle + dist * progress;
+        if (angle >= 2 * Math.PI) angle -= 2 * Math.PI;
+        return angle;
       }
     };
   },

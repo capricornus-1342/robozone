@@ -141,4 +141,33 @@
 
 ---
 
-> *Текущий статус: реализованы шаги 0–5. Следующий шаг: Шаг 6 — Сортировка.*
+---
+
+## ✅ Шаг 6 — Сортировка: кольцевой конвейер, скаты, маршрутизация (Core Domain)
+
+**Файлы:** `classes/ConveyorBelt.js`, `classes/Pocket.js`, `simulation.js`, `visualization.js`, `app.js`, `index.html`
+
+**Реализовано:**
+- **Pocket** (`classes/Pocket.js`) — id, capacity, threshold, items[], fillRate, isFull, isReadyToShip, addItem(), clear()
+- **ConveyorBelt** (`classes/ConveyorBelt.js`) — id, throughput
+- **Состояние сортировки** (`simulation.js`):
+  - `Simulation.sorting` — 400 карманов (Pocket), очередь конвейера, счётчики
+  - `getPocketAngle()` — расчёт угла кармана на кольцевой схеме
+  - `getConveyorItemAngle()` — позиция точки на конвейере по прогрессу
+- **Цикл сортировки** (`app.js`):
+  - `scheduleSortingStep()` — событие каждые 0.1 мин модельного времени
+  - `processSortingBatch()` — забор товаров из очереди инфида → сканирование (95% успех) → маршрутизация по destination → карман
+  - NonSort (5% ошибок сканирования + `type === 'nonsort'`) → счётчик
+  - Коэффициент эффективности 0.9 (efficiencyFactor) применяется к throughput
+  - Создание визуальных точек на конвейере (1 на каждые 10 товаров, макс 600)
+- **Анимация конвейера** (`app.js`):
+  - `updateConveyor(deltaMin)` — движение точек по кольцу в onTick
+  - Скорость: 0.4 прогресса/мин → точка проходит кольцо за ~2.5 мин
+- **Визуализация** (`visualization.js`):
+  - `drawConveyorItems()` — рисование движущихся голубых точек с glow-эффектом
+  - `drawPocketBlocks()` — динамическая заливка карманов: зелёный (<50%), жёлтый (50–80%), красный (>80%)
+- **Статус-бар**: отсортировано, на конвейере
+
+---
+
+> *Текущий статус: реализованы шаги 0–6. Следующий шаг: Шаг 7 — Упаковка.*

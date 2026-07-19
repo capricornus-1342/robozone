@@ -67,6 +67,7 @@ Visualization.draw = function (ctx, cfg) {
   this.drawBuffer(ctx, ringCX, ringCY, ringRX, cfg, self);
   this.drawRingConveyor(ctx, ringCX, ringCY, ringRX, ringRY, self);
   this.drawPocketBlocks(ctx, ringCX, ringCY, ringRX, ringRY, cfg);
+  this.drawConveyorItems(ctx, ringCX, ringCY, ringRX, ringRY);
   this.drawLoadingDocks(ctx, w, cfg, ringCY, self);
   this.drawSupportZones(ctx, ringCX, ringCY, ringRX, ringRY, w, h, self);
   this.drawLegend(ctx, w, h);
@@ -321,6 +322,8 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg) {
   const bottomStart = 205 * Math.PI / 180;
   const bottomEnd = 335 * Math.PI / 180;
 
+  var pocketData = Simulation.sorting ? Simulation.sorting.pockets : null;
+
   function drawBlock(index, angle, isTop) {
     const bx = cx + (rx + offset) * Math.cos(angle);
     const by = cy + (ry + offset) * Math.sin(angle);
@@ -340,9 +343,21 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg) {
     ctx.fillRect(bx - bw / 2, by - bh / 2, bw, bh);
     ctx.strokeRect(bx - bw / 2, by - bh / 2, bw, bh);
 
-    const fillLevel = 0.25 + ((index * 7 + index * index * 3) % 100) / 100 * 0.5;
-    ctx.fillStyle = fillLevel > 0.6 ? '#d29922' : '#3fb950';
-    ctx.fillRect(bx - bw / 2 + 2, by - bh / 2 + 2, (bw - 4) * fillLevel, bh - 4);
+    var avgFill = 0;
+    if (pocketData) {
+      var startIdx = index * perBlock;
+      var endIdx = Math.min(startIdx + perBlock, cfg.sorting.pockets);
+      var cnt = endIdx - startIdx;
+      var total = 0;
+      for (var p = startIdx; p < endIdx; p++) {
+        total += pocketData[p].fillRate;
+      }
+      avgFill = cnt > 0 ? total / cnt : 0;
+    }
+
+    var fillColor = avgFill > 0.8 ? '#f85149' : avgFill > 0.5 ? '#d29922' : '#3fb950';
+    ctx.fillStyle = fillColor;
+    ctx.fillRect(bx - bw / 2 + 2, by - bh / 2 + 2, (bw - 4) * avgFill, bh - 4);
 
     ctx.fillStyle = '#8b949e';
     ctx.font = '7px "Segoe UI", sans-serif';
@@ -368,6 +383,30 @@ Visualization.drawPocketBlocks = function (ctx, cx, cy, rx, ry, cfg) {
     const angle = bottomStart + t * (bottomEnd - bottomStart);
     drawBlock(topBlocks + i, angle, false);
   }
+};
+
+Visualization.drawConveyorItems = function (ctx, cx, cy, rx, ry) {
+  var sort = Simulation.sorting;
+  if (!sort || !sort.conveyorItems || sort.conveyorItems.length === 0) return;
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(88, 166, 255, 0.4)';
+  ctx.shadowBlur = 6;
+  ctx.fillStyle = '#58a6ff';
+
+  var items = sort.conveyorItems;
+  for (var i = 0; i < items.length; i++) {
+    var ci = items[i];
+    if (ci.progress < 0 || ci.progress >= 1) continue;
+    var angle = sort.getConveyorItemAngle(ci.destPocketIndex, ci.progress);
+    var dotX = cx + rx * Math.cos(angle);
+    var dotY = cy + ry * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(dotX, dotY, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
 };
 
 Visualization.drawLoadingDocks = function (ctx, w, cfg, ringCY, self) {
