@@ -339,14 +339,15 @@
   <text  x="397" y="112" font-size="8" font-weight="bold" fill="#D32F2F" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(397 112) scale(0.625 1) translate(-397 -112)">товары 100 000/ч →</text>
 
   <!-- Синий: поток КТЯ -->
-  <path d="M312,376 L365,376" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M365,600 L605,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M610,600 L665,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M665,600 L720,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M720,600 L765,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M805,500 L845,500" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <text  x="375" y="367" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="end" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(375 367) scale(0.625 1) translate(-375 -367)">пустые КТЯ → сортеры (3 700/ч)</text>
-  <text  x="740" y="590" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(740 590) scale(0.625 1) translate(-740 -590)">заполненные КТЯ 3 700/ч → заклейка → направления → отгрузка</text>
+  <path d="M312,432 L365,432" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M365,432 L605,432" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M610,432 L665,432" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M665,432 L720,432" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M720,432 L765,432" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M765,432 L805,432" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M805,432 L845,432" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <text  x="375" y="423" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="end" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(375 423) scale(0.625 1) translate(-375 -423)">пустые КТЯ → сортеры (3 700/ч)</text>
+  <text  x="740" y="423" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(740 423) scale(0.625 1) translate(-740 -423)">заполненные КТЯ 3 700/ч → заклейка → направления → отгрузка</text>
 
   <!-- Бирюзовый: новые КТЯ (машина новых коробов → сортеры) -->
   <path d="M263,176 L263,208 L365,208" stroke="#00838F" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#at)"/>
