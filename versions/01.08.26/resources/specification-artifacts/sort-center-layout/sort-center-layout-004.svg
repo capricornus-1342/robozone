@@ -33,35 +33,35 @@
   <g transform="translate(510,0) scale(1.6,1) translate(-60,0)">
 
   <!-- Западная рампа (въезд) -->
-  <rect x="60" y="80" width="35" height="560" fill="#E3F2FD" stroke="#64B5F6" stroke-width="1"/>
-  <text  x="52" y="360" font-size="9" font-weight="bold" fill="#1565C0" transform="rotate(-90 52 360) translate(52 360) scale(1 0.625) translate(-52 -360)" text-anchor="middle">ВЪЕЗД · 8 мест разгрузки грузовиков</text>
+  <rect x="55" y="80" width="35" height="560" fill="#E3F2FD" stroke="#64B5F6" stroke-width="1"/>
+  <text  x="47" y="360" font-size="9" font-weight="bold" fill="#1565C0" transform="rotate(-90 47 360) translate(47 360) scale(1 0.625) translate(-47 -360)" text-anchor="middle">ВЪЕЗД · 8 мест разгрузки грузовиков</text>
   <g fill="#BBDEFB" stroke="#64B5F6" stroke-width="1">
-    <rect x="89" y="90" width="6" height="44" rx="1"/><rect x="89" y="160" width="6" height="44" rx="1"/>
-    <rect x="89" y="230" width="6" height="44" rx="1"/><rect x="89" y="300" width="6" height="44" rx="1"/>
-    <rect x="89" y="370" width="6" height="44" rx="1"/><rect x="89" y="440" width="6" height="44" rx="1"/>
-    <rect x="89" y="510" width="6" height="44" rx="1"/><rect x="89" y="580" width="6" height="44" rx="1"/>
+    <rect x="84" y="90" width="6" height="44" rx="1"/><rect x="84" y="160" width="6" height="44" rx="1"/>
+    <rect x="84" y="230" width="6" height="44" rx="1"/><rect x="84" y="300" width="6" height="44" rx="1"/>
+    <rect x="84" y="370" width="6" height="44" rx="1"/><rect x="84" y="440" width="6" height="44" rx="1"/>
+    <rect x="84" y="510" width="6" height="44" rx="1"/><rect x="84" y="580" width="6" height="44" rx="1"/>
   </g>
 
   <!-- Восточная рампа (выезд) -->
-  <rect x="960" y="80" width="40" height="800" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
-  <text  x="988" y="480" font-size="9" font-weight="bold" fill="#2E7D32" transform="rotate(90 988 480) translate(988 480) scale(1 0.625) translate(-988 -480)" text-anchor="middle">ВЫЕЗД · 24 места погрузки грузовиков</text>
+  <rect x="965" y="80" width="40" height="800" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+  <text  x="993" y="480" font-size="9" font-weight="bold" fill="#2E7D32" transform="rotate(90 993 480) translate(993 480) scale(1 0.625) translate(-993 -480)" text-anchor="middle">ВЫЕЗД · 24 места погрузки грузовиков</text>
   <g fill="#C8E6C9" stroke="#66BB6A" stroke-width="1">
-    <rect x="960" y="84" width="6" height="26" rx="1"/><rect x="960" y="117" width="6" height="26" rx="1"/>
-    <rect x="960" y="150" width="6" height="26" rx="1"/><rect x="960" y="183" width="6" height="26" rx="1"/>
-    <rect x="960" y="216" width="6" height="26" rx="1"/><rect x="960" y="249" width="6" height="26" rx="1"/>
-    <rect x="960" y="282" width="6" height="26" rx="1"/><rect x="960" y="315" width="6" height="26" rx="1"/>
-    <rect x="960" y="348" width="6" height="26" rx="1"/><rect x="960" y="381" width="6" height="26" rx="1"/>
-    <rect x="960" y="414" width="6" height="26" rx="1"/><rect x="960" y="447" width="6" height="26" rx="1"/>
-    <rect x="960" y="480" width="6" height="26" rx="1"/><rect x="960" y="513" width="6" height="26" rx="1"/>
-    <rect x="960" y="546" width="6" height="26" rx="1"/><rect x="960" y="579" width="6" height="26" rx="1"/>
-    <rect x="960" y="612" width="6" height="26" rx="1"/><rect x="960" y="645" width="6" height="26" rx="1"/>
-    <rect x="960" y="678" width="6" height="26" rx="1"/><rect x="960" y="711" width="6" height="26" rx="1"/>
-    <rect x="960" y="744" width="6" height="26" rx="1"/><rect x="960" y="777" width="6" height="26" rx="1"/>
-    <rect x="960" y="810" width="6" height="26" rx="1"/><rect x="960" y="843" width="6" height="26" rx="1"/>
+    <rect x="965" y="84" width="6" height="26" rx="1"/><rect x="965" y="117" width="6" height="26" rx="1"/>
+    <rect x="965" y="150" width="6" height="26" rx="1"/><rect x="965" y="183" width="6" height="26" rx="1"/>
+    <rect x="965" y="216" width="6" height="26" rx="1"/><rect x="965" y="249" width="6" height="26" rx="1"/>
+    <rect x="965" y="282" width="6" height="26" rx="1"/><rect x="965" y="315" width="6" height="26" rx="1"/>
+    <rect x="965" y="348" width="6" height="26" rx="1"/><rect x="965" y="381" width="6" height="26" rx="1"/>
+    <rect x="965" y="414" width="6" height="26" rx="1"/><rect x="965" y="447" width="6" height="26" rx="1"/>
+    <rect x="965" y="480" width="6" height="26" rx="1"/><rect x="965" y="513" width="6" height="26" rx="1"/>
+    <rect x="965" y="546" width="6" height="26" rx="1"/><rect x="965" y="579" width="6" height="26" rx="1"/>
+    <rect x="965" y="612" width="6" height="26" rx="1"/><rect x="965" y="645" width="6" height="26" rx="1"/>
+    <rect x="965" y="678" width="6" height="26" rx="1"/><rect x="965" y="711" width="6" height="26" rx="1"/>
+    <rect x="965" y="744" width="6" height="26" rx="1"/><rect x="965" y="777" width="6" height="26" rx="1"/>
+    <rect x="965" y="810" width="6" height="26" rx="1"/><rect x="965" y="843" width="6" height="26" rx="1"/>
   </g>
 
   <!-- Здание -->
-  <rect x="100" y="80" width="855" height="880" rx="10" fill="#FFFFFF" stroke="#37474F" stroke-width="3" filter="url(#sh)"/>
+  <rect x="95" y="75" width="865" height="890" rx="10" fill="#FFFFFF" stroke="#37474F" stroke-width="3" filter="url(#sh)"/>
 
   <!-- ===== ЗОНА 1. ПРИЁМКА (18×140 м) ===== -->
   <g>
