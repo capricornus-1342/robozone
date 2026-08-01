@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1940 1060" font-family="'Segoe UI', Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2050 1060" font-family="'Segoe UI', Arial, sans-serif">
   <defs>
     <marker id="ar" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D32F2F"/></marker>
     <marker id="ab" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1565C0"/></marker>
@@ -15,12 +15,12 @@
   <rect x="0" y="0" width="1940" height="1060" fill="#FAFAFA"/>
 
   <!-- Заголовок -->
-  <text x="970" y="26" font-size="20" font-weight="bold" text-anchor="middle" fill="#1A237E">СОРТИРОВОЧНЫЙ ЦЕНТР — ПЛАН (ВИД СВЕРХУ)</text>
-  <text x="970" y="44" font-size="12" text-anchor="middle" fill="#455A64">вход с запада → выход на восток · здание 200 × 220 м = 44 000 м² · план растянут по горизонтали ×1,6 · потоки по спецификации specification.md</text>
-  <line x1="20" y1="52" x2="1920" y2="52" stroke="#90A4AE" stroke-width="1.5"/>
+  <text x="1025" y="26" font-size="20" font-weight="bold" text-anchor="middle" fill="#1A237E">СОРТИРОВОЧНЫЙ ЦЕНТР — ПЛАН (ВИД СВЕРХУ)</text>
+  <text x="1025" y="44" font-size="12" text-anchor="middle" fill="#455A64">вход с запада → выход на восток · здание 200 × 220 м = 44 000 м² · план растянут по горизонтали ×1,6 · потоки по спецификации specification.md</text>
+  <line x1="20" y1="52" x2="2030" y2="52" stroke="#90A4AE" stroke-width="1.5"/>
 
   <!-- Компас -->
-  <g transform="translate(1900,32)">
+  <g transform="translate(2005,32)">
     <circle r="14" fill="#FFFFFF" stroke="#90A4AE" stroke-width="1"/>
     <path d="M0,-10 L3,2 L0,-1 L-3,2 Z" fill="#C62828"/>
     <text x="0" y="-14" font-size="8" text-anchor="middle" fill="#37474F" font-weight="bold">С</text>
@@ -30,38 +30,38 @@
   </g>
 
   <!-- ===== ПЛАН ЗДАНИЯ (растянут по горизонтали ×1,6, шрифты компенсированы) ===== -->
-  <g transform="translate(500,0) scale(1.6,1) translate(-60,0)">
+  <g transform="translate(510,0) scale(1.6,1) translate(-60,0)">
 
   <!-- Западная рампа (въезд) -->
-  <rect x="60" y="80" width="40" height="560" fill="#E3F2FD" stroke="#64B5F6" stroke-width="1"/>
+  <rect x="60" y="80" width="35" height="560" fill="#E3F2FD" stroke="#64B5F6" stroke-width="1"/>
   <text  x="52" y="360" font-size="9" font-weight="bold" fill="#1565C0" transform="rotate(-90 52 360) translate(52 360) scale(1 0.625) translate(-52 -360)" text-anchor="middle">ВЪЕЗД · 8 мест разгрузки грузовиков</text>
   <g fill="#BBDEFB" stroke="#64B5F6" stroke-width="1">
-    <rect x="94" y="90" width="6" height="44" rx="1"/><rect x="94" y="160" width="6" height="44" rx="1"/>
-    <rect x="94" y="230" width="6" height="44" rx="1"/><rect x="94" y="300" width="6" height="44" rx="1"/>
-    <rect x="94" y="370" width="6" height="44" rx="1"/><rect x="94" y="440" width="6" height="44" rx="1"/>
-    <rect x="94" y="510" width="6" height="44" rx="1"/><rect x="94" y="580" width="6" height="44" rx="1"/>
+    <rect x="89" y="90" width="6" height="44" rx="1"/><rect x="89" y="160" width="6" height="44" rx="1"/>
+    <rect x="89" y="230" width="6" height="44" rx="1"/><rect x="89" y="300" width="6" height="44" rx="1"/>
+    <rect x="89" y="370" width="6" height="44" rx="1"/><rect x="89" y="440" width="6" height="44" rx="1"/>
+    <rect x="89" y="510" width="6" height="44" rx="1"/><rect x="89" y="580" width="6" height="44" rx="1"/>
   </g>
 
   <!-- Восточная рампа (выезд) -->
-  <rect x="900" y="80" width="40" height="800" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
-  <text  x="928" y="480" font-size="9" font-weight="bold" fill="#2E7D32" transform="rotate(90 928 480) translate(928 480) scale(1 0.625) translate(-928 -480)" text-anchor="middle">ВЫЕЗД · 24 места погрузки грузовиков</text>
+  <rect x="960" y="80" width="40" height="800" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+  <text  x="988" y="480" font-size="9" font-weight="bold" fill="#2E7D32" transform="rotate(90 988 480) translate(988 480) scale(1 0.625) translate(-988 -480)" text-anchor="middle">ВЫЕЗД · 24 места погрузки грузовиков</text>
   <g fill="#C8E6C9" stroke="#66BB6A" stroke-width="1">
-    <rect x="900" y="84" width="6" height="26" rx="1"/><rect x="900" y="117" width="6" height="26" rx="1"/>
-    <rect x="900" y="150" width="6" height="26" rx="1"/><rect x="900" y="183" width="6" height="26" rx="1"/>
-    <rect x="900" y="216" width="6" height="26" rx="1"/><rect x="900" y="249" width="6" height="26" rx="1"/>
-    <rect x="900" y="282" width="6" height="26" rx="1"/><rect x="900" y="315" width="6" height="26" rx="1"/>
-    <rect x="900" y="348" width="6" height="26" rx="1"/><rect x="900" y="381" width="6" height="26" rx="1"/>
-    <rect x="900" y="414" width="6" height="26" rx="1"/><rect x="900" y="447" width="6" height="26" rx="1"/>
-    <rect x="900" y="480" width="6" height="26" rx="1"/><rect x="900" y="513" width="6" height="26" rx="1"/>
-    <rect x="900" y="546" width="6" height="26" rx="1"/><rect x="900" y="579" width="6" height="26" rx="1"/>
-    <rect x="900" y="612" width="6" height="26" rx="1"/><rect x="900" y="645" width="6" height="26" rx="1"/>
-    <rect x="900" y="678" width="6" height="26" rx="1"/><rect x="900" y="711" width="6" height="26" rx="1"/>
-    <rect x="900" y="744" width="6" height="26" rx="1"/><rect x="900" y="777" width="6" height="26" rx="1"/>
-    <rect x="900" y="810" width="6" height="26" rx="1"/><rect x="900" y="843" width="6" height="26" rx="1"/>
+    <rect x="960" y="84" width="6" height="26" rx="1"/><rect x="960" y="117" width="6" height="26" rx="1"/>
+    <rect x="960" y="150" width="6" height="26" rx="1"/><rect x="960" y="183" width="6" height="26" rx="1"/>
+    <rect x="960" y="216" width="6" height="26" rx="1"/><rect x="960" y="249" width="6" height="26" rx="1"/>
+    <rect x="960" y="282" width="6" height="26" rx="1"/><rect x="960" y="315" width="6" height="26" rx="1"/>
+    <rect x="960" y="348" width="6" height="26" rx="1"/><rect x="960" y="381" width="6" height="26" rx="1"/>
+    <rect x="960" y="414" width="6" height="26" rx="1"/><rect x="960" y="447" width="6" height="26" rx="1"/>
+    <rect x="960" y="480" width="6" height="26" rx="1"/><rect x="960" y="513" width="6" height="26" rx="1"/>
+    <rect x="960" y="546" width="6" height="26" rx="1"/><rect x="960" y="579" width="6" height="26" rx="1"/>
+    <rect x="960" y="612" width="6" height="26" rx="1"/><rect x="960" y="645" width="6" height="26" rx="1"/>
+    <rect x="960" y="678" width="6" height="26" rx="1"/><rect x="960" y="711" width="6" height="26" rx="1"/>
+    <rect x="960" y="744" width="6" height="26" rx="1"/><rect x="960" y="777" width="6" height="26" rx="1"/>
+    <rect x="960" y="810" width="6" height="26" rx="1"/><rect x="960" y="843" width="6" height="26" rx="1"/>
   </g>
 
   <!-- Здание -->
-  <rect x="100" y="80" width="800" height="880" rx="10" fill="#FFFFFF" stroke="#37474F" stroke-width="3" filter="url(#sh)"/>
+  <rect x="100" y="80" width="855" height="880" rx="10" fill="#FFFFFF" stroke="#37474F" stroke-width="3" filter="url(#sh)"/>
 
   <!-- ===== ЗОНА 1. ПРИЁМКА (18×140 м) ===== -->
   <g>
@@ -79,213 +79,213 @@
 
   <!-- ===== ЗОНА 2. РАЗУКРУПНЕНИЕ (10×120 м) ===== -->
   <g>
-    <rect x="172" y="80" width="40" height="480" rx="6" fill="#E0F2E9" stroke="#2E7D32" stroke-width="2"/>
+    <rect x="177" y="80" width="40" height="480" rx="6" fill="#E0F2E9" stroke="#2E7D32" stroke-width="2"/>
     <g fill="#A5D6A7" stroke="#2E7D32" stroke-width="1.2">
-      <rect x="176" y="160" width="32" height="64" rx="2"/><rect x="176" y="280" width="32" height="64" rx="2"/><rect x="176" y="400" width="32" height="64" rx="2"/>
+      <rect x="181" y="160" width="32" height="64" rx="2"/><rect x="181" y="280" width="32" height="64" rx="2"/><rect x="181" y="400" width="32" height="64" rx="2"/>
     </g>
     <g font-size="8" fill="#1B5E20" text-anchor="end">
-      <text  x="208" y="180" transform="translate(208 180) scale(0.625 1) translate(-208 -180)">депал-</text><text  x="208" y="190" transform="translate(208 190) scale(0.625 1) translate(-208 -190)">тайзер 1</text>
-      <text  x="208" y="300" transform="translate(208 300) scale(0.625 1) translate(-208 -300)">депал-</text><text  x="208" y="310" transform="translate(208 310) scale(0.625 1) translate(-208 -310)">тайзер 2</text>
-      <text  x="208" y="420" transform="translate(208 420) scale(0.625 1) translate(-208 -420)">депал-</text><text  x="208" y="430" transform="translate(208 430) scale(0.625 1) translate(-208 -430)">тайзер 3</text>
+      <text  x="213" y="180" transform="translate(213 180) scale(0.625 1) translate(-213 -180)">депал-</text><text  x="213" y="190" transform="translate(213 190) scale(0.625 1) translate(-213 -190)">тайзер 1</text>
+      <text  x="213" y="300" transform="translate(213 300) scale(0.625 1) translate(-213 -300)">депал-</text><text  x="213" y="310" transform="translate(213 310) scale(0.625 1) translate(-213 -310)">тайзер 2</text>
+      <text  x="213" y="420" transform="translate(213 420) scale(0.625 1) translate(-213 -420)">депал-</text><text  x="213" y="430" transform="translate(213 430) scale(0.625 1) translate(-213 -430)">тайзер 3</text>
     </g>
-    <text  x="176" y="90" font-size="7" font-weight="bold" fill="#1B5E20" transform="translate(176 90) scale(0.625 1) translate(-176 -90)">ЗОНА 2</text>
-    <text  x="176" y="98" font-size="6" fill="#2E7D32" transform="translate(176 98) scale(0.625 1) translate(-176 -98)">РАЗУКРУП-</text>
-    <text  x="176" y="106" font-size="6" fill="#2E7D32" transform="translate(176 106) scale(0.625 1) translate(-176 -106)">НЕНИЕ</text>
+    <text  x="181" y="90" font-size="7" font-weight="bold" fill="#1B5E20" transform="translate(181 90) scale(0.625 1) translate(-181 -90)">ЗОНА 2</text>
+    <text  x="181" y="98" font-size="6" fill="#2E7D32" transform="translate(181 98) scale(0.625 1) translate(-181 -98)">РАЗУКРУП-</text>
+    <text  x="181" y="106" font-size="6" fill="#2E7D32" transform="translate(181 106) scale(0.625 1) translate(-181 -106)">НЕНИЕ</text>
   </g>
 
   <!-- ===== ЗОНА 3. ВСКРЫТИЕ КТЯ (7,5×120 м) ===== -->
   <g>
-    <rect x="212" y="80" width="30" height="480" rx="6" fill="#FFF3D6" stroke="#EF6C00" stroke-width="2"/>
+    <rect x="222" y="80" width="30" height="480" rx="6" fill="#FFF3D6" stroke="#EF6C00" stroke-width="2"/>
     <g fill="#FFE082" stroke="#EF6C00" stroke-width="1">
-      <rect x="216" y="110" width="22" height="28" rx="1"/><rect x="216" y="160" width="22" height="28" rx="1"/>
-      <rect x="216" y="210" width="22" height="28" rx="1"/><rect x="216" y="260" width="22" height="28" rx="1"/>
-      <rect x="216" y="310" width="22" height="28" rx="1"/><rect x="216" y="360" width="22" height="28" rx="1"/>
-      <rect x="216" y="410" width="22" height="28" rx="1"/><rect x="216" y="460" width="22" height="28" rx="1"/>
+      <rect x="226" y="110" width="22" height="28" rx="1"/><rect x="226" y="160" width="22" height="28" rx="1"/>
+      <rect x="226" y="210" width="22" height="28" rx="1"/><rect x="226" y="260" width="22" height="28" rx="1"/>
+      <rect x="226" y="310" width="22" height="28" rx="1"/><rect x="226" y="360" width="22" height="28" rx="1"/>
+      <rect x="226" y="410" width="22" height="28" rx="1"/><rect x="226" y="460" width="22" height="28" rx="1"/>
     </g>
-    <text  x="215" y="90" font-size="6.5" font-weight="bold" fill="#E65100" transform="translate(215 90) scale(0.625 1) translate(-215 -90)">ЗОНА 3</text>
-    <text  x="215" y="98" font-size="5.5" fill="#EF6C00" transform="translate(215 98) scale(0.625 1) translate(-215 -98)">ВСКРЫТИЕ</text>
-    <text  x="215" y="106" font-size="6" fill="#EF6C00" transform="translate(215 106) scale(0.625 1) translate(-215 -106)">КТЯ</text>
+    <text  x="225" y="90" font-size="6.5" font-weight="bold" fill="#E65100" transform="translate(225 90) scale(0.625 1) translate(-225 -90)">ЗОНА 3</text>
+    <text  x="225" y="98" font-size="5.5" fill="#EF6C00" transform="translate(225 98) scale(0.625 1) translate(-225 -98)">ВСКРЫТИЕ</text>
+    <text  x="225" y="106" font-size="6" fill="#EF6C00" transform="translate(225 106) scale(0.625 1) translate(-225 -106)">КТЯ</text>
   </g>
 
   <!-- ===== ЗОНА 4. СТОК КТЯ + НОВЫЕ КОРОБА (12,5×120 м) ===== -->
   <g>
-    <rect x="242" y="80" width="50" height="480" rx="6" fill="#E6F4F5" stroke="#00838F" stroke-width="2"/>
-    <rect x="246" y="130" width="42" height="44" rx="2" fill="#80CBC4" stroke="#00695C" stroke-width="1.2"/>
+    <rect x="257" y="80" width="50" height="480" rx="6" fill="#E6F4F5" stroke="#00838F" stroke-width="2"/>
+    <rect x="261" y="130" width="42" height="44" rx="2" fill="#80CBC4" stroke="#00695C" stroke-width="1.2"/>
     <g font-size="6.5" fill="#004D40" text-anchor="end">
-      <text  x="288" y="145" transform="translate(288 145) scale(0.625 1) translate(-288 -145)">машина</text><text  x="288" y="155" transform="translate(288 155) scale(0.625 1) translate(-288 -155)">новых</text><text  x="288" y="165" transform="translate(288 165) scale(0.625 1) translate(-288 -165)">коробов</text>
+      <text  x="303" y="145" transform="translate(303 145) scale(0.625 1) translate(-303 -145)">машина</text><text  x="303" y="155" transform="translate(303 155) scale(0.625 1) translate(-303 -155)">новых</text><text  x="303" y="165" transform="translate(303 165) scale(0.625 1) translate(-303 -165)">коробов</text>
     </g>
-    <text  x="288" y="178" font-size="6" fill="#004D40" text-anchor="end" font-weight="bold" transform="translate(288 178) scale(0.625 1) translate(-288 -178)">740/ч</text>
-    <rect x="246" y="190" width="42" height="366" fill="url(#pal)" opacity="0.6"/>
-    <text  x="246" y="90" font-size="7" font-weight="bold" fill="#00695C" transform="translate(246 90) scale(0.625 1) translate(-246 -90)">ЗОНА 4</text>
-    <text  x="246" y="98" font-size="6" fill="#00838F" transform="translate(246 98) scale(0.625 1) translate(-246 -98)">СТОК КТЯ</text>
-    <text  x="246" y="106" font-size="6" fill="#00838F" transform="translate(246 106) scale(0.625 1) translate(-246 -106)">+ НОВЫЕ</text>
-    <text  x="246" y="114" font-size="6" fill="#00838F" transform="translate(246 114) scale(0.625 1) translate(-246 -114)">КОРОБА</text>
-    <text  x="246" y="122" font-size="6" fill="#00838F" transform="translate(246 122) scale(0.625 1) translate(-246 -122)">12,5×120 м</text>
+    <text  x="303" y="178" font-size="6" fill="#004D40" text-anchor="end" font-weight="bold" transform="translate(303 178) scale(0.625 1) translate(-303 -178)">740/ч</text>
+    <rect x="261" y="190" width="42" height="366" fill="url(#pal)" opacity="0.6"/>
+    <text  x="261" y="90" font-size="7" font-weight="bold" fill="#00695C" transform="translate(261 90) scale(0.625 1) translate(-261 -90)">ЗОНА 4</text>
+    <text  x="261" y="98" font-size="6" fill="#00838F" transform="translate(261 98) scale(0.625 1) translate(-261 -98)">СТОК КТЯ</text>
+    <text  x="261" y="106" font-size="6" fill="#00838F" transform="translate(261 106) scale(0.625 1) translate(-261 -106)">+ НОВЫЕ</text>
+    <text  x="261" y="114" font-size="6" fill="#00838F" transform="translate(261 114) scale(0.625 1) translate(-261 -114)">КОРОБА</text>
+    <text  x="261" y="122" font-size="6" fill="#00838F" transform="translate(261 122) scale(0.625 1) translate(-261 -122)">12,5×120 м</text>
   </g>
 
   <!-- ===== ЗОНА 5. ПОДАЧА (ИНФИДЫ) (12×140 м) ===== -->
   <g>
-    <rect x="292" y="80" width="48" height="560" rx="6" fill="#FDE8E8" stroke="#C62828" stroke-width="2"/>
+    <rect x="312" y="80" width="48" height="560" rx="6" fill="#FDE8E8" stroke="#C62828" stroke-width="2"/>
     <g fill="#EF9A9A" stroke="#C62828" stroke-width="1.2">
-      <rect x="296" y="100" width="40" height="36" rx="2"/><rect x="296" y="156" width="40" height="36" rx="2"/>
-      <rect x="296" y="212" width="40" height="36" rx="2"/><rect x="296" y="268" width="40" height="36" rx="2"/>
-      <rect x="296" y="324" width="40" height="36" rx="2"/><rect x="296" y="380" width="40" height="36" rx="2"/>
-      <rect x="296" y="436" width="40" height="36" rx="2"/><rect x="296" y="492" width="40" height="36" rx="2"/>
-      <rect x="296" y="548" width="40" height="36" rx="2"/><rect x="296" y="604" width="40" height="36" rx="2"/>
+      <rect x="316" y="100" width="40" height="36" rx="2"/><rect x="316" y="156" width="40" height="36" rx="2"/>
+      <rect x="316" y="212" width="40" height="36" rx="2"/><rect x="316" y="268" width="40" height="36" rx="2"/>
+      <rect x="316" y="324" width="40" height="36" rx="2"/><rect x="316" y="380" width="40" height="36" rx="2"/>
+      <rect x="316" y="436" width="40" height="36" rx="2"/><rect x="316" y="492" width="40" height="36" rx="2"/>
+      <rect x="316" y="548" width="40" height="36" rx="2"/><rect x="316" y="604" width="40" height="36" rx="2"/>
     </g>
     <g font-size="7.5" fill="#7F0000" text-anchor="end">
-      <text  x="338" y="119" transform="translate(338 119) scale(0.625 1) translate(-338 -119)">инфид 1</text><text  x="338" y="175" transform="translate(338 175) scale(0.625 1) translate(-338 -175)">инфид 2</text><text  x="338" y="231" transform="translate(338 231) scale(0.625 1) translate(-338 -231)">инфид 3</text>
-      <text  x="338" y="287" transform="translate(338 287) scale(0.625 1) translate(-338 -287)">инфид 4</text><text  x="338" y="343" transform="translate(338 343) scale(0.625 1) translate(-338 -343)">инфид 5</text><text  x="338" y="399" transform="translate(338 399) scale(0.625 1) translate(-338 -399)">инфид 6</text>
-      <text  x="338" y="455" transform="translate(338 455) scale(0.625 1) translate(-338 -455)">инфид 7</text><text  x="338" y="511" transform="translate(338 511) scale(0.625 1) translate(-338 -511)">инфид 8</text><text  x="338" y="567" transform="translate(338 567) scale(0.625 1) translate(-338 -567)">инфид 9</text>
-      <text  x="338" y="623" transform="translate(338 623) scale(0.625 1) translate(-338 -623)">инфид 10</text>
+      <text  x="358" y="119" transform="translate(358 119) scale(0.625 1) translate(-358 -119)">инфид 1</text><text  x="358" y="175" transform="translate(358 175) scale(0.625 1) translate(-358 -175)">инфид 2</text><text  x="358" y="231" transform="translate(358 231) scale(0.625 1) translate(-358 -231)">инфид 3</text>
+      <text  x="358" y="287" transform="translate(358 287) scale(0.625 1) translate(-358 -287)">инфид 4</text><text  x="358" y="343" transform="translate(358 343) scale(0.625 1) translate(-358 -343)">инфид 5</text><text  x="358" y="399" transform="translate(358 399) scale(0.625 1) translate(-358 -399)">инфид 6</text>
+      <text  x="358" y="455" transform="translate(358 455) scale(0.625 1) translate(-358 -455)">инфид 7</text><text  x="358" y="511" transform="translate(358 511) scale(0.625 1) translate(-358 -511)">инфид 8</text><text  x="358" y="567" transform="translate(358 567) scale(0.625 1) translate(-358 -567)">инфид 9</text>
+      <text  x="358" y="623" transform="translate(358 623) scale(0.625 1) translate(-358 -623)">инфид 10</text>
     </g>
-    <text  x="296" y="88" font-size="7" font-weight="bold" fill="#B71C1C" transform="translate(296 88) scale(0.625 1) translate(-296 -88)">ЗОНА 5</text>
-    <text  x="296" y="94" font-size="7" fill="#C62828" transform="translate(296 94) scale(0.625 1) translate(-296 -94)">ИНФИДЫ</text>
-    <text  x="296" y="99" font-size="6" fill="#C62828" transform="translate(296 99) scale(0.625 1) translate(-296 -99)">12×140 м</text>
+    <text  x="316" y="88" font-size="7" font-weight="bold" fill="#B71C1C" transform="translate(316 88) scale(0.625 1) translate(-316 -88)">ЗОНА 5</text>
+    <text  x="316" y="94" font-size="7" fill="#C62828" transform="translate(316 94) scale(0.625 1) translate(-316 -94)">ИНФИДЫ</text>
+    <text  x="316" y="99" font-size="6" fill="#C62828" transform="translate(316 99) scale(0.625 1) translate(-316 -99)">12×140 м</text>
   </g>
 
   <!-- ===== ЗОНА 6. СОРТИРОВКА (60×210 м) ===== -->
   <g>
-    <rect x="340" y="80" width="240" height="840" rx="6" fill="#E3E8F5" stroke="#3949AB" stroke-width="2"/>
+    <rect x="365" y="80" width="240" height="840" rx="6" fill="#E3E8F5" stroke="#3949AB" stroke-width="2"/>
     <g fill="#FFFFFF" stroke="#3949AB" stroke-width="1.4">
-      <rect x="344" y="100" width="232" height="48" rx="4"/><rect x="344" y="156" width="232" height="48" rx="4"/>
-      <rect x="344" y="212" width="232" height="48" rx="4"/><rect x="344" y="268" width="232" height="48" rx="4"/>
-      <rect x="344" y="324" width="232" height="48" rx="4"/><rect x="344" y="380" width="232" height="48" rx="4"/>
-      <rect x="344" y="436" width="232" height="48" rx="4"/><rect x="344" y="492" width="232" height="48" rx="4"/>
-      <rect x="344" y="548" width="232" height="48" rx="4"/><rect x="344" y="604" width="232" height="48" rx="4"/>
+      <rect x="369" y="100" width="232" height="48" rx="4"/><rect x="369" y="156" width="232" height="48" rx="4"/>
+      <rect x="369" y="212" width="232" height="48" rx="4"/><rect x="369" y="268" width="232" height="48" rx="4"/>
+      <rect x="369" y="324" width="232" height="48" rx="4"/><rect x="369" y="380" width="232" height="48" rx="4"/>
+      <rect x="369" y="436" width="232" height="48" rx="4"/><rect x="369" y="492" width="232" height="48" rx="4"/>
+      <rect x="369" y="548" width="232" height="48" rx="4"/><rect x="369" y="604" width="232" height="48" rx="4"/>
     </g>
     <g stroke="#7986CB" stroke-width="2">
-      <line x1="348" y1="124" x2="572" y2="124"/><line x1="348" y1="180" x2="572" y2="180"/>
-      <line x1="348" y1="236" x2="572" y2="236"/><line x1="348" y1="292" x2="572" y2="292"/>
-      <line x1="348" y1="348" x2="572" y2="348"/><line x1="348" y1="404" x2="572" y2="404"/>
-      <line x1="348" y1="460" x2="572" y2="460"/><line x1="348" y1="516" x2="572" y2="516"/>
-      <line x1="348" y1="572" x2="572" y2="572"/><line x1="348" y1="628" x2="572" y2="628"/>
+      <line x1="373" y1="124" x2="597" y2="124"/><line x1="373" y1="180" x2="597" y2="180"/>
+      <line x1="373" y1="236" x2="597" y2="236"/><line x1="373" y1="292" x2="597" y2="292"/>
+      <line x1="373" y1="348" x2="597" y2="348"/><line x1="373" y1="404" x2="597" y2="404"/>
+      <line x1="373" y1="460" x2="597" y2="460"/><line x1="373" y1="516" x2="597" y2="516"/>
+      <line x1="373" y1="572" x2="597" y2="572"/><line x1="373" y1="628" x2="597" y2="628"/>
     </g>
     <g fill="#9FA8DA" stroke="#283593" stroke-width="0.6">
-      <rect x="352" y="134" width="8" height="10"/><rect x="384" y="134" width="8" height="10"/><rect x="416" y="134" width="8" height="10"/><rect x="448" y="134" width="8" height="10"/><rect x="480" y="134" width="8" height="10"/><rect x="512" y="134" width="8" height="10"/><rect x="544" y="134" width="8" height="10"/>
-      <rect x="352" y="190" width="8" height="10"/><rect x="384" y="190" width="8" height="10"/><rect x="416" y="190" width="8" height="10"/><rect x="448" y="190" width="8" height="10"/><rect x="480" y="190" width="8" height="10"/><rect x="512" y="190" width="8" height="10"/><rect x="544" y="190" width="8" height="10"/>
-      <rect x="352" y="246" width="8" height="10"/><rect x="384" y="246" width="8" height="10"/><rect x="416" y="246" width="8" height="10"/><rect x="448" y="246" width="8" height="10"/><rect x="480" y="246" width="8" height="10"/><rect x="512" y="246" width="8" height="10"/><rect x="544" y="246" width="8" height="10"/>
-      <rect x="352" y="302" width="8" height="10"/><rect x="384" y="302" width="8" height="10"/><rect x="416" y="302" width="8" height="10"/><rect x="448" y="302" width="8" height="10"/><rect x="480" y="302" width="8" height="10"/><rect x="512" y="302" width="8" height="10"/><rect x="544" y="302" width="8" height="10"/>
-      <rect x="352" y="358" width="8" height="10"/><rect x="384" y="358" width="8" height="10"/><rect x="416" y="358" width="8" height="10"/><rect x="448" y="358" width="8" height="10"/><rect x="480" y="358" width="8" height="10"/><rect x="512" y="358" width="8" height="10"/><rect x="544" y="358" width="8" height="10"/>
-      <rect x="352" y="414" width="8" height="10"/><rect x="384" y="414" width="8" height="10"/><rect x="416" y="414" width="8" height="10"/><rect x="448" y="414" width="8" height="10"/><rect x="480" y="414" width="8" height="10"/><rect x="512" y="414" width="8" height="10"/><rect x="544" y="414" width="8" height="10"/>
-      <rect x="352" y="470" width="8" height="10"/><rect x="384" y="470" width="8" height="10"/><rect x="416" y="470" width="8" height="10"/><rect x="448" y="470" width="8" height="10"/><rect x="480" y="470" width="8" height="10"/><rect x="512" y="470" width="8" height="10"/><rect x="544" y="470" width="8" height="10"/>
-      <rect x="352" y="526" width="8" height="10"/><rect x="384" y="526" width="8" height="10"/><rect x="416" y="526" width="8" height="10"/><rect x="448" y="526" width="8" height="10"/><rect x="480" y="526" width="8" height="10"/><rect x="512" y="526" width="8" height="10"/><rect x="544" y="526" width="8" height="10"/>
-      <rect x="352" y="582" width="8" height="10"/><rect x="384" y="582" width="8" height="10"/><rect x="416" y="582" width="8" height="10"/><rect x="448" y="582" width="8" height="10"/><rect x="480" y="582" width="8" height="10"/><rect x="512" y="582" width="8" height="10"/><rect x="544" y="582" width="8" height="10"/>
-      <rect x="352" y="638" width="8" height="10"/><rect x="384" y="638" width="8" height="10"/><rect x="416" y="638" width="8" height="10"/><rect x="448" y="638" width="8" height="10"/><rect x="480" y="638" width="8" height="10"/><rect x="512" y="638" width="8" height="10"/><rect x="544" y="638" width="8" height="10"/>
+      <rect x="377" y="134" width="8" height="10"/><rect x="409" y="134" width="8" height="10"/><rect x="441" y="134" width="8" height="10"/><rect x="473" y="134" width="8" height="10"/><rect x="505" y="134" width="8" height="10"/><rect x="537" y="134" width="8" height="10"/><rect x="569" y="134" width="8" height="10"/>
+      <rect x="377" y="190" width="8" height="10"/><rect x="409" y="190" width="8" height="10"/><rect x="441" y="190" width="8" height="10"/><rect x="473" y="190" width="8" height="10"/><rect x="505" y="190" width="8" height="10"/><rect x="537" y="190" width="8" height="10"/><rect x="569" y="190" width="8" height="10"/>
+      <rect x="377" y="246" width="8" height="10"/><rect x="409" y="246" width="8" height="10"/><rect x="441" y="246" width="8" height="10"/><rect x="473" y="246" width="8" height="10"/><rect x="505" y="246" width="8" height="10"/><rect x="537" y="246" width="8" height="10"/><rect x="569" y="246" width="8" height="10"/>
+      <rect x="377" y="302" width="8" height="10"/><rect x="409" y="302" width="8" height="10"/><rect x="441" y="302" width="8" height="10"/><rect x="473" y="302" width="8" height="10"/><rect x="505" y="302" width="8" height="10"/><rect x="537" y="302" width="8" height="10"/><rect x="569" y="302" width="8" height="10"/>
+      <rect x="377" y="358" width="8" height="10"/><rect x="409" y="358" width="8" height="10"/><rect x="441" y="358" width="8" height="10"/><rect x="473" y="358" width="8" height="10"/><rect x="505" y="358" width="8" height="10"/><rect x="537" y="358" width="8" height="10"/><rect x="569" y="358" width="8" height="10"/>
+      <rect x="377" y="414" width="8" height="10"/><rect x="409" y="414" width="8" height="10"/><rect x="441" y="414" width="8" height="10"/><rect x="473" y="414" width="8" height="10"/><rect x="505" y="414" width="8" height="10"/><rect x="537" y="414" width="8" height="10"/><rect x="569" y="414" width="8" height="10"/>
+      <rect x="377" y="470" width="8" height="10"/><rect x="409" y="470" width="8" height="10"/><rect x="441" y="470" width="8" height="10"/><rect x="473" y="470" width="8" height="10"/><rect x="505" y="470" width="8" height="10"/><rect x="537" y="470" width="8" height="10"/><rect x="569" y="470" width="8" height="10"/>
+      <rect x="377" y="526" width="8" height="10"/><rect x="409" y="526" width="8" height="10"/><rect x="441" y="526" width="8" height="10"/><rect x="473" y="526" width="8" height="10"/><rect x="505" y="526" width="8" height="10"/><rect x="537" y="526" width="8" height="10"/><rect x="569" y="526" width="8" height="10"/>
+      <rect x="377" y="582" width="8" height="10"/><rect x="409" y="582" width="8" height="10"/><rect x="441" y="582" width="8" height="10"/><rect x="473" y="582" width="8" height="10"/><rect x="505" y="582" width="8" height="10"/><rect x="537" y="582" width="8" height="10"/><rect x="569" y="582" width="8" height="10"/>
+      <rect x="377" y="638" width="8" height="10"/><rect x="409" y="638" width="8" height="10"/><rect x="441" y="638" width="8" height="10"/><rect x="473" y="638" width="8" height="10"/><rect x="505" y="638" width="8" height="10"/><rect x="537" y="638" width="8" height="10"/><rect x="569" y="638" width="8" height="10"/>
     </g>
     <g font-size="7.5" fill="#283593" text-anchor="middle">
-      <text  x="460" y="120" transform="translate(460 120) scale(0.625 1) translate(-460 -120)">сортер №1 · 10 000/ч</text><text  x="460" y="176" transform="translate(460 176) scale(0.625 1) translate(-460 -176)">сортер №2 · 10 000/ч</text>
-      <text  x="460" y="232" transform="translate(460 232) scale(0.625 1) translate(-460 -232)">сортер №3 · 10 000/ч</text><text  x="460" y="288" transform="translate(460 288) scale(0.625 1) translate(-460 -288)">сортер №4 · 10 000/ч</text>
-      <text  x="460" y="344" transform="translate(460 344) scale(0.625 1) translate(-460 -344)">сортер №5 · 10 000/ч</text><text  x="460" y="400" transform="translate(460 400) scale(0.625 1) translate(-460 -400)">сортер №6 · 10 000/ч</text>
-      <text  x="460" y="456" transform="translate(460 456) scale(0.625 1) translate(-460 -456)">сортер №7 · 10 000/ч</text><text  x="460" y="512" transform="translate(460 512) scale(0.625 1) translate(-460 -512)">сортер №8 · 10 000/ч</text>
-      <text  x="460" y="568" transform="translate(460 568) scale(0.625 1) translate(-460 -568)">сортер №9 · 10 000/ч</text><text  x="460" y="624" transform="translate(460 624) scale(0.625 1) translate(-460 -624)">сортер №10 · 10 000/ч</text>
+      <text  x="485" y="120" transform="translate(485 120) scale(0.625 1) translate(-485 -120)">сортер №1 · 10 000/ч</text><text  x="485" y="176" transform="translate(485 176) scale(0.625 1) translate(-485 -176)">сортер №2 · 10 000/ч</text>
+      <text  x="485" y="232" transform="translate(485 232) scale(0.625 1) translate(-485 -232)">сортер №3 · 10 000/ч</text><text  x="485" y="288" transform="translate(485 288) scale(0.625 1) translate(-485 -288)">сортер №4 · 10 000/ч</text>
+      <text  x="485" y="344" transform="translate(485 344) scale(0.625 1) translate(-485 -344)">сортер №5 · 10 000/ч</text><text  x="485" y="400" transform="translate(485 400) scale(0.625 1) translate(-485 -400)">сортер №6 · 10 000/ч</text>
+      <text  x="485" y="456" transform="translate(485 456) scale(0.625 1) translate(-485 -456)">сортер №7 · 10 000/ч</text><text  x="485" y="512" transform="translate(485 512) scale(0.625 1) translate(-485 -512)">сортер №8 · 10 000/ч</text>
+      <text  x="485" y="568" transform="translate(485 568) scale(0.625 1) translate(-485 -568)">сортер №9 · 10 000/ч</text><text  x="485" y="624" transform="translate(485 624) scale(0.625 1) translate(-485 -624)">сортер №10 · 10 000/ч</text>
     </g>
-    <text  x="424" y="88" font-size="8" font-weight="bold" fill="#283593" transform="translate(424 88) scale(0.625 1) translate(-424 -88)">ЗОНА 6 · СОРТИРОВКА</text>
-    <text  x="424" y="98" font-size="7" fill="#3949AB" transform="translate(424 98) scale(0.625 1) translate(-424 -98)">60×210 м · 12 600 м²</text>
-    <text  x="460" y="665" font-size="7.5" fill="#283593" text-anchor="middle" transform="translate(460 665) scale(0.625 1) translate(-460 -665)">съём заполненных КТЯ + утряска (3 700/ч) → заклейка</text>
-    <text  x="460" y="679" font-size="7" fill="#3949AB" text-anchor="middle" transform="translate(460 679) scale(0.625 1) translate(-460 -679)">40 скатов на сортер · 400 направлений</text>
+    <text  x="449" y="88" font-size="8" font-weight="bold" fill="#283593" transform="translate(449 88) scale(0.625 1) translate(-449 -88)">ЗОНА 6 · СОРТИРОВКА</text>
+    <text  x="449" y="98" font-size="7" fill="#3949AB" transform="translate(449 98) scale(0.625 1) translate(-449 -98)">60×210 м · 12 600 м²</text>
+    <text  x="485" y="665" font-size="7.5" fill="#283593" text-anchor="middle" transform="translate(485 665) scale(0.625 1) translate(-485 -665)">съём заполненных КТЯ + утряска (3 700/ч) → заклейка</text>
+    <text  x="485" y="679" font-size="7" fill="#3949AB" text-anchor="middle" transform="translate(485 679) scale(0.625 1) translate(-485 -679)">40 скатов на сортер · 400 направлений</text>
   </g>
 
   <!-- ===== ЗОНА 7. ЗАКЛЕЙКА (12,5×140 м) ===== -->
   <g>
-    <rect x="580" y="80" width="50" height="560" rx="6" fill="#F0F2E8" stroke="#827717" stroke-width="2"/>
+    <rect x="610" y="80" width="50" height="560" rx="6" fill="#F0F2E8" stroke="#827717" stroke-width="2"/>
     <g fill="#DCE3C8" stroke="#827717" stroke-width="1.2">
-      <rect x="584" y="120" width="42" height="52" rx="2"/><rect x="584" y="230" width="42" height="52" rx="2"/>
-      <rect x="584" y="340" width="42" height="52" rx="2"/><rect x="584" y="450" width="42" height="52" rx="2"/>
+      <rect x="614" y="120" width="42" height="52" rx="2"/><rect x="614" y="230" width="42" height="52" rx="2"/>
+      <rect x="614" y="340" width="42" height="52" rx="2"/><rect x="614" y="450" width="42" height="52" rx="2"/>
     </g>
     <g font-size="6.5" fill="#4E4300" text-anchor="middle">
-      <text  x="605" y="136" transform="translate(605 136) scale(0.625 1) translate(-605 -136)">заклейка</text><text  x="605" y="146" transform="translate(605 146) scale(0.625 1) translate(-605 -146)">№1 · 1 000</text>
-      <text  x="605" y="246" transform="translate(605 246) scale(0.625 1) translate(-605 -246)">заклейка</text><text  x="605" y="256" transform="translate(605 256) scale(0.625 1) translate(-605 -256)">№2 · 1 000</text>
-      <text  x="605" y="356" transform="translate(605 356) scale(0.625 1) translate(-605 -356)">заклейка</text><text  x="605" y="366" transform="translate(605 366) scale(0.625 1) translate(-605 -366)">№3 · 1 000</text>
-      <text  x="605" y="466" transform="translate(605 466) scale(0.625 1) translate(-605 -466)">заклейка</text><text  x="605" y="476" transform="translate(605 476) scale(0.625 1) translate(-605 -476)">№4 · 1 000</text>
+      <text  x="635" y="136" transform="translate(635 136) scale(0.625 1) translate(-635 -136)">заклейка</text><text  x="635" y="146" transform="translate(635 146) scale(0.625 1) translate(-635 -146)">№1 · 1 000</text>
+      <text  x="635" y="246" transform="translate(635 246) scale(0.625 1) translate(-635 -246)">заклейка</text><text  x="635" y="256" transform="translate(635 256) scale(0.625 1) translate(-635 -256)">№2 · 1 000</text>
+      <text  x="635" y="356" transform="translate(635 356) scale(0.625 1) translate(-635 -356)">заклейка</text><text  x="635" y="366" transform="translate(635 366) scale(0.625 1) translate(-635 -366)">№3 · 1 000</text>
+      <text  x="635" y="466" transform="translate(635 466) scale(0.625 1) translate(-635 -466)">заклейка</text><text  x="635" y="476" transform="translate(635 476) scale(0.625 1) translate(-635 -476)">№4 · 1 000</text>
     </g>
-    <text  x="584" y="90" font-size="7" font-weight="bold" fill="#655800" transform="translate(584 90) scale(0.625 1) translate(-584 -90)">ЗОНА 7</text>
-    <text  x="584" y="98" font-size="6" fill="#827717" transform="translate(584 98) scale(0.625 1) translate(-584 -98)">ЗАКЛЕЙКА</text>
-    <text  x="584" y="106" font-size="6" fill="#827717" transform="translate(584 106) scale(0.625 1) translate(-584 -106)">12,5×140 м</text>
+    <text  x="614" y="90" font-size="7" font-weight="bold" fill="#655800" transform="translate(614 90) scale(0.625 1) translate(-614 -90)">ЗОНА 7</text>
+    <text  x="614" y="98" font-size="6" fill="#827717" transform="translate(614 98) scale(0.625 1) translate(-614 -98)">ЗАКЛЕЙКА</text>
+    <text  x="614" y="106" font-size="6" fill="#827717" transform="translate(614 106) scale(0.625 1) translate(-614 -106)">12,5×140 м</text>
   </g>
 
   <!-- ===== ЗОНА 8. КТЯ-СОРТИРОВКА (12,5×140 м) ===== -->
   <g>
-    <rect x="630" y="80" width="50" height="560" rx="6" fill="#FBEEDB" stroke="#E65100" stroke-width="2"/>
-    <rect x="634" y="84" width="42" height="552" fill="url(#cell)" opacity="0.7"/>
-    <text  x="634" y="90" font-size="7" font-weight="bold" fill="#BF360C" transform="translate(634 90) scale(0.625 1) translate(-634 -90)">ЗОНА 8</text>
-    <text  x="634" y="98" font-size="5.5" fill="#E65100" transform="translate(634 98) scale(0.625 1) translate(-634 -98)">КТЯ-СОРТИРОВКА</text>
-    <text  x="634" y="106" font-size="6" fill="#E65100" transform="translate(634 106) scale(0.625 1) translate(-634 -106)">12,5×140 м</text>
+    <rect x="665" y="80" width="50" height="560" rx="6" fill="#FBEEDB" stroke="#E65100" stroke-width="2"/>
+    <rect x="669" y="84" width="42" height="552" fill="url(#cell)" opacity="0.7"/>
+    <text  x="669" y="90" font-size="7" font-weight="bold" fill="#BF360C" transform="translate(669 90) scale(0.625 1) translate(-669 -90)">ЗОНА 8</text>
+    <text  x="669" y="98" font-size="5.5" fill="#E65100" transform="translate(669 98) scale(0.625 1) translate(-669 -98)">КТЯ-СОРТИРОВКА</text>
+    <text  x="669" y="106" font-size="6" fill="#E65100" transform="translate(669 106) scale(0.625 1) translate(-669 -106)">12,5×140 м</text>
   </g>
 
   <!-- ===== ЗОНА 9. БУФЕР ОТГРУЗКИ (10×140 м) ===== -->
   <g>
-    <rect x="680" y="80" width="40" height="560" rx="6" fill="#EDE7F6" stroke="#4527A0" stroke-width="2"/>
-    <rect x="684" y="84" width="32" height="552" fill="url(#pal)" opacity="0.6"/>
-    <text  x="684" y="90" font-size="7" font-weight="bold" fill="#311B92" transform="translate(684 90) scale(0.625 1) translate(-684 -90)">ЗОНА 9</text>
-    <text  x="684" y="98" font-size="6" fill="#4527A0" transform="translate(684 98) scale(0.625 1) translate(-684 -98)">БУФЕР</text>
-    <text  x="684" y="106" font-size="6" fill="#4527A0" transform="translate(684 106) scale(0.625 1) translate(-684 -106)">10×140 м</text>
+    <rect x="720" y="80" width="40" height="560" rx="6" fill="#EDE7F6" stroke="#4527A0" stroke-width="2"/>
+    <rect x="724" y="84" width="32" height="552" fill="url(#pal)" opacity="0.6"/>
+    <text  x="724" y="90" font-size="7" font-weight="bold" fill="#311B92" transform="translate(724 90) scale(0.625 1) translate(-724 -90)">ЗОНА 9</text>
+    <text  x="724" y="98" font-size="6" fill="#4527A0" transform="translate(724 98) scale(0.625 1) translate(-724 -98)">БУФЕР</text>
+    <text  x="724" y="106" font-size="6" fill="#4527A0" transform="translate(724 106) scale(0.625 1) translate(-724 -106)">10×140 м</text>
   </g>
 
   <!-- ===== ЗОНА 10. ПАЛЛЕТИРОВАНИЕ (10×120 м) ===== -->
   <g>
-    <rect x="720" y="80" width="40" height="480" rx="6" fill="#E8F6EC" stroke="#2E7D32" stroke-width="2"/>
+    <rect x="765" y="80" width="40" height="480" rx="6" fill="#E8F6EC" stroke="#2E7D32" stroke-width="2"/>
     <g fill="#A5D6A7" stroke="#2E7D32" stroke-width="1.2">
-      <rect x="724" y="110" width="32" height="30" rx="2"/><rect x="724" y="180" width="32" height="30" rx="2"/>
-      <rect x="724" y="250" width="32" height="30" rx="2"/><rect x="724" y="320" width="32" height="30" rx="2"/>
-      <rect x="724" y="390" width="32" height="30" rx="2"/>
+      <rect x="769" y="110" width="32" height="30" rx="2"/><rect x="769" y="180" width="32" height="30" rx="2"/>
+      <rect x="769" y="250" width="32" height="30" rx="2"/><rect x="769" y="320" width="32" height="30" rx="2"/>
+      <rect x="769" y="390" width="32" height="30" rx="2"/>
     </g>
     <g font-size="6.5" fill="#1B5E20" text-anchor="middle">
-      <text  x="740" y="127" transform="translate(740 127) scale(0.625 1) translate(-740 -127)">паллет.</text><text  x="740" y="135" transform="translate(740 135) scale(0.625 1) translate(-740 -135)">№1</text>
-      <text  x="740" y="197" transform="translate(740 197) scale(0.625 1) translate(-740 -197)">паллет.</text><text  x="740" y="205" transform="translate(740 205) scale(0.625 1) translate(-740 -205)">№2</text>
-      <text  x="740" y="267" transform="translate(740 267) scale(0.625 1) translate(-740 -267)">паллет.</text><text  x="740" y="275" transform="translate(740 275) scale(0.625 1) translate(-740 -275)">№3</text>
-      <text  x="740" y="337" transform="translate(740 337) scale(0.625 1) translate(-740 -337)">паллет.</text><text  x="740" y="345" transform="translate(740 345) scale(0.625 1) translate(-740 -345)">№4</text>
-      <text  x="740" y="407" transform="translate(740 407) scale(0.625 1) translate(-740 -407)">паллет.</text><text  x="740" y="415" transform="translate(740 415) scale(0.625 1) translate(-740 -415)">№5</text>
+      <text  x="785" y="127" transform="translate(785 127) scale(0.625 1) translate(-785 -127)">паллет.</text><text  x="785" y="135" transform="translate(785 135) scale(0.625 1) translate(-785 -135)">№1</text>
+      <text  x="785" y="197" transform="translate(785 197) scale(0.625 1) translate(-785 -197)">паллет.</text><text  x="785" y="205" transform="translate(785 205) scale(0.625 1) translate(-785 -205)">№2</text>
+      <text  x="785" y="267" transform="translate(785 267) scale(0.625 1) translate(-785 -267)">паллет.</text><text  x="785" y="275" transform="translate(785 275) scale(0.625 1) translate(-785 -275)">№3</text>
+      <text  x="785" y="337" transform="translate(785 337) scale(0.625 1) translate(-785 -337)">паллет.</text><text  x="785" y="345" transform="translate(785 345) scale(0.625 1) translate(-785 -345)">№4</text>
+      <text  x="785" y="407" transform="translate(785 407) scale(0.625 1) translate(-785 -407)">паллет.</text><text  x="785" y="415" transform="translate(785 415) scale(0.625 1) translate(-785 -415)">№5</text>
     </g>
-    <text  x="724" y="90" font-size="7" font-weight="bold" fill="#1B5E20" transform="translate(724 90) scale(0.625 1) translate(-724 -90)">ЗОНА 10</text>
-    <text  x="724" y="98" font-size="5.5" fill="#2E7D32" transform="translate(724 98) scale(0.625 1) translate(-724 -98)">ПАЛЛЕТИ-</text>
-    <text  x="724" y="106" font-size="5.5" fill="#2E7D32" transform="translate(724 106) scale(0.625 1) translate(-724 -106)">РОВАНИЕ</text>
+    <text  x="769" y="90" font-size="7" font-weight="bold" fill="#1B5E20" transform="translate(769 90) scale(0.625 1) translate(-769 -90)">ЗОНА 10</text>
+    <text  x="769" y="98" font-size="5.5" fill="#2E7D32" transform="translate(769 98) scale(0.625 1) translate(-769 -98)">ПАЛЛЕТИ-</text>
+    <text  x="769" y="106" font-size="5.5" fill="#2E7D32" transform="translate(769 106) scale(0.625 1) translate(-769 -106)">РОВАНИЕ</text>
   </g>
 
   <!-- ===== ЗОНА 11. ОТГРУЗКА (25×200 м) ===== -->
   <g>
-    <rect x="800" y="80" width="100" height="880" rx="6" fill="#DCE8F7" stroke="#1565C0" stroke-width="2"/>
-    <rect x="804" y="84" width="88" height="872" fill="url(#pal)" opacity="0.5"/>
-    <text  x="804" y="90" font-size="7" font-weight="bold" fill="#0D47A1" transform="translate(804 90) scale(0.625 1) translate(-804 -90)">ЗОНА 11 · ОТГРУЗКА</text>
-    <text  x="804" y="98" font-size="6" fill="#1565C0" transform="translate(804 98) scale(0.625 1) translate(-804 -98)">25×200 м · 5 000 м²</text>
-    <text  x="804" y="112" font-size="6.5" font-weight="bold" fill="#0D47A1" transform="translate(804 112) scale(0.625 1) translate(-804 -112)">24 ворота · 12 машин/ч</text>
-    <text  x="804" y="124" font-size="6" fill="#0D47A1" transform="translate(804 124) scale(0.625 1) translate(-804 -124)">машина: 16 пал + 16 кейджей</text>
+    <rect x="845" y="80" width="100" height="880" rx="6" fill="#DCE8F7" stroke="#1565C0" stroke-width="2"/>
+    <rect x="849" y="84" width="88" height="872" fill="url(#pal)" opacity="0.5"/>
+    <text  x="849" y="90" font-size="7" font-weight="bold" fill="#0D47A1" transform="translate(849 90) scale(0.625 1) translate(-849 -90)">ЗОНА 11 · ОТГРУЗКА</text>
+    <text  x="849" y="98" font-size="6" fill="#1565C0" transform="translate(849 98) scale(0.625 1) translate(-849 -98)">25×200 м · 5 000 м²</text>
+    <text  x="849" y="112" font-size="6.5" font-weight="bold" fill="#0D47A1" transform="translate(849 112) scale(0.625 1) translate(-849 -112)">24 ворота · 12 машин/ч</text>
+    <text  x="849" y="124" font-size="6" fill="#0D47A1" transform="translate(849 124) scale(0.625 1) translate(-849 -124)">машина: 16 пал + 16 кейджей</text>
   </g>
 
   <!-- ===== ЗОНА 12. NONSORT (50×50 м) ===== -->
   <g>
-    <rect x="580" y="640" width="200" height="200" rx="6" fill="#FFF0E5" stroke="#E65100" stroke-width="2"/>
-    <text  x="584" y="654" font-size="8.5" font-weight="bold" fill="#BF360C" transform="translate(584 654) scale(0.625 1) translate(-584 -654)">ЗОНА 12 · NONSORT — 50×50 м · 2 500 м²</text>
-    <rect x="584" y="664" width="88" height="56" rx="2" fill="#FFCC80" stroke="#E65100" stroke-width="1"/>
-    <text  x="628" y="680" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(628 680) scale(0.625 1) translate(-628 -680)">адресные ячейки</text>
-    <text  x="628" y="690" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(628 690) scale(0.625 1) translate(-628 -690)">(по маршрутам)</text>
-    <rect x="680" y="664" width="92" height="56" rx="2" fill="#FFCC80" stroke="#E65100" stroke-width="1"/>
-    <text  x="726" y="680" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(726 680) scale(0.625 1) translate(-726 -680)">рабочие места</text>
-    <text  x="726" y="690" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(726 690) scale(0.625 1) translate(-726 -690)">ручной сортировки</text>
-    <rect x="584" y="728" width="188" height="60" rx="2" fill="#FFCC80" stroke="#E65100" stroke-width="1"/>
-    <text  x="678" y="748" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(678 748) scale(0.625 1) translate(-678 -748)">парк ролл-кейджей (16 на машину)</text>
-    <text  x="678" y="762" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(678 762) scale(0.625 1) translate(-678 -762)">до 192 кейджей/ч · буфер до 384 (2 ч)</text>
-    <text  x="584" y="808" font-size="7" fill="#37474F" transform="translate(584 808) scale(0.625 1) translate(-584 -808)">форма/хрупкость/тип/штрихкод/негабарит &gt; 320 мм</text>
-    <text  x="584" y="822" font-size="7" fill="#37474F" transform="translate(584 822) scale(0.625 1) translate(-584 -822)">поток — параметр модели</text>
+    <rect x="610" y="650" width="200" height="200" rx="6" fill="#FFF0E5" stroke="#E65100" stroke-width="2"/>
+    <text  x="614" y="664" font-size="8.5" font-weight="bold" fill="#BF360C" transform="translate(614 664) scale(0.625 1) translate(-614 -664)">ЗОНА 12 · NONSORT — 50×50 м · 2 500 м²</text>
+    <rect x="614" y="674" width="88" height="56" rx="2" fill="#FFCC80" stroke="#E65100" stroke-width="1"/>
+    <text  x="658" y="690" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(658 690) scale(0.625 1) translate(-658 -690)">адресные ячейки</text>
+    <text  x="658" y="700" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(658 700) scale(0.625 1) translate(-658 -700)">(по маршрутам)</text>
+    <rect x="710" y="674" width="92" height="56" rx="2" fill="#FFCC80" stroke="#E65100" stroke-width="1"/>
+    <text  x="756" y="690" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(756 690) scale(0.625 1) translate(-756 -690)">рабочие места</text>
+    <text  x="756" y="700" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(756 700) scale(0.625 1) translate(-756 -700)">ручной сортировки</text>
+    <rect x="614" y="738" width="188" height="60" rx="2" fill="#FFCC80" stroke="#E65100" stroke-width="1"/>
+    <text  x="708" y="758" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(708 758) scale(0.625 1) translate(-708 -758)">парк ролл-кейджей (16 на машину)</text>
+    <text  x="708" y="772" font-size="7" text-anchor="middle" fill="#7F2B00" transform="translate(708 772) scale(0.625 1) translate(-708 -772)">до 192 кейджей/ч · буфер до 384 (2 ч)</text>
+    <text  x="614" y="818" font-size="7" fill="#37474F" transform="translate(614 818) scale(0.625 1) translate(-614 -818)">форма/хрупкость/тип/штрихкод/негабарит &gt; 320 мм</text>
+    <text  x="614" y="832" font-size="7" fill="#37474F" transform="translate(614 832) scale(0.625 1) translate(-614 -832)">поток — параметр модели</text>
   </g>
 
   <!-- ===== ЗОНА 13. ВОЗВРАТНЫЕ КАНАЛЫ (16×50 м) ===== -->
   <g>
-    <rect x="260" y="700" width="64" height="200" rx="6" fill="#F3E8FD" stroke="#6A1B9A" stroke-width="2"/>
-    <text  x="264" y="714" font-size="6.5" font-weight="bold" fill="#4A148C" transform="translate(264 714) scale(0.625 1) translate(-264 -714)">ЗОНА 13</text>
-    <text  x="264" y="724" font-size="6.5" font-weight="bold" fill="#4A148C" transform="translate(264 724) scale(0.625 1) translate(-264 -724)">ВОЗВРАТНЫЕ</text>
-    <text  x="264" y="734" font-size="6" font-weight="bold" fill="#4A148C" transform="translate(264 734) scale(0.625 1) translate(-264 -734)">16×50 · 800 м²</text>
-    <rect x="264" y="748" width="56" height="36" rx="2" fill="#CE93D8" stroke="#6A1B9A" stroke-width="1"/>
-    <text  x="292" y="762" font-size="6" text-anchor="middle" fill="#38006B" transform="translate(292 762) scale(0.625 1) translate(-292 -762)">повторный</text>
-    <text  x="292" y="772" text-anchor="middle" font-size="6" fill="#38006B" transform="translate(292 772) scale(0.625 1) translate(-292 -772)">прогон</text>
-    <rect x="264" y="800" width="56" height="36" rx="2" fill="#CE93D8" stroke="#6A1B9A" stroke-width="1"/>
-    <text  x="292" y="814" font-size="6" text-anchor="middle" fill="#38006B" transform="translate(292 814) scale(0.625 1) translate(-292 -814)">отбраковка</text>
-    <text  x="292" y="824" font-size="6" text-anchor="middle" fill="#38006B" transform="translate(292 824) scale(0.625 1) translate(-292 -824)">(ручная)</text>
-    <text  x="264" y="856" font-size="6" fill="#37474F" transform="translate(264 856) scale(0.625 1) translate(-264 -856)">нечитаемый код /</text>
-    <text  x="264" y="866" font-size="6" fill="#37474F" transform="translate(264 866) scale(0.625 1) translate(-264 -866)">множ. считывание /</text>
-    <text  x="264" y="876" font-size="6" fill="#37474F" transform="translate(264 876) scale(0.625 1) translate(-264 -876)">негабарит /</text>
-    <text  x="264" y="886" font-size="6" fill="#37474F" transform="translate(264 886) scale(0.625 1) translate(-264 -886)">повреждённая тара /</text>
-    <text  x="264" y="896" font-size="6" fill="#37474F" transform="translate(264 896) scale(0.625 1) translate(-264 -896)">нет маршрута</text>
+    <rect x="280" y="700" width="64" height="200" rx="6" fill="#F3E8FD" stroke="#6A1B9A" stroke-width="2"/>
+    <text  x="284" y="714" font-size="6.5" font-weight="bold" fill="#4A148C" transform="translate(284 714) scale(0.625 1) translate(-284 -714)">ЗОНА 13</text>
+    <text  x="284" y="724" font-size="6.5" font-weight="bold" fill="#4A148C" transform="translate(284 724) scale(0.625 1) translate(-284 -724)">ВОЗВРАТНЫЕ</text>
+    <text  x="284" y="734" font-size="6" font-weight="bold" fill="#4A148C" transform="translate(284 734) scale(0.625 1) translate(-284 -734)">16×50 · 800 м²</text>
+    <rect x="284" y="748" width="56" height="36" rx="2" fill="#CE93D8" stroke="#6A1B9A" stroke-width="1"/>
+    <text  x="312" y="762" font-size="6" text-anchor="middle" fill="#38006B" transform="translate(312 762) scale(0.625 1) translate(-312 -762)">повторный</text>
+    <text  x="312" y="772" text-anchor="middle" font-size="6" fill="#38006B" transform="translate(312 772) scale(0.625 1) translate(-312 -772)">прогон</text>
+    <rect x="284" y="800" width="56" height="36" rx="2" fill="#CE93D8" stroke="#6A1B9A" stroke-width="1"/>
+    <text  x="312" y="814" font-size="6" text-anchor="middle" fill="#38006B" transform="translate(312 814) scale(0.625 1) translate(-312 -814)">отбраковка</text>
+    <text  x="312" y="824" font-size="6" text-anchor="middle" fill="#38006B" transform="translate(312 824) scale(0.625 1) translate(-312 -824)">(ручная)</text>
+    <text  x="284" y="856" font-size="6" fill="#37474F" transform="translate(284 856) scale(0.625 1) translate(-284 -856)">нечитаемый код /</text>
+    <text  x="284" y="866" font-size="6" fill="#37474F" transform="translate(284 866) scale(0.625 1) translate(-284 -866)">множ. считывание /</text>
+    <text  x="284" y="876" font-size="6" fill="#37474F" transform="translate(284 876) scale(0.625 1) translate(-284 -876)">негабарит /</text>
+    <text  x="284" y="886" font-size="6" fill="#37474F" transform="translate(284 886) scale(0.625 1) translate(-284 -886)">повреждённая тара /</text>
+    <text  x="284" y="896" font-size="6" fill="#37474F" transform="translate(284 896) scale(0.625 1) translate(-284 -896)">нет маршрута</text>
   </g>
 
   <!-- ===== ЗОНА 14. БРАК И ОТХОДЫ (20×20 м) ===== -->
@@ -317,55 +317,55 @@
   <!-- Буфер ролл-кейджей входит в зону 12 (до 384 кейджей) -->
 
   <!-- Служебные коридоры -->
-  <text  x="334" y="820" font-size="7.5" fill="#78909C" transform="rotate(90 334 820) translate(334 820) scale(1 0.625) translate(-334 -820)" text-anchor="middle">служебный проход</text>
-  <text  x="780" y="300" font-size="7.5" fill="#78909C" transform="rotate(90 780 300) translate(780 300) scale(1 0.625) translate(-780 -300)" text-anchor="middle">служебный коридор (10 м)</text>
-  <text  x="250" y="930" font-size="7.5" fill="#78909C" text-anchor="middle" transform="translate(250 930) scale(0.625 1) translate(-250 -930)">служебный коридор (южная зона)</text>
+  <text  x="354" y="820" font-size="7.5" fill="#78909C" transform="rotate(90 354 820) translate(354 820) scale(1 0.625) translate(-354 -820)" text-anchor="middle">служебный проход</text>
+  <text  x="825" y="300" font-size="7.5" fill="#78909C" transform="rotate(90 825 300) translate(825 300) scale(1 0.625) translate(-825 -300)" text-anchor="middle">служебный коридор (10 м)</text>
+  <text  x="270" y="930" font-size="7.5" fill="#78909C" text-anchor="middle" transform="translate(270 930) scale(0.625 1) translate(-270 -930)">служебный коридор (южная зона)</text>
 
   <!-- ===== ПОТОКИ ===== -->
   <!-- Красный: основной поток товаров -->
   <path d="M100,250 L172,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
-  <path d="M172,250 L212,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
-  <path d="M212,250 L242,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
-  <path d="M242,250 L292,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
+  <path d="M177,250 L217,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
+  <path d="M222,250 L252,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
+  <path d="M257,250 L307,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
   <g stroke="#D32F2F" stroke-width="2.5" marker-end="url(#ar)">
-    <path d="M292,115 L340,115"/><path d="M292,171 L340,171"/><path d="M292,227 L340,227"/>
-    <path d="M292,283 L340,283"/><path d="M292,339 L340,339"/><path d="M292,395 L340,395"/>
-    <path d="M292,451 L340,451"/><path d="M292,507 L340,507"/><path d="M292,563 L340,563"/>
-    <path d="M292,619 L340,619"/>
+    <path d="M312,115 L365,115"/><path d="M312,171 L365,171"/><path d="M312,227 L365,227"/>
+    <path d="M312,283 L365,283"/><path d="M312,339 L365,339"/><path d="M312,395 L365,395"/>
+    <path d="M312,451 L365,451"/><path d="M312,507 L365,507"/><path d="M312,563 L365,563"/>
+    <path d="M312,619 L365,619"/>
   </g>
-  <text  x="372" y="112" font-size="8" font-weight="bold" fill="#D32F2F" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(372 112) scale(0.625 1) translate(-372 -112)">товары 100 000/ч →</text>
+  <text  x="397" y="112" font-size="8" font-weight="bold" fill="#D32F2F" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(397 112) scale(0.625 1) translate(-397 -112)">товары 100 000/ч →</text>
 
   <!-- Синий: поток КТЯ -->
-  <path d="M292,376 L340,376" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M340,600 L580,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M580,600 L630,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M630,600 L680,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M680,600 L720,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M760,500 L800,500" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <text  x="350" y="367" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="end" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(350 367) scale(0.625 1) translate(-350 -367)">пустые КТЯ → сортеры (3 700/ч)</text>
-  <text  x="700" y="590" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(700 590) scale(0.625 1) translate(-700 -590)">заполненные КТЯ 3 700/ч → заклейка → направления → отгрузка</text>
+  <path d="M312,376 L365,376" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M365,600 L605,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M610,600 L665,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M665,600 L720,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M720,600 L765,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M805,500 L845,500" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <text  x="375" y="367" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="end" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(375 367) scale(0.625 1) translate(-375 -367)">пустые КТЯ → сортеры (3 700/ч)</text>
+  <text  x="740" y="590" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(740 590) scale(0.625 1) translate(-740 -590)">заполненные КТЯ 3 700/ч → заклейка → направления → отгрузка</text>
 
   <!-- Бирюзовый: новые КТЯ (машина новых коробов → сортеры) -->
-  <path d="M248,176 L248,208 L340,208" stroke="#00838F" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#at)"/>
-  <text  x="316" y="200" font-size="7.5" font-weight="bold" fill="#00838F" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(316 200) scale(0.625 1) translate(-316 -200)">новые КТЯ 740/ч →</text>
+  <path d="M263,176 L263,208 L365,208" stroke="#00838F" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#at)"/>
+  <text  x="336" y="200" font-size="7.5" font-weight="bold" fill="#00838F" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(336 200) scale(0.625 1) translate(-336 -200)">новые КТЯ 740/ч →</text>
 
   <!-- Зелёный: поток палет -->
-  <path d="M200,560 L200,646 L334,646 L334,925 L786,925 L786,560 L760,560" stroke="#2E7D32" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ag)"/>
-  <text  x="430" y="918" font-size="7.5" font-weight="bold" fill="#2E7D32" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(430 918) scale(0.625 1) translate(-430 -918)">пустые палеты → паллетирование (185 пал/ч)</text>
+  <path d="M205,560 L205,646 L359,646 L359,925 L831,925 L831,560 L805,560" stroke="#2E7D32" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ag)"/>
+  <text  x="455" y="918" font-size="7.5" font-weight="bold" fill="#2E7D32" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(455 918) scale(0.625 1) translate(-455 -918)">пустые палеты → паллетирование (185 пал/ч)</text>
 
   <!-- Серый: брак -->
-  <path d="M285,560 L285,650 L330,650 L330,926 L190,926 L190,940" stroke="#616161" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#agr)"/>
-  <text  x="310" y="648" font-size="7.5" font-weight="bold" fill="#616161" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(310 648) scale(0.625 1) translate(-310 -648)">брак КТЯ 740/ч + отходы</text>
+  <path d="M300,560 L300,650 L355,650 L355,926 L190,926 L190,940" stroke="#616161" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#agr)"/>
+  <text  x="336" y="648" font-size="7.5" font-weight="bold" fill="#616161" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(336 648) scale(0.625 1) translate(-336 -648)">брак КТЯ 740/ч + отходы</text>
 
   <!-- Оранжевый: nonsort / ролл-кейджи -->
-  <path d="M324,790 L580,790" stroke="#E65100" stroke-width="2.5" marker-end="url(#ao)"/>
-  <path d="M338,640 L338,790" stroke="#E65100" stroke-width="2.5" marker-end="url(#ao)"/>
-  <path d="M700,840 L700,872 L800,872" stroke="#E65100" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ao)"/>
-  <text  x="585" y="932" font-size="7.5" font-weight="bold" fill="#E65100" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(585 932) scale(0.625 1) translate(-585 -932)">nonsort → ролл-кейджи → ворота (до 192/ч)</text>
+  <path d="M344,790 L610,790" stroke="#E65100" stroke-width="2.5" marker-end="url(#ao)"/>
+  <path d="M363,640 L363,790" stroke="#E65100" stroke-width="2.5" marker-end="url(#ao)"/>
+  <path d="M730,850 L730,872 L845,872" stroke="#E65100" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ao)"/>
+  <text  x="615" y="932" font-size="7.5" font-weight="bold" fill="#E65100" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(615 932) scale(0.625 1) translate(-615 -932)">nonsort → ролл-кейджи → ворота (до 192/ч)</text>
 
   <!-- Фиолетовый: возвратные -->
-  <path d="M580,920 L580,948 L264,948 L264,900" stroke="#6A1B9A" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ap)"/>
-  <text  x="420" y="940" font-size="7" font-weight="bold" fill="#6A1B9A" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(420 940) scale(0.625 1) translate(-420 -940)">возврат исключений → повторный прогон</text>
+  <path d="M605,920 L605,948 L284,948 L284,900" stroke="#6A1B9A" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ap)"/>
+  <text  x="445" y="940" font-size="7" font-weight="bold" fill="#6A1B9A" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(445 940) scale(0.625 1) translate(-445 -940)">возврат исключений → повторный прогон</text>
 
   <!-- ===== ЛЕГЕНДА И РАСЧЁТ (левая панель) ===== -->
   </g>
