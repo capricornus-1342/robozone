@@ -146,7 +146,8 @@
 
   <!-- ===== ЗОНА 6. СОРТИРОВКА (60×210 м) ===== -->
   <g>
-    <rect x="365" y="80" width="240" height="840" rx="6" fill="#E3E8F5" stroke="#3949AB" stroke-width="2"/>
+    <rect x="365" y="80" width="240" height="572" rx="6" fill="#E3E8F5" stroke="#3949AB" stroke-width="2"/>
+    <rect x="365" y="652" width="240" height="268" rx="6" fill="#F5F7FD" stroke="#3949AB" stroke-width="2" stroke-dasharray="6 4"/>
     <g fill="#FFFFFF" stroke="#3949AB" stroke-width="1.4">
       <rect x="369" y="100" width="232" height="48" rx="4"/><rect x="369" y="156" width="232" height="48" rx="4"/>
       <rect x="369" y="212" width="232" height="48" rx="4"/><rect x="369" y="268" width="232" height="48" rx="4"/>
@@ -182,8 +183,10 @@
     </g>
     <text  x="449" y="88" font-size="8" font-weight="bold" fill="#283593" transform="translate(449 88) scale(0.625 1) translate(-449 -88)">ЗОНА 6 · СОРТИРОВКА</text>
     <text  x="449" y="98" font-size="7" fill="#3949AB" transform="translate(449 98) scale(0.625 1) translate(-449 -98)">60×210 м · 12 600 м²</text>
-    <text  x="485" y="665" font-size="7.5" fill="#283593" text-anchor="middle" transform="translate(485 665) scale(0.625 1) translate(-485 -665)">съём заполненных КТЯ + утряска (3 700/ч) → заклейка</text>
-    <text  x="485" y="679" font-size="7" fill="#3949AB" text-anchor="middle" transform="translate(485 679) scale(0.625 1) translate(-485 -679)">40 скатов на сортер · 400 направлений</text>
+    <text  x="485" y="672" font-size="8" font-weight="bold" fill="#3949AB" text-anchor="middle" transform="translate(485 672) scale(0.625 1) translate(-485 -672)">ЗОНА 6 · НИЖНИЙ ЯРУС — СКАТЫ И СЪЁМ ЗАПОЛНЕННЫХ КТЯ</text>
+    <text  x="485" y="686" font-size="7" fill="#3949AB" text-anchor="middle" transform="translate(485 686) scale(0.625 1) translate(-485 -686)">60×67 м = 4 020 м² · входит в площадь зоны 6 (12 600 м² по 4.2)</text>
+    <text  x="485" y="704" font-size="7.5" fill="#283593" text-anchor="middle" transform="translate(485 704) scale(0.625 1) translate(-485 -704)">съём заполненных КТЯ + утряска (3 700/ч) → заклейка</text>
+    <text  x="485" y="718" font-size="7" fill="#3949AB" text-anchor="middle" transform="translate(485 718) scale(0.625 1) translate(-485 -718)">40 скатов на сортер · 400 направлений</text>
   </g>
 
   <!-- ===== ЗОНА 7. ЗАКЛЕЙКА (12,5×140 м) ===== -->
