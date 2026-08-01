@@ -323,24 +323,24 @@
 
   <!-- ===== ПОТОКИ ===== -->
   <!-- Красный: основной поток товаров -->
-  <path d="M160,250 L172,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
-  <path d="M200,250 L212,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
-  <path d="M230,250 L242,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
-  <path d="M280,250 L292,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
+  <path d="M100,250 L172,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
+  <path d="M172,250 L212,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
+  <path d="M212,250 L242,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
+  <path d="M242,250 L292,250" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
   <g stroke="#D32F2F" stroke-width="2.5" marker-end="url(#ar)">
-    <path d="M336,125 L340,125"/><path d="M336,171 L340,171"/><path d="M336,217 L340,217"/>
-    <path d="M336,263 L340,263"/><path d="M336,309 L340,309"/><path d="M336,355 L340,355"/>
-    <path d="M336,401 L340,401"/><path d="M336,447 L340,447"/><path d="M336,493 L340,493"/>
-    <path d="M336,539 L340,539"/>
+    <path d="M292,125 L340,125"/><path d="M292,171 L340,171"/><path d="M292,217 L340,217"/>
+    <path d="M292,263 L340,263"/><path d="M292,309 L340,309"/><path d="M292,355 L340,355"/>
+    <path d="M292,401 L340,401"/><path d="M292,447 L340,447"/><path d="M292,493 L340,493"/>
+    <path d="M292,539 L340,539"/>
   </g>
   <text  x="372" y="112" font-size="8" font-weight="bold" fill="#D32F2F" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(372 112) scale(0.625 1) translate(-372 -112)">товары 100 000/ч →</text>
 
   <!-- Синий: поток КТЯ -->
   <path d="M292,380 L340,380" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M540,600 L580,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M590,600 L630,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M640,600 L680,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
-  <path d="M690,600 L720,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M340,600 L580,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M580,600 L630,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M630,600 L680,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M680,600 L720,600" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
   <path d="M760,500 L800,500" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
   <text  x="350" y="371" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="end" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(350 371) scale(0.625 1) translate(-350 -371)">пустые КТЯ → сортеры (3 700/ч)</text>
   <text  x="700" y="590" font-size="7.5" font-weight="bold" fill="#1565C0" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(700 590) scale(0.625 1) translate(-700 -590)">заполненные КТЯ 3 700/ч → заклейка → направления → отгрузка</text>
@@ -350,18 +350,17 @@
   <text  x="316" y="200" font-size="7.5" font-weight="bold" fill="#00838F" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(316 200) scale(0.625 1) translate(-316 -200)">новые КТЯ 740/ч →</text>
 
   <!-- Зелёный: поток палет -->
-  <path d="M200,560 L200,646 L338,646 L338,925 L786,925 L786,560 L760,560" stroke="#2E7D32" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ag)"/>
+  <path d="M200,560 L200,646 L334,646 L334,925 L786,925 L786,560 L760,560" stroke="#2E7D32" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ag)"/>
   <text  x="430" y="918" font-size="7.5" font-weight="bold" fill="#2E7D32" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(430 918) scale(0.625 1) translate(-430 -918)">пустые палеты → паллетирование (185 пал/ч)</text>
 
   <!-- Серый: брак -->
-  <path d="M285,560 L285,650 L330,650 L330,936 L190,936 L190,940" stroke="#616161" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#agr)"/>
+  <path d="M285,560 L285,650 L330,650 L330,926 L190,926 L190,940" stroke="#616161" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#agr)"/>
   <text  x="310" y="648" font-size="7.5" font-weight="bold" fill="#616161" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(310 648) scale(0.625 1) translate(-310 -648)">брак КТЯ 740/ч + отходы</text>
 
   <!-- Оранжевый: nonsort / ролл-кейджи -->
-  <path d="M540,790 L580,790" stroke="#E65100" stroke-width="2.5" marker-end="url(#ao)"/>
-  <path d="M700,840 L700,916" stroke="#E65100" stroke-width="2.5" marker-end="url(#ao)"/>
-  <path d="M700,916 L782,916" stroke="#E65100" stroke-width="2.5" fill="none"/>
-  <path d="M782,916 L782,872 L800,872" stroke="#E65100" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ao)"/>
+  <path d="M324,790 L580,790" stroke="#E65100" stroke-width="2.5" marker-end="url(#ao)"/>
+  <path d="M338,640 L338,790" stroke="#E65100" stroke-width="2.5" marker-end="url(#ao)"/>
+  <path d="M700,840 L700,872 L800,872" stroke="#E65100" stroke-width="2.5" fill="none" stroke-linejoin="round" marker-end="url(#ao)"/>
   <text  x="585" y="932" font-size="7.5" font-weight="bold" fill="#E65100" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" transform="translate(585 932) scale(0.625 1) translate(-585 -932)">nonsort → ролл-кейджи → ворота (до 192/ч)</text>
 
   <!-- Фиолетовый: возвратные -->
