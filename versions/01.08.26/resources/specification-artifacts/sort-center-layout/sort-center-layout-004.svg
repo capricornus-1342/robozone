@@ -231,14 +231,14 @@
     <g fill="#A5D6A7" stroke="#2E7D32" stroke-width="1.2">
       <rect x="769" y="110" width="32" height="30" rx="2"/><rect x="769" y="180" width="32" height="30" rx="2"/>
       <rect x="769" y="250" width="32" height="30" rx="2"/><rect x="769" y="320" width="32" height="30" rx="2"/>
-      <rect x="769" y="390" width="32" height="30" rx="2"/>
+      <rect x="769" y="446" width="32" height="30" rx="2"/>
     </g>
     <g font-size="6.5" fill="#1B5E20" text-anchor="middle">
       <text  x="785" y="127" transform="translate(785 127) scale(0.625 1) translate(-785 -127)">паллет.</text><text  x="785" y="135" transform="translate(785 135) scale(0.625 1) translate(-785 -135)">№1</text>
       <text  x="785" y="197" transform="translate(785 197) scale(0.625 1) translate(-785 -197)">паллет.</text><text  x="785" y="205" transform="translate(785 205) scale(0.625 1) translate(-785 -205)">№2</text>
       <text  x="785" y="267" transform="translate(785 267) scale(0.625 1) translate(-785 -267)">паллет.</text><text  x="785" y="275" transform="translate(785 275) scale(0.625 1) translate(-785 -275)">№3</text>
       <text  x="785" y="337" transform="translate(785 337) scale(0.625 1) translate(-785 -337)">паллет.</text><text  x="785" y="345" transform="translate(785 345) scale(0.625 1) translate(-785 -345)">№4</text>
-      <text  x="785" y="407" transform="translate(785 407) scale(0.625 1) translate(-785 -407)">паллет.</text><text  x="785" y="415" transform="translate(785 415) scale(0.625 1) translate(-785 -415)">№5</text>
+      <text  x="785" y="463" transform="translate(785 463) scale(0.625 1) translate(-785 -463)">паллет.</text><text  x="785" y="471" transform="translate(785 471) scale(0.625 1) translate(-785 -471)">№5</text>
     </g>
     <text  x="769" y="90" font-size="7" font-weight="bold" fill="#1B5E20" transform="translate(769 90) scale(0.625 1) translate(-769 -90)">ЗОНА 10</text>
     <text  x="769" y="98" font-size="5.5" fill="#2E7D32" transform="translate(769 98) scale(0.625 1) translate(-769 -98)">ПАЛЛЕТИ-</text>
