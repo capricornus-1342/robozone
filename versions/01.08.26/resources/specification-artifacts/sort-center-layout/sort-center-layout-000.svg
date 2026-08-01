@@ -1,0 +1,397 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1330" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D32F2F"/></marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1565C0"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2E7D32"/></marker>
+    <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#E65100"/></marker>
+    <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6A1B9A"/></marker>
+    <marker id="agr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#616161"/></marker>
+    <pattern id="pal" width="9" height="7" patternUnits="userSpaceOnUse"><rect x="0.5" y="0.5" width="8" height="6" fill="none" stroke="#B0BEC5" stroke-width="0.7"/></pattern>
+    <pattern id="cell" width="7" height="5" patternUnits="userSpaceOnUse"><rect x="0.4" y="0.4" width="6.2" height="4.2" fill="none" stroke="#90A4AE" stroke-width="0.6"/></pattern>
+  </defs>
+
+  <rect x="0" y="0" width="1080" height="1330" fill="#FFFFFF"/>
+
+  <!-- Заголовок -->
+  <text x="540" y="26" font-size="20" font-weight="bold" text-anchor="middle" fill="#1A237E">СОРТИРОВОЧНЫЙ ЦЕНТР — ПЛАН (ВИД СВЕРХУ)</text>
+  <text x="540" y="44" font-size="12" text-anchor="middle" fill="#455A64">Здание 200 × 220 м = 44 000 м² · масштаб 1 px = 0,25 м · потоки по спецификации specification.md</text>
+  <line x1="20" y1="52" x2="1060" y2="52" stroke="#90A4AE" stroke-width="1.5"/>
+
+  <!-- Северная рампа (приёмка) -->
+  <rect x="100" y="58" width="800" height="18" fill="#E3F2FD" stroke="#64B5F6" stroke-width="1"/>
+  <text x="120" y="70" font-size="10" fill="#1565C0" font-weight="bold">ВЪЕЗД: 8 мест разгрузки грузовиков</text>
+  <g fill="#BBDEFB" stroke="#64B5F6" stroke-width="1">
+    <rect x="280" y="60" width="21" height="14" rx="2"/><rect x="307" y="60" width="21" height="14" rx="2"/>
+    <rect x="334" y="60" width="21" height="14" rx="2"/><rect x="361" y="60" width="21" height="14" rx="2"/>
+    <rect x="388" y="60" width="21" height="14" rx="2"/><rect x="415" y="60" width="21" height="14" rx="2"/>
+    <rect x="442" y="60" width="21" height="14" rx="2"/><rect x="469" y="60" width="21" height="14" rx="2"/>
+  </g>
+
+  <!-- Здание -->
+  <rect x="100" y="80" width="800" height="880" fill="#F5F5F5" stroke="#37474F" stroke-width="3"/>
+  <text x="906" y="540" font-size="10" fill="#78909C" transform="rotate(90 906 540)" text-anchor="middle">служебный коридор (10 м)</text>
+
+  <!-- ===== ЗОНА 1. ПРИЁМКА ===== -->
+  <g>
+    <rect x="100" y="80" width="560" height="72" fill="#E8F0FE" stroke="#3F51B5" stroke-width="2"/>
+    <rect x="104" y="84" width="552" height="64" fill="url(#pal)" opacity="0.6"/>
+    <text x="108" y="95" font-size="12" font-weight="bold" fill="#1A237E">ЗОНА 1. ПРИЁМКА — 140×18 м · 2 520 м²</text>
+    <text x="108" y="108" font-size="9" fill="#37474F">Буфер приёмки: 400 палетомест (2 яруса, 185 пал/ч × 2,2 ч)</text>
+    <g fill="#90CAF9" stroke="#1976D2" stroke-width="1">
+      <rect x="300" y="82" width="20" height="6"/><rect x="320" y="82" width="20" height="6"/>
+      <rect x="340" y="82" width="20" height="6"/><rect x="360" y="82" width="20" height="6"/>
+      <rect x="380" y="82" width="20" height="6"/><rect x="400" y="82" width="20" height="6"/>
+      <rect x="420" y="82" width="20" height="6"/><rect x="440" y="82" width="20" height="6"/>
+    </g>
+    <text x="505" y="84" font-size="8.5" fill="#1565C0">8 доков × 5 м</text>
+  </g>
+
+  <!-- ===== ЗОНА 2. РАЗУКРУПНЕНИЕ ===== -->
+  <g>
+    <rect x="100" y="152" width="480" height="40" fill="#E0F2E9" stroke="#2E7D32" stroke-width="2"/>
+    <text x="104" y="163" font-size="12" font-weight="bold" fill="#1B5E20">ЗОНА 2. РАЗУКРУПНЕНИЕ — 120×10 м · 1 200 м²</text>
+    <g fill="#A5D6A7" stroke="#2E7D32" stroke-width="1.2">
+      <rect x="108" y="170" width="120" height="18" rx="2"/><text x="168" y="183" font-size="8.5" text-anchor="middle" fill="#1B5E20">депаллетайзер №1</text>
+      <rect x="240" y="170" width="120" height="18" rx="2"/><text x="300" y="183" font-size="8.5" text-anchor="middle" fill="#1B5E20">депаллетайзер №2</text>
+      <rect x="372" y="170" width="120" height="18" rx="2"/><text x="432" y="183" font-size="8.5" text-anchor="middle" fill="#1B5E20">депаллетайзер №3</text>
+    </g>
+    <rect x="520" y="170" width="52" height="18" fill="#C8E6C9" stroke="#2E7D32" stroke-width="1"/><text x="546" y="183" font-size="8.5" text-anchor="middle" fill="#1B5E20">накопитель пустых палет</text>
+  </g>
+
+  <!-- ===== ЗОНА 3. ВСКРЫТИЕ КТЯ ===== -->
+  <g>
+    <rect x="100" y="192" width="480" height="30" fill="#FFF3D6" stroke="#EF6C00" stroke-width="2"/>
+    <text x="104" y="203" font-size="12" font-weight="bold" fill="#E65100">ЗОНА 3. ВСКРЫТИЕ КТЯ — 120×7,5 м · 900 м²</text>
+    <g fill="#FFE082" stroke="#EF6C00" stroke-width="1">
+      <rect x="116" y="208" width="52" height="10" rx="1"/><rect x="176" y="208" width="52" height="10" rx="1"/>
+      <rect x="236" y="208" width="52" height="10" rx="1"/><rect x="296" y="208" width="52" height="10" rx="1"/>
+      <rect x="356" y="208" width="52" height="10" rx="1"/><rect x="416" y="208" width="52" height="10" rx="1"/>
+      <rect x="476" y="208" width="52" height="10" rx="1"/><rect x="536" y="208" width="52" height="10" rx="1"/>
+    </g>
+    <text x="104" y="219" font-size="8.5" fill="#37474F">8 машин вскрытия по 462,5 КТЯ/ч (3 700/ч суммарно) · срез скотча без повреждения короба</text>
+  </g>
+
+  <!-- ===== ЗОНА 4. СТОК ПУСТЫХ КТЯ + НОВЫЕ КОРОБА ===== -->
+  <g>
+    <rect x="100" y="222" width="480" height="50" fill="#E6F4F5" stroke="#00838F" stroke-width="2"/>
+    <text x="104" y="237" font-size="12" font-weight="bold" fill="#00695C">ЗОНА 4. СТОК ПУСТЫХ КТЯ — 120×12,5 м · 1 500 м²</text>
+    <rect x="104" y="240" width="52" height="26" fill="#80CBC4" stroke="#00695C" stroke-width="1.2" rx="2"/><text x="130" y="250" font-size="8" text-anchor="middle" fill="#004D40">машина новых</text><text x="130" y="260" font-size="8" text-anchor="middle" fill="#004D40">коробов 740/ч</text>
+    <rect x="160" y="240" width="412" height="26" fill="url(#pal)" stroke="#00838F" stroke-width="1"/>
+    <text x="168" y="262" font-size="8.5" fill="#004D40">сток повторных КТЯ ≈930 мест (2 яруса, 30 мин) · 2 960/ч повтор + 740/ч новых</text>
+  </g>
+
+  <!-- ===== ЗОНА 5. ПОДАЧА (ИНФИДЫ) ===== -->
+  <g>
+    <rect x="100" y="272" width="560" height="48" fill="#FDE8E8" stroke="#C62828" stroke-width="2"/>
+    <text x="104" y="283" font-size="12" font-weight="bold" fill="#B71C1C">ЗОНА 5. ПОДАЧА (ИНФИДЫ) — 140×12 м · 1 680 м²</text>
+    <g fill="#EF9A9A" stroke="#C62828" stroke-width="1.2">
+      <rect x="104" y="290" width="52" height="26" rx="2"/><text x="130" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №1</text><text x="130" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+      <rect x="160" y="290" width="52" height="26" rx="2"/><text x="186" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №2</text><text x="186" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+      <rect x="216" y="290" width="52" height="26" rx="2"/><text x="242" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №3</text><text x="242" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+      <rect x="272" y="290" width="52" height="26" rx="2"/><text x="298" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №4</text><text x="298" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+      <rect x="328" y="290" width="52" height="26" rx="2"/><text x="354" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №5</text><text x="354" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+      <rect x="384" y="290" width="52" height="26" rx="2"/><text x="410" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №6</text><text x="410" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+      <rect x="440" y="290" width="52" height="26" rx="2"/><text x="466" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №7</text><text x="466" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+      <rect x="496" y="290" width="52" height="26" rx="2"/><text x="522" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №8</text><text x="522" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+      <rect x="552" y="290" width="52" height="26" rx="2"/><text x="578" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №9</text><text x="578" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+      <rect x="608" y="290" width="52" height="26" rx="2"/><text x="634" y="300" font-size="7.5" text-anchor="middle" fill="#7F0000">инфид №10</text><text x="634" y="309" font-size="7.5" text-anchor="middle" fill="#7F0000">10 000/ч</text>
+    </g>
+  </g>
+
+  <!-- ===== ЗОНА 6. СОРТИРОВКА ===== -->
+  <g>
+    <rect x="100" y="320" width="560" height="360" fill="#E3E8F5" stroke="#3949AB" stroke-width="2"/>
+    <g>
+      <rect x="100" y="322" width="560" height="6" fill="#B3C6F7"/>
+    </g>
+    <g fill="#FFF" stroke="#3949AB" stroke-width="1.4">
+      <rect x="104" y="340" width="52" height="296" rx="8"/>
+      <rect x="160" y="340" width="52" height="296" rx="8"/>
+      <rect x="216" y="340" width="52" height="296" rx="8"/>
+      <rect x="272" y="340" width="52" height="296" rx="8"/>
+      <rect x="328" y="340" width="52" height="296" rx="8"/>
+      <rect x="384" y="340" width="52" height="296" rx="8"/>
+      <rect x="440" y="340" width="52" height="296" rx="8"/>
+      <rect x="496" y="340" width="52" height="296" rx="8"/>
+      <rect x="552" y="340" width="52" height="296" rx="8"/>
+      <rect x="608" y="340" width="52" height="296" rx="8"/>
+    </g>
+    <g font-size="7.5" fill="#283593" text-anchor="middle">
+      <text x="130" y="496">сортер №1</text><text x="186" y="496">сортер №2</text><text x="242" y="496">сортер №3</text>
+      <text x="298" y="496">сортер №4</text><text x="354" y="496">сортер №5</text><text x="410" y="496">сортер №6</text>
+      <text x="466" y="496">сортер №7</text><text x="522" y="496">сортер №8</text><text x="578" y="496">сортер №9</text>
+      <text x="634" y="496">сортер №10</text>
+    </g>
+    <g fill="#7986CB" stroke="#283593" stroke-width="0.8">
+      <rect x="130" y="352" width="10" height="24"/><rect x="150" y="352" width="10" height="24"/>
+      <rect x="186" y="352" width="10" height="24"/><rect x="206" y="352" width="10" height="24"/>
+      <rect x="242" y="352" width="10" height="24"/><rect x="262" y="352" width="10" height="24"/>
+      <rect x="298" y="352" width="10" height="24"/><rect x="318" y="352" width="10" height="24"/>
+      <rect x="354" y="352" width="10" height="24"/><rect x="374" y="352" width="10" height="24"/>
+      <rect x="410" y="352" width="10" height="24"/><rect x="430" y="352" width="10" height="24"/>
+      <rect x="466" y="352" width="10" height="24"/><rect x="486" y="352" width="10" height="24"/>
+      <rect x="522" y="352" width="10" height="24"/><rect x="542" y="352" width="10" height="24"/>
+      <rect x="578" y="352" width="10" height="24"/><rect x="598" y="352" width="10" height="24"/>
+      <rect x="634" y="352" width="10" height="24"/><rect x="654" y="352" width="10" height="24"/>
+    </g>
+    <text x="130" y="390" font-size="7" fill="#3949AB" text-anchor="middle">инфид ↓</text>
+    <g fill="#9FA8DA" stroke="#283593" stroke-width="0.7">
+      <rect x="108" y="620" width="44" height="8"/><rect x="164" y="620" width="44" height="8"/>
+      <rect x="220" y="620" width="44" height="8"/><rect x="276" y="620" width="44" height="8"/>
+      <rect x="332" y="620" width="44" height="8"/><rect x="388" y="620" width="44" height="8"/>
+      <rect x="444" y="620" width="44" height="8"/><rect x="500" y="620" width="44" height="8"/>
+      <rect x="556" y="620" width="44" height="8"/><rect x="612" y="620" width="44" height="8"/>
+    </g>
+    <text x="130" y="637" font-size="7" fill="#3949AB" text-anchor="middle">40 скатов ↓</text>
+    <g fill="#90CAF9" stroke="#1565C0" stroke-width="0.8">
+      <rect x="106" y="648" width="12" height="10"/><rect x="162" y="648" width="12" height="10"/>
+      <rect x="218" y="648" width="12" height="10"/><rect x="274" y="648" width="12" height="10"/>
+      <rect x="330" y="648" width="12" height="10"/><rect x="386" y="648" width="12" height="10"/>
+      <rect x="442" y="648" width="12" height="10"/><rect x="498" y="648" width="12" height="10"/>
+      <rect x="554" y="648" width="12" height="10"/><rect x="610" y="648" width="12" height="10"/>
+    </g>
+    <rect x="100" y="672" width="560" height="8" fill="#B3C6F7"/>
+    <text x="380" y="679" font-size="7.5" fill="#283593" text-anchor="middle">съём заполненных КТЯ + утряска (3 700/ч) → заклейка</text>
+    <text x="108" y="668" font-size="12" font-weight="bold" fill="#283593">ЗОНА 6. СОРТИРОВКА — 140×90 м · 12 600 м²</text>
+  </g>
+
+  <!-- ===== ЗОНА 7. ЗАКЛЕЙКА ===== -->
+  <g>
+    <rect x="100" y="680" width="560" height="50" fill="#F0F2E8" stroke="#827717" stroke-width="2"/>
+    <text x="104" y="691" font-size="12" font-weight="bold" fill="#655800">ЗОНА 7. ЗАКЛЕЙКА</text>
+    <g fill="#DCE3C8" stroke="#827717" stroke-width="1.2">
+      <rect x="104" y="698" width="130" height="24" rx="2"/><text x="169" y="714" font-size="8.5" text-anchor="middle" fill="#4E4300">линия заклейки ×4</text>
+      <rect x="244" y="698" width="130" height="24" rx="2"/><text x="309" y="714" font-size="8.5" text-anchor="middle" fill="#4E4300">линия заклейки ×4</text>
+      <rect x="384" y="698" width="130" height="24" rx="2"/><text x="449" y="714" font-size="8.5" text-anchor="middle" fill="#4E4300">линия заклейки ×4</text>
+      <rect x="524" y="698" width="130" height="24" rx="2"/><text x="589" y="714" font-size="8.5" text-anchor="middle" fill="#4E4300">линия заклейки ×4</text>
+    </g>
+    <text x="104" y="728" font-size="8" fill="#37474F">140×12,5 м · 1 750 м² · 4 × 1 000 КТЯ/ч = 4 000 ≥ 3 700 (загрузка 92,5 %) · маркировка штрих-кодом</text>
+  </g>
+
+  <!-- ===== ЗОНА 8. КТЯ-СОРТИРОВКА ===== -->
+  <g>
+    <rect x="100" y="730" width="560" height="50" fill="#FBEEDB" stroke="#E65100" stroke-width="2"/>
+    <rect x="104" y="736" width="552" height="38" fill="url(#cell)" opacity="0.8"/>
+    <text x="108" y="743" font-size="12" font-weight="bold" fill="#BF360C">ЗОНА 8. КТЯ-СОРТИРОВКА ПО НАПРАВЛЕНИЯМ — 140×12,5 м · 1 750 м²</text>
+    <text x="108" y="756" font-size="8.5" fill="#37474F">400 ячеек-накопителей (20×20, шюттл-система) · 3 700 КТЯ/ч · на одной палете — КТЯ нескольких направлений</text>
+  </g>
+
+  <!-- ===== ЗОНА 9. БУФЕР ОТГРУЗКИ ===== -->
+  <g>
+    <rect x="100" y="780" width="560" height="40" fill="#EDE7F6" stroke="#4527A0" stroke-width="2"/>
+    <rect x="104" y="786" width="552" height="28" fill="url(#pal)" opacity="0.7"/>
+    <text x="108" y="792" font-size="12" font-weight="bold" fill="#311B92">ЗОНА 9. БУФЕР ОТГРУЗКИ — 140×10 м · 1 400 м²</text>
+    <text x="108" y="805" font-size="8.5" fill="#37474F">370 палетомест (185 пал/ч × 2 ч) · сглаживание перед паллетированием</text>
+  </g>
+
+  <!-- ===== ЗОНА 10. ПАЛЛЕТИРОВАНИЕ ===== -->
+  <g>
+    <rect x="100" y="820" width="480" height="40" fill="#E8F6EC" stroke="#2E7D32" stroke-width="2"/>
+    <text x="104" y="831" font-size="12" font-weight="bold" fill="#1B5E20">ЗОНА 10. ПАЛЛЕТИРОВАНИЕ — 120×10 м · 1 200 м²</text>
+    <g fill="#A5D6A7" stroke="#2E7D32" stroke-width="1.2">
+      <rect x="104" y="838" width="88" height="16" rx="2"/><rect x="200" y="838" width="88" height="16" rx="2"/>
+      <rect x="296" y="838" width="88" height="16" rx="2"/><rect x="392" y="838" width="88" height="16" rx="2"/>
+      <rect x="488" y="838" width="88" height="16" rx="2"/>
+    </g>
+    <text x="104" y="857" font-size="8" fill="#37474F">5 роботизированных паллетайзеров по 40 пал/ч = 200 ≥ 185 · 20 КТЯ на палету</text>
+  </g>
+
+  <!-- ===== ЗОНА 11. ОТГРУЗКА ===== -->
+  <g>
+    <rect x="100" y="860" width="800" height="100" fill="#DCE8F7" stroke="#1565C0" stroke-width="2"/>
+    <rect x="104" y="902" width="792" height="52" fill="url(#pal)" opacity="0.7"/>
+    <text x="108" y="872" font-size="12" font-weight="bold" fill="#0D47A1">ЗОНА 11. ОТГРУЗКА — 200×25 м · 5 000 м²</text>
+    <text x="108" y="885" font-size="8.5" fill="#37474F">24 ворота · 12 машин/ч · 2 ч на машину · машина: 16 палет КТЯ (320 КТЯ) + 16 ролл-кейджей</text>
+    <text x="108" y="899" font-size="8" fill="#37474F">буферы ворот: 32 палеты на машину · волны отгрузки по графику магистрального транспорта</text>
+    <g fill="#BBDEFB" stroke="#1565C0" stroke-width="0.9">
+      <rect x="260" y="912" width="19" height="16"/><rect x="280" y="912" width="19" height="16"/><rect x="300" y="912" width="19" height="16"/>
+      <rect x="320" y="912" width="19" height="16"/><rect x="340" y="912" width="19" height="16"/><rect x="360" y="912" width="19" height="16"/>
+      <rect x="380" y="912" width="19" height="16"/><rect x="400" y="912" width="19" height="16"/><rect x="420" y="912" width="19" height="16"/>
+      <rect x="440" y="912" width="19" height="16"/><rect x="460" y="912" width="19" height="16"/><rect x="480" y="912" width="19" height="16"/>
+      <rect x="500" y="912" width="19" height="16"/><rect x="520" y="912" width="19" height="16"/><rect x="540" y="912" width="19" height="16"/>
+      <rect x="560" y="912" width="19" height="16"/><rect x="580" y="912" width="19" height="16"/><rect x="600" y="912" width="19" height="16"/>
+      <rect x="620" y="912" width="19" height="16"/><rect x="640" y="912" width="19" height="16"/><rect x="660" y="912" width="19" height="16"/>
+      <rect x="680" y="912" width="19" height="16"/><rect x="700" y="912" width="19" height="16"/><rect x="720" y="912" width="19" height="16"/>
+    </g>
+    <g fill="#90CAF9" stroke="#0D47A1" stroke-width="0.9">
+      <rect x="262" y="936" width="16" height="10"/><rect x="282" y="936" width="16" height="10"/><rect x="302" y="936" width="16" height="10"/>
+      <rect x="322" y="936" width="16" height="10"/><rect x="342" y="936" width="16" height="10"/><rect x="362" y="936" width="16" height="10"/>
+      <rect x="382" y="936" width="16" height="10"/><rect x="402" y="936" width="16" height="10"/><rect x="422" y="936" width="16" height="10"/>
+      <rect x="442" y="936" width="16" height="10"/><rect x="462" y="936" width="16" height="10"/><rect x="482" y="936" width="16" height="10"/>
+      <rect x="502" y="936" width="16" height="10"/><rect x="522" y="936" width="16" height="10"/><rect x="542" y="936" width="16" height="10"/>
+      <rect x="562" y="936" width="16" height="10"/>
+    </g>
+    <text x="400" y="958" font-size="7.5" fill="#0D47A1" text-anchor="middle">16 палет КТЯ (20 КТЯ) + 16 ролл-кейджей на машину · 24 проёма × 5 м</text>
+  </g>
+
+  <!-- ===== ЗОНА 12. NONSORT ===== -->
+  <g>
+    <rect x="700" y="320" width="200" height="200" fill="#FFF0E5" stroke="#E65100" stroke-width="2"/>
+    <text x="704" y="332" font-size="11" font-weight="bold" fill="#BF360C">ЗОНА 12. NONSORT</text>
+    <text x="704" y="344" font-size="9" fill="#37474F">50×50 м · 2 500 м²</text>
+    <g fill="#FFCC80" stroke="#E65100" stroke-width="1">
+      <rect x="708" y="352" width="80" height="52" rx="2"/><text x="748" y="368" font-size="7.5" text-anchor="middle" fill="#7F2B00">адресные ячейки</text><text x="748" y="378" font-size="7.5" text-anchor="middle" fill="#7F2B00">(по маршрутам)</text>
+      <rect x="800" y="352" width="92" height="52" rx="2"/><text x="846" y="368" font-size="7.5" text-anchor="middle" fill="#7F2B00">рабочие места</text><text x="846" y="378" font-size="7.5" text-anchor="middle" fill="#7F2B00">ручной сортировки</text>
+      <rect x="708" y="412" width="184" height="60" rx="2"/><text x="800" y="432" font-size="7.5" text-anchor="middle" fill="#7F2B00">парк ролл-кейджей (16 на машину)</text>
+    </g>
+    <text x="704" y="490" font-size="8" fill="#37474F">форма/хрупкость/тип/штрихкод/негабарит &gt; 320 мм</text>
+    <text x="704" y="502" font-size="8" fill="#37474F">поток — параметр модели (до 192 кейджей/ч)</text>
+  </g>
+
+  <!-- ===== ЗОНА 13. ВОЗВРАТНЫЕ КАНАЛЫ ===== -->
+  <g>
+    <rect x="700" y="520" width="200" height="64" fill="#F3E8FD" stroke="#6A1B9A" stroke-width="2"/>
+    <text x="704" y="532" font-size="11" font-weight="bold" fill="#4A148C">ЗОНА 13. ВОЗВРАТНЫЕ КАНАЛЫ</text>
+    <text x="704" y="544" font-size="9" fill="#37474F">50×16 м · 800 м²</text>
+    <g fill="#CE93D8" stroke="#6A1B9A" stroke-width="1">
+      <rect x="708" y="552" width="92" height="24" rx="2"/><text x="754" y="568" font-size="7.5" text-anchor="middle" fill="#38006B">каналы повторного прогона</text>
+      <rect x="810" y="552" width="84" height="24" rx="2"/><text x="852" y="568" font-size="7.5" text-anchor="middle" fill="#38006B">отбраковка (ручная)</text>
+    </g>
+    <text x="704" y="582" font-size="7.5" fill="#37474F">нечитаемый код / множественное считывание / негабарит / повреждённая тара / нет маршрута</text>
+  </g>
+
+  <!-- ===== ЗОНА 14. БРАК И ОТХОДЫ ===== -->
+  <g>
+    <rect x="820" y="584" width="80" height="80" fill="#F2F2F2" stroke="#616161" stroke-width="2"/>
+    <text x="824" y="596" font-size="10" font-weight="bold" fill="#37474F">ЗОНА 14. БРАК</text>
+    <text x="824" y="606" font-size="8" fill="#616161">20×20 м · 400 м²</text>
+    <rect x="828" y="614" width="64" height="20" fill="#BDBDBD" stroke="#616161" stroke-width="1" rx="2"/><text x="860" y="627" font-size="7.5" text-anchor="middle" fill="#212121">компактор 740 КТЯ/ч</text>
+    <rect x="828" y="640" width="64" height="16" fill="#E0E0E0" stroke="#616161" stroke-width="1"/><text x="860" y="652" font-size="7.5" text-anchor="middle" fill="#424242">отходы: плёнка, ленты</text>
+    <rect x="892" y="600" width="8" height="48" fill="#9E9E9E"/><text x="901" y="656" font-size="7" fill="#616161">техворота</text>
+  </g>
+
+  <!-- ===== ЗОНА 15. ИНФРАСТРУКТУРА ===== -->
+  <g>
+    <rect x="700" y="80" width="200" height="160" fill="#F5F0E8" stroke="#795548" stroke-width="2"/>
+    <text x="704" y="92" font-size="11" font-weight="bold" fill="#4E342E">ЗОНА 15. ИНФРАСТРУКТУРА</text>
+    <text x="704" y="104" font-size="9" fill="#37474F">50×40 м · 2 000 м²</text>
+    <g fill="#D7CCC8" stroke="#795548" stroke-width="1">
+      <rect x="708" y="112" width="88" height="26" rx="2"/><text x="752" y="126" font-size="7.5" text-anchor="middle" fill="#3E2723">серверная WMS/WES</text>
+      <rect x="806" y="112" width="88" height="26" rx="2"/><text x="850" y="126" font-size="7.5" text-anchor="middle" fill="#3E2723">диспетчерская</text>
+      <rect x="708" y="146" width="88" height="30" rx="2"/><text x="752" y="158" font-size="7.5" text-anchor="middle" fill="#3E2723">зарядные станции</text><text x="752" y="168" font-size="7.5" text-anchor="middle" fill="#3E2723">AGV (24)</text>
+      <rect x="806" y="146" width="88" height="30" rx="2"/><text x="850" y="158" font-size="7.5" text-anchor="middle" fill="#3E2723">парк AGV (~60 ед.)</text>
+      <rect x="708" y="184" width="186" height="30" rx="2"/><text x="801" y="200" font-size="7.5" text-anchor="middle" fill="#3E2723">офисы, бытовые помещения, ИТ</text>
+    </g>
+  </g>
+
+  <!-- ===== ЗОНА 16. БУФЕР РОЛЛ-КЕЙДЖЕЙ ===== -->
+  <g>
+    <rect x="700" y="664" width="200" height="80" fill="#FFF8E1" stroke="#F57F17" stroke-width="2"/>
+    <rect x="704" y="672" width="192" height="40" fill="url(#pal)" opacity="0.6"/>
+    <text x="704" y="682" font-size="10" font-weight="bold" fill="#F57F17">БУФЕР РОЛЛ-КЕЙДЖЕЙ</text>
+    <text x="704" y="694" font-size="8.5" fill="#37474F">50×20 м · 1 000 м²</text>
+    <text x="704" y="712" font-size="7.5" fill="#616161">до 384 кейджей в обороте (192/ч × 2 ч) ·</text>
+    <text x="704" y="722" font-size="7.5" fill="#616161">16 кейджей на машину → ворота отгрузки</text>
+    <text x="704" y="740" font-size="7.5" fill="#616161">порожние кейджи возвращаются в зону 12</text>
+  </g>
+
+  <!-- Южная рампа (отгрузка) -->
+  <rect x="100" y="964" width="800" height="18" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1"/>
+  <text x="120" y="976" font-size="10" fill="#2E7D32" font-weight="bold">ВЫЕЗД: 24 места погрузки грузовиков</text>
+  <g fill="#C8E6C9" stroke="#66BB6A" stroke-width="1">
+    <rect x="280" y="966" width="21" height="14" rx="2"/><rect x="307" y="966" width="21" height="14" rx="2"/><rect x="334" y="966" width="21" height="14" rx="2"/>
+    <rect x="361" y="966" width="21" height="14" rx="2"/><rect x="388" y="966" width="21" height="14" rx="2"/><rect x="415" y="966" width="21" height="14" rx="2"/>
+    <rect x="442" y="966" width="21" height="14" rx="2"/><rect x="469" y="966" width="21" height="14" rx="2"/><rect x="496" y="966" width="21" height="14" rx="2"/>
+    <rect x="523" y="966" width="21" height="14" rx="2"/><rect x="550" y="966" width="21" height="14" rx="2"/><rect x="577" y="966" width="21" height="14" rx="2"/>
+    <rect x="604" y="966" width="21" height="14" rx="2"/><rect x="631" y="966" width="21" height="14" rx="2"/><rect x="658" y="966" width="21" height="14" rx="2"/>
+    <rect x="685" y="966" width="21" height="14" rx="2"/><rect x="712" y="966" width="21" height="14" rx="2"/><rect x="739" y="966" width="21" height="14" rx="2"/>
+  </g>
+
+  <!-- ===== ПОТОКИ ===== -->
+  <!-- Красный: основной поток товаров -->
+  <path d="M494,88 L494,152" stroke="#D32F2F" stroke-width="3.5" marker-end="url(#ar)"/>
+  <path d="M494,152 L494,192" stroke="#D32F2F" stroke-width="3.5" marker-end="url(#ar)"/>
+  <path d="M494,192 L494,222" stroke="#D32F2F" stroke-width="3.5"/>
+  <path d="M494,222 L494,272" stroke="#D32F2F" stroke-width="3.5" marker-end="url(#ar)"/>
+  <path d="M494,272 L494,292" stroke="#D32F2F" stroke-width="3" marker-end="url(#ar)"/>
+  <g stroke="#D32F2F" stroke-width="2.5" marker-end="url(#ar)">
+    <path d="M130,318 L130,342"/><path d="M186,318 L186,342"/><path d="M242,318 L242,342"/>
+    <path d="M298,318 L298,342"/><path d="M354,318 L354,342"/><path d="M410,318 L410,342"/>
+    <path d="M466,318 L466,342"/><path d="M522,318 L522,342"/><path d="M578,318 L578,342"/>
+    <path d="M634,318 L634,342"/>
+  </g>
+  <text x="360" y="140" font-size="8.5" fill="#D32F2F" font-weight="bold">товары 100 000/ч</text>
+  <text x="540" y="165" font-size="8" fill="#D32F2F">вскрытие КТЯ → инфиды</text>
+
+  <!-- Синий: КТЯ -->
+  <path d="M540,192 L540,222" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M128,266 L158,266" stroke="#1565C0" stroke-width="2.5" marker-end="url(#ab)"/>
+  <path d="M580,247 L660,247 L660,328 L116,328" stroke="#1565C0" stroke-width="3" fill="none" marker-end="url(#ab)"/>
+  <g stroke="#1565C0" stroke-width="2" marker-end="url(#ab)">
+    <path d="M116,328 L116,344"/><path d="M172,328 L172,344"/><path d="M228,328 L228,344"/>
+    <path d="M284,328 L284,344"/><path d="M340,328 L340,344"/><path d="M396,328 L396,344"/>
+    <path d="M452,328 L452,344"/><path d="M508,328 L508,344"/><path d="M564,328 L564,344"/>
+    <path d="M620,328 L620,344"/>
+  </g>
+  <g stroke="#1565C0" stroke-width="2.5" marker-end="url(#ab)">
+    <path d="M250,680 L250,698"/><path d="M320,680 L320,698"/><path d="M390,680 L390,698"/>
+    <path d="M460,680 L460,698"/><path d="M530,680 L530,698"/><path d="M600,680 L600,698"/>
+  </g>
+  <path d="M580,730 L580,780" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M580,780 L580,820" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <path d="M580,820 L580,860" stroke="#1565C0" stroke-width="3" marker-end="url(#ab)"/>
+  <text x="500" y="240" font-size="8" fill="#1565C0" font-weight="bold">пустые КТЯ → сортировщики (3 700/ч)</text>
+  <text x="585" y="880" font-size="8" fill="#1565C0" font-weight="bold">заполненные КТЯ → заклейка → направления → отгрузка</text>
+
+  <!-- Зелёный: палеты -->
+  <path d="M540,188 L670,188 L670,842 L340,842 L340,838" stroke="#2E7D32" stroke-width="2.5" fill="none" marker-end="url(#ag)"/>
+  <path d="M580,860 L580,908" stroke="#2E7D32" stroke-width="2.5" marker-end="url(#ag)"/>
+  <text x="392" y="814" font-size="8" fill="#2E7D32" font-weight="bold">пустые палеты → паллетирование (185 пал/ч)</text>
+
+  <!-- Оранжевый: nonsort -->
+  <path d="M660,296 L700,296" stroke="#E65100" stroke-width="2.5" marker-end="url(#ao)"/>
+  <path d="M700,520 L690,520 L690,700 L900,700" stroke="#E65100" stroke-width="2.5" fill="none" marker-end="url(#ao)"/>
+  <path d="M900,700 L900,930 L540,930" stroke="#E65100" stroke-width="2.5" fill="none" marker-end="url(#ao)"/>
+  <text x="620" y="279" font-size="8" fill="#E65100" font-weight="bold">nonsort</text>
+  <text x="700" y="762" font-size="8" fill="#E65100">ролл-кейджи к воротам (до 192/ч)</text>
+
+  <!-- Фиолетовый: возвратные -->
+  <path d="M700,560 L684,560 L684,318 L634,318" stroke="#6A1B9A" stroke-width="2.5" fill="none" marker-end="url(#ap)"/>
+  <text x="660" y="450" font-size="8" fill="#6A1B9A" font-weight="bold" transform="rotate(-90 660 450)">возврат исключений → повторный прогон</text>
+
+  <!-- Серый: брак -->
+  <path d="M580,215 L680,215 L680,624 L820,624" stroke="#616161" stroke-width="2.5" fill="none" marker-end="url(#agr)"/>
+  <path d="M652,676 L660,676 L660,624 L680,624" stroke="#616161" stroke-width="2" fill="none"/>
+  <path d="M900,624 L920,624" stroke="#616161" stroke-width="3" marker-end="url(#agr)"/>
+  <text x="690" y="246" font-size="8" fill="#616161">брак КТЯ 740/ч + отходы</text>
+  <text x="908" y="618" font-size="8" fill="#616161">вывоз</text>
+
+  <!-- ===== ЛЕГЕНДА ===== -->
+  <line x1="20" y1="1000" x2="1060" y2="1000" stroke="#90A4AE" stroke-width="1.5"/>
+  <text x="30" y="1022" font-size="14" font-weight="bold" fill="#1A237E">ЛЕГЕНДА И РАСЧЁТ</text>
+
+  <!-- Потоки -->
+  <g font-size="10" fill="#37474F">
+    <line x1="30" y1="1038" x2="80" y2="1038" stroke="#D32F2F" stroke-width="4"/><text x="88" y="1042">основной поток товаров — 100 000 тов/ч</text>
+    <line x1="30" y1="1056" x2="80" y2="1056" stroke="#1565C0" stroke-width="4"/><text x="88" y="1060">поток КТЯ — пустые 3 700/ч → заполненные 3 700/ч</text>
+    <line x1="30" y1="1074" x2="80" y2="1074" stroke="#2E7D32" stroke-width="4"/><text x="88" y="1078">поток палет — 185 пал/ч</text>
+    <line x1="30" y1="1092" x2="80" y2="1092" stroke="#E65100" stroke-width="4"/><text x="88" y="1096">поток nonsort — ролл-кейджи (до 192/ч)</text>
+    <line x1="30" y1="1110" x2="80" y2="1110" stroke="#6A1B9A" stroke-width="4"/><text x="88" y="1114">возвратные потоки — исключения (повторный прогон / отбраковка)</text>
+    <line x1="30" y1="1128" x2="80" y2="1128" stroke="#616161" stroke-width="4"/><text x="88" y="1132">брак КТЯ 740/ч + отходы → вывоз</text>
+  </g>
+
+  <!-- Таблица зон -->
+  <text x="30" y="1162" font-size="12" font-weight="bold" fill="#283593">ПЛОЩАДИ ЗОН (расчёт):</text>
+  <g font-size="9" fill="#37474F">
+    <text x="30" y="1178">1. Приёмка — 140×18 = 2 520 м² · 8 доков, буфер 400 палет</text>
+    <text x="30" y="1192">2. Разукрупнение — 120×10 = 1 200 м² · 3 депаллетайзера (3×65 = 195 ≥ 185 пал/ч) · снятие стрейч-плёнки/ленты</text>
+    <text x="30" y="1206">3. Вскрытие КТЯ — 120×7,5 = 900 м² · 8 машин (8×462,5 = 3 700 КТЯ/ч)</text>
+    <text x="30" y="1220">4. Сток КТЯ + новые короба — 120×12,5 = 1 500 м² · машина 740 КТЯ/ч, сток ≈930 мест</text>
+    <text x="30" y="1234">5. Инфиды — 140×12 = 1 680 м² · 10×10 000 = 100 000 тов/ч (резерв 0 — узкое место) · станция: робот-укладчик, сканер, весы</text>
+    <text x="30" y="1248">6. Сортировка — 140×90 = 12 600 м² · 10 × 3D-сортер cross-belt по 10 000 тов/ч (40 скатов, 400 направлений)</text>
+    <text x="30" y="1262">7. Заклейка — 140×12,5 = 1 750 м² · 4 линии (4×1 000 = 4 000 ≥ 3 700 КТЯ/ч)</text>
+    <text x="30" y="1276">8. КТЯ-сортировка — 140×12,5 = 1 750 м² · 400 ячеек (20×20)</text>
+    <text x="30" y="1290">9. Буфер отгрузки — 140×10 = 1 400 м² · 370 палетомест (185×2 ч)</text>
+    <text x="30" y="1304">10. Паллетирование — 120×10 = 1 200 м² · 5 паллетайзеров (5×40 = 200 ≥ 185)</text>
+    <text x="560" y="1178">11. Отгрузка — 200×25 = 5 000 м² · 24 ворота, 12 машин/ч, 2 ч</text>
+    <text x="560" y="1192">12. Nonsort — 50×50 = 2 500 м² · адресные ячейки, ролл-кейджи</text>
+    <text x="560" y="1206">13. Возвратные каналы — 50×16 = 800 м² · повторный прогон, отбраковка</text>
+    <text x="560" y="1220">14. Брак/отходы — 20×20 = 400 м² · компактор 740 КТЯ/ч, техворота</text>
+    <text x="560" y="1234">15. Инфраструктура — 50×40 = 2 000 м² · серверная, зарядки AGV (24), офисы</text>
+    <text x="560" y="1248">16. Буфер ролл-кейджей — 50×20 = 1 000 м² · до 384 кейджей</text>
+    <text x="560" y="1262" font-weight="bold">Зоны: 38 200 м² + проходы 5 800 м² = 44 000 м²</text>
+    <text x="560" y="1276">Мощности: ворота отгрузки 96,4 % (3 840/3 700) · заклейка 92,5 % · паллетирование 92,5 %</text>
+    <text x="560" y="1290">Доки приёмки: 5,78 машин/ч × 1,25 ч ≈ 7,2 → 8 доков (90 %)</text>
+    <text x="560" y="1304">Остальное (плёнка, ленты, паллетные борта) — контекст маркетплейса, вне модели</text>
+  </g>
+</svg>

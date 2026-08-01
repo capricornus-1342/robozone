@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Аналитика потоков сортировочного центра</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#1e293b; --panel2:#273449; --line:#334155;
+    --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+  header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+  header h1{margin:0;font-size:20px;color:var(--accent)}
+  header p{margin:0;font-size:12px;color:var(--muted)}
+  .layout{display:flex;gap:14px;padding:14px;align-items:flex-start;flex-wrap:wrap}
+  aside{width:330px;flex-shrink:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;position:sticky;top:10px;max-height:calc(100vh - 20px);overflow-y:auto}
+  aside h2{margin:0 0 6px;font-size:13px;color:var(--accent)}
+  .grp{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
+  .ctrl{margin:8px 0}
+  .ctrl label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:2px}
+  .ctrl label b{color:var(--text)}
+  .ctrl input[type=range]{width:100%;accent-color:var(--accent)}
+  .chk{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;margin:6px 0}
+  .chk input{accent-color:var(--accent)}
+  main{flex:1;min-width:640px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:12px}
+  .sec{grid-column:1/-1;margin:6px 0 0;font-size:12px;color:var(--accent);letter-spacing:.5px;border-top:1px solid var(--line);padding-top:10px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px 8px;position:relative}
+  .card h3{margin:0 0 2px;font-size:13px;font-weight:600}
+  .card .sub{font-size:11px;color:var(--muted);margin-bottom:6px}
+  .card canvas{width:100%;height:150px;display:block;cursor:crosshair}
+  .card .sum{font-size:11px;color:var(--muted);margin-top:4px}
+  .card .sum b{color:var(--text)}
+  #tooltip{position:fixed;pointer-events:none;background:#0b1220;border:1px solid var(--accent);border-radius:6px;padding:6px 10px;font-size:12px;display:none;z-index:50}
+  .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:14px}
+  .chip{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--muted)}
+  .chip b{display:block;font-size:15px;color:var(--text);margin-top:2px}
+  .chip.warn{border-color:#f59e0b}
+  .chip.warn b{color:#fbbf24}
+  .btn{width:100%;padding:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:8px;cursor:pointer;font-size:13px;margin-top:10px}
+  .btn:hover{background:var(--accent);color:#0b1220}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Аналитика потоков сортировочного центра</h1>
+  <p>Имитация 8 потоков и 6 буферов · изменение параметров слева пересчитывает графики в браузере</p>
+</header>
+
+<div class="layout">
+  <aside id="controls">
+    <button class="btn" onclick="run(true)">Пересчитать</button>
+    <div class="grp">
+      <h2>Входной транспорт</h2>
+      <div class="ctrl"><label>Приезд грузовиков <b id="v1">6</b> маш/ч</label><input type="range" id="p1" min="1" max="10" step="1" value="6" oninput="slider(1,this.value)"></div>
+      <div class="ctrl"><label>Время разгрузки <b id="v2">15</b> мин</label><input type="range" id="p2" min="5" max="30" step="1" value="15" oninput="slider(2,this.value)"></div>
+      <div class="ctrl"><label>Приёмочных доков <b id="v3">8</b> шт</label><input type="range" id="p3" min="2" max="12" step="1" value="8" oninput="slider(3,this.value)"></div>
+      <div class="ctrl"><label>Палет в машине <b id="v4">32</b> шт</label><input type="range" id="p4" min="16" max="40" step="4" value="32" oninput="slider(4,this.value)"></div>
+    </div>
+    <div class="grp">
+      <h2>Товары и тара</h2>
+      <div class="ctrl"><label>Товаров в КТЯ <b id="v5">27</b> шт</label><input type="range" id="p5" min="10" max="40" step="1" value="27" oninput="slider(5,this.value)"></div>
+      <div class="ctrl"><label>Доля nonsort <b id="v6">5</b> %</label><input type="range" id="p6" min="0" max="30" step="1" value="5" oninput="slider(6,this.value)"></div>
+      <div class="ctrl"><label>Доля исключений (возврат) <b id="v7">2</b> %</label><input type="range" id="p7" min="0" max="15" step="1" value="2" oninput="slider(7,this.value)"></div>
+      <div class="ctrl"><label>Задержка возврата <b id="v8">15</b> мин</label><input type="range" id="p8" min="5" max="60" step="5" value="15" oninput="slider(8,this.value)"></div>
+      <div class="ctrl"><label>Брак КТЯ <b id="v9">20</b> %</label><input type="range" id="p9" min="0" max="40" step="1" value="20" oninput="slider(9,this.value)"></div>
+    </div>
+    <div class="grp">
+      <h2>Сортировка и заклейка</h2>
+      <div class="ctrl"><label>Сортировщиков <b id="v10">10</b> шт</label><input type="range" id="p10" min="2" max="14" step="1" value="10" oninput="slider(10,this.value)"></div>
+      <div class="ctrl"><label>Производительность сортировщика <b id="v11">10 000</b> тов/ч</label><input type="range" id="p11" min="1000" max="15000" step="500" value="10000" oninput="slider(11,this.value)"></div>
+      <div class="ctrl"><label>Линий заклейки <b id="v12">4</b> шт</label><input type="range" id="p12" min="1" max="8" step="1" value="4" oninput="slider(12,this.value)"></div>
+    </div>
+    <div class="grp">
+      <h2>Отгрузка</h2>
+      <div class="ctrl"><label>Ворот отгрузки <b id="v13">24</b> шт</label><input type="range" id="p13" min="8" max="32" step="1" value="24" oninput="slider(13,this.value)"></div>
+      <div class="ctrl"><label>Время погрузки машины <b id="v14">2</b> ч</label><input type="range" id="p14" min="1" max="4" step="0.5" value="2" oninput="slider(14,this.value)"></div>
+      <div class="ctrl"><label>Товаров в ролл-кейдже <b id="v15">150</b> шт</label><input type="range" id="p15" min="50" max="400" step="10" value="150" oninput="slider(15,this.value)"></div>
+    </div>
+    <div class="grp">
+      <h2>Симуляция</h2>
+      <div class="ctrl"><label>Часов симуляции <b id="v16">24</b> ч</label><input type="range" id="p16" min="4" max="48" step="1" value="24" oninput="slider(16,this.value)"></div>
+      <label class="chk"><input type="checkbox" id="p17" checked onchange="schedule()"> Случайные колебания прибытия</label>
+    </div>
+  </aside>
+
+  <main>
+    <div class="grid" id="grid"></div>
+    <div class="stats" id="stats"></div>
+  </main>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+"use strict";
+
+var CHARTS = [
+  { id:"ch1",  title:"1. Приёмка палет",            unit:"пал/ч",    color:"#38bdf8" },
+  { id:"ch2",  title:"2. Вскрытие КТЯ",             unit:"КТЯ/ч",    color:"#2dd4bf" },
+  { id:"ch3",  title:"3. Товары на сортировку",     unit:"тов/ч",    color:"#f87171" },
+  { id:"ch4",  title:"4. Поток nonsort",            unit:"тов/ч",    color:"#fb923c" },
+  { id:"ch5",  title:"5. Заклейка КТЯ",             unit:"КТЯ/ч",    color:"#a3e635" },
+  { id:"ch6",  title:"6. Брак КТЯ",                 unit:"КТЯ/ч",    color:"#94a3b8" },
+  { id:"ch7",  title:"7. Отгрузка КТЯ",             unit:"КТЯ/ч",    color:"#34d399" },
+  { id:"ch8",  title:"8. Ролл-кейджи к отгрузке",   unit:"кейдж/ч",  color:"#fbbf24" }
+];
+
+var BUFFER_CHARTS = [
+  { id:"bf1", title:"Б1. Грузовики в очереди к докам",     unit:"маш",   color:"#38bdf8" },
+  { id:"bf2", title:"Б2. КТЯ перед вскрытием",             unit:"КТЯ",   color:"#2dd4bf" },
+  { id:"bf3", title:"Б3. Товары перед сортировкой",        unit:"тов",   color:"#f87171" },
+  { id:"bf4", title:"Б4. Товары на возврате (исключения)", unit:"тов",   color:"#fb923c" },
+  { id:"bf5", title:"Б5. КТЯ в буфере к отгрузке",         unit:"КТЯ",   color:"#34d399" },
+  { id:"bf6", title:"Б6. Ролл-кейджи в буфере к отгрузке", unit:"кейдж", color:"#fbbf24" }
+];
+
+var grid = document.getElementById("grid");
+function createCards(list, level){
+  list.forEach(function(c){
+    var card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = '<h3 style="color:'+c.color+'">'+c.title+'</h3>'+
+      '<div class="sub">'+(level?"уровень скопления, ":"")+c.unit+' · ось X — время, ч · сглаживание 30 мин</div>'+
+      '<canvas id="'+c.id+'" width="760" height="150"></canvas>'+
+      '<div class="sum" id="sum-'+c.id+'"></div>';
+    grid.appendChild(card);
+  });
+}
+createCards(CHARTS, false);
+var sec = document.createElement("div");
+sec.className = "sec";
+sec.textContent = "Скопления в буферах — уровень запаса по времени";
+grid.appendChild(sec);
+createCards(BUFFER_CHARTS, true);
+
+function v(i){ return document.getElementById("p"+i).value; }
+function ck(i){ return document.getElementById("p"+i).checked; }
+
+function slider(i,val){
+  var el = document.getElementById("v"+i);
+  el.textContent = (i===11) ? (+val).toLocaleString("ru-RU") : val;
+  schedule();
+}
+
+var timer = null;
+function schedule(){ clearTimeout(timer); timer = setTimeout(function(){ run(false); }, 200); }
+
+function run(force){
+  var p = {
+    trucksPerHour: +v(1), unloadMin: +v(2), docks: +v(3), palletsPerTruck: +v(4),
+    itemsPerBox: +v(5), nonsortFrac: +v(6)/100, excFrac: +v(7)/100, retDelay: +v(8),
+    scrapFrac: +v(9)/100, sorters: +v(10), sorterRate: +v(11), tapingLines: +v(12),
+    gates: +v(13), loadHours: +v(14), itemsPerCage: +v(15), simHours: +v(16),
+    random: ck(17)
+  };
+  var res = simulate(p);
+  render(res, p);
+}
+
+function poisson(lambda){
+  var L = Math.exp(-lambda), k = 0, prod = 1;
+  do { k++; prod *= Math.random(); } while (prod > L);
+  return k - 1;
+}
+
+function simulate(p){
+  var dt = 1/60, minutes = p.simHours*60;
+  var data = CHARTS.map(function(){ return new Array(minutes).fill(0); });
+  var bufs = BUFFER_CHARTS.map(function(){ return new Array(minutes).fill(0); });
+
+  var dockBusy = [], truckQueue = [];
+  var nextArrival = p.random ? null : 60/p.trucksPerHour;
+  var returnLoop = [];
+  var cageStock = 0, boxStock = 0, unopened = 0;
+  var openCapMin = 3700*dt;
+  var sortCapMin = p.sorters*p.sorterRate*dt;
+  var tapeCapMin = p.tapingLines*1000*dt;
+  var trucksPerMin = p.gates/p.loadHours/60;
+  var boxPerTruck = 16*20, cagesPerTruck = 16;
+  var shipBoxCap = trucksPerMin*boxPerTruck;
+  var shipCageCap = trucksPerMin*cagesPerTruck;
+
+  var totalTrucks = 0, totalSortCap = 0, totalSortTaken = 0, totalShipCap = 0, totalShipTaken = 0;
+  var qItems = 0, qBoxes = 0, qCages = 0, qPallets = 0;
+
+  for(var t=0; t<minutes; t++){
+    if(p.random){
+      var k = poisson(p.trucksPerHour*dt);
+      for(var a=0;a<k;a++){ truckQueue.push(t+p.unloadMin); totalTrucks++; }
+    }
+    else if(t >= nextArrival){ truckQueue.push(t+p.unloadMin); totalTrucks++; nextArrival += 60/p.trucksPerHour; }
+
+    while(truckQueue.length && dockBusy.length < p.docks){
+      var e = truckQueue.shift();
+      if(e <= t) e = t + p.unloadMin;
+      dockBusy.push(e);
+    }
+    var palletsOut = 0;
+    for(var d=dockBusy.length-1; d>=0; d--){
+      if(dockBusy[d] <= t){ dockBusy.splice(d,1); palletsOut += p.palletsPerTruck; }
+    }
+    qPallets += palletsOut;
+    data[0][t] = palletsOut*60;
+
+    unopened += palletsOut*20;
+    var opened = Math.min(unopened, openCapMin);
+    unopened -= opened;
+    data[1][t] = opened*60;
+    data[5][t] = opened*p.scrapFrac*60;
+
+    qItems += opened*p.itemsPerBox;
+    var take = Math.min(qItems, sortCapMin);
+    qItems -= take;
+    totalSortCap += sortCapMin;
+    totalSortTaken += take;
+    data[2][t] = take*60;
+
+    var exc = take*p.excFrac;
+    var nons = take*p.nonsortFrac;
+    var sorted = take - exc - nons;
+    if(exc > 0) returnLoop.push({ at: t + p.retDelay, qty: exc });
+    for(var r=returnLoop.length-1; r>=0; r--){
+      if(returnLoop[r].at <= t){ qItems += returnLoop[r].qty; returnLoop.splice(r,1); }
+    }
+    data[3][t] = nons*60;
+
+    cageStock += nons/p.itemsPerCage;
+    var cagesOut = Math.min(cageStock, shipCageCap);
+    cageStock -= cagesOut;
+    data[7][t] = cagesOut*60;
+
+    boxStock += sorted/p.itemsPerBox;
+    var taped = Math.min(boxStock, tapeCapMin);
+    data[4][t] = taped*60;
+
+    var shipped = Math.min(boxStock, shipBoxCap);
+    boxStock -= shipped;
+    totalShipCap += shipBoxCap;
+    totalShipTaken += shipped;
+    data[6][t] = shipped*60;
+    qBoxes = boxStock;
+    qCages = cageStock;
+    bufs[0][t] = truckQueue.length + dockBusy.length;
+    bufs[1][t] = unopened;
+    bufs[2][t] = qItems;
+    var retQ = 0;
+    for(var rr=0; rr<returnLoop.length; rr++) retQ += returnLoop[rr].qty;
+    bufs[3][t] = retQ;
+    bufs[4][t] = boxStock;
+    bufs[5][t] = cageStock;
+  }
+
+  var sum = function(arr){ return arr.reduce(function(a,x){ return a+x; }, 0)/60; };
+  return {
+    data: data,
+    totals: {
+      trucks: totalTrucks,
+      pallets: sum(data[0]),
+      boxesIn: sum(data[1]),
+      items: sum(data[2]),
+      nons: sum(data[3]),
+      taped: sum(data[4]),
+      scrap: sum(data[5]),
+      shippedBox: sum(data[6]),
+      cages: sum(data[7])
+    },
+    queues: { pallets: qPallets, items: qItems, boxes: qBoxes, cages: qCages },
+    bufs: bufs,
+    util: { sort: totalSortCap ? totalSortTaken/totalSortCap : 0, ship: totalShipCap ? totalShipTaken/totalShipCap : 0 }
+  };
+}
+
+function smooth(arr, w){
+  var out = new Array(arr.length).fill(0);
+  var acc = 0;
+  for(var i=0;i<arr.length;i++){
+    acc += arr[i];
+    if(i >= w) acc -= arr[i-w];
+    out[i] = acc/Math.min(i+1, w);
+  }
+  return out;
+}
+
+function render(res, p){
+  CHARTS.forEach(function(c, i){
+    var cv = document.getElementById(c.id);
+    var ctx = cv.getContext("2d");
+    var w = Math.min(60, Math.max(10, Math.round(res.data[i].length/10)));
+    cv._raw = res.data[i];
+    cv._sm = smooth(res.data[i], w);
+    cv._hours = p.simHours;
+    cv._unit = c.unit;
+    cv._color = c.color;
+    cv._hover = null;
+    drawChart(ctx, cv);
+    var avg = cv._sm[cv._sm.length-1];
+    document.getElementById("sum-"+c.id).innerHTML =
+      "средний темп <b>"+Math.round(avg).toLocaleString("ru-RU")+"</b> " + c.unit +
+      " · всего за период <b>"+Math.round(res.totals[["pallets","boxesIn","items","nons","taped","scrap","shippedBox","cages"][i]]).toLocaleString("ru-RU")+"</b> шт";
+  });
+  BUFFER_CHARTS.forEach(function(c, i){
+    var cv = document.getElementById(c.id);
+    var ctx = cv.getContext("2d");
+    var w = Math.min(60, Math.max(10, Math.round(res.bufs[i].length/10)));
+    cv._raw = res.bufs[i];
+    cv._sm = smooth(res.bufs[i], w);
+    cv._hours = p.simHours;
+    cv._unit = c.unit;
+    cv._color = c.color;
+    cv._hover = null;
+    cv._mode = "level";
+    drawChart(ctx, cv);
+    var last = cv._sm[cv._sm.length-1], peak = 0;
+    for(var j=0;j<cv._sm.length;j++) if(cv._sm[j]>peak) peak = cv._sm[j];
+    document.getElementById("sum-"+c.id).innerHTML =
+      "на конец периода <b>"+Math.round(last).toLocaleString("ru-RU")+"</b> "+c.unit +
+      " · пик <b>"+Math.round(peak).toLocaleString("ru-RU")+"</b> "+c.unit;
+  });
+  renderStats(res);
+}
+
+function renderStats(res){
+  var s = document.getElementById("stats");
+  var chip = function(label, val, warn){
+    return '<div class="chip'+(warn?" warn":"")+'">'+label+'<b>'+val+'</b></div>';
+  };
+  var q = res.queues, u = res.util;
+  s.innerHTML =
+    chip("Грузовиков принято", res.totals.trucks.toLocaleString("ru-RU")+" маш") +
+    chip("Палет принято", Math.round(res.totals.pallets).toLocaleString("ru-RU")+" пал") +
+    chip("КТЯ вскрыто", Math.round(res.totals.boxesIn).toLocaleString("ru-RU")+" шт") +
+    chip("Товаров через инфид", Math.round(res.totals.items).toLocaleString("ru-RU")+" шт") +
+    chip("Nonsort товаров", Math.round(res.totals.nons).toLocaleString("ru-RU")+" шт") +
+    chip("КТЯ заклеено", Math.round(res.totals.taped).toLocaleString("ru-RU")+" шт") +
+    chip("Брак КТЯ", Math.round(res.totals.scrap).toLocaleString("ru-RU")+" шт") +
+    chip("КТЯ отгружено", Math.round(res.totals.shippedBox).toLocaleString("ru-RU")+" шт") +
+    chip("Ролл-кейджей отгружено", Math.round(res.totals.cages).toLocaleString("ru-RU")+" шт") +
+    chip("Загрузка сортировки", Math.round(u.sort*100)+" %", u.sort > 0.95) +
+    chip("Загрузка ворот отгрузки", Math.round(u.ship*100)+" %", u.ship > 0.95) +
+    chip("Очередь товаров на инфид", Math.round(q.items).toLocaleString("ru-RU")+" шт", q.items > 0) +
+    chip("Очередь КТЯ к отгрузке", Math.round(q.boxes).toLocaleString("ru-RU")+" шт", q.boxes > 0) +
+    chip("Очередь ролл-кейджей", Math.round(q.cages).toLocaleString("ru-RU")+" шт", q.cages > 0);
+}
+
+function drawChart(ctx, cv){
+  var w = cv.width, h = cv.height;
+  var ml = 46, mr = 8, mt = 6, mb = 18;
+  ctx.clearRect(0, 0, w, h);
+  var d = cv._sm, hours = cv._hours;
+  if(!d || !d.length) return;
+  var max = 1;
+  for(var i=0;i<d.length;i++) if(d[i]>max) max = d[i];
+  max = niceMax(max);
+  var iw = w-ml-mr, ih = h-mt-mb;
+  var X = function(i){ return ml + (i/(d.length-1))*iw; };
+  var Y = function(val){ return mt + ih - val/max*ih; };
+
+  ctx.strokeStyle = "#334155"; ctx.fillStyle = "#94a3b8";
+  ctx.lineWidth = 1; ctx.font = "10px Segoe UI, Arial";
+  for(var g=0; g<=4; g++){
+    var val = max/4*g, y = Y(val);
+    ctx.beginPath(); ctx.moveTo(ml,y); ctx.lineTo(w-mr,y); ctx.stroke();
+    ctx.textAlign = "right"; ctx.fillText(Math.round(val).toLocaleString("ru-RU"), ml-4, y+3);
+  }
+  ctx.textAlign = "center";
+  var step = hours/6;
+  for(var t=0; t<=6; t++){
+    var hx = Math.round(t*step*10)/10, xi = ml + t/6*iw;
+    ctx.beginPath(); ctx.moveTo(xi, mt+ih); ctx.lineTo(xi, mt+ih+3); ctx.stroke();
+    ctx.fillText(hx.toLocaleString("ru-RU"), xi, h-4);
+  }
+  ctx.textAlign = "left"; ctx.fillText("0", ml, h-4);
+
+  ctx.globalAlpha = 0.18;
+  ctx.fillStyle = cv._color;
+  ctx.beginPath(); ctx.moveTo(ml, mt+ih);
+  for(var i2=0;i2<d.length;i2++) ctx.lineTo(X(i2), Y(d[i2]));
+  ctx.lineTo(w-mr, mt+ih); ctx.closePath(); ctx.fill();
+  ctx.globalAlpha = 1;
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = cv._color;
+  ctx.beginPath();
+  for(var i3=0;i3<d.length;i3++){
+    var px = X(i3), py = Y(d[i3]);
+    if(i3===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+
+  if(cv._hover !== null && cv._hover >= 0){
+    var hx2 = X(cv._hover), hy = Y(d[cv._hover]);
+    ctx.strokeStyle = "#f8fafc"; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.moveTo(hx2, mt); ctx.lineTo(hx2, mt+ih); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = "#f8fafc";
+    ctx.beginPath(); ctx.arc(hx2, hy, 3.5, 0, 7); ctx.fill();
+  }
+}
+
+function niceMax(m){
+  var p = Math.pow(10, Math.floor(Math.log10(m)));
+  var n = m/p;
+  var r = n<=1?1 : n<=2?2 : n<=2.5?2.5 : n<=5?5 : 10;
+  return r*p;
+}
+
+document.addEventListener("mousemove", function(e){
+  var tt = document.getElementById("tooltip");
+  var hit = false;
+  document.querySelectorAll("canvas").forEach(function(cv){
+    var r = cv.getBoundingClientRect();
+    if(e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom && cv._sm){
+      var px = e.clientX - r.left;
+      var k = px/r.width*cv.width;
+      var iw = cv.width - 46 - 8;
+      var idx = Math.max(0, Math.min(cv._sm.length-1, Math.round((k-46)/iw*(cv._sm.length-1))));
+      if(cv._hover !== idx){
+        cv._hover = idx;
+        drawChart(cv.getContext("2d"), cv);
+      }
+      tt.style.display = "block";
+      tt.style.left = (e.clientX + 14) + "px";
+      tt.style.top = (e.clientY + 14) + "px";
+      tt.innerHTML = "t = " + (idx/60).toFixed(1) + " ч · " +
+        (cv._mode === "level"
+          ? "уровень <b>" + Math.round(cv._sm[idx]).toLocaleString("ru-RU") + "</b> " + cv._unit
+          : cv._unit + " <b>" + Math.round(cv._sm[idx]).toLocaleString("ru-RU") + "</b>" +
+            " · итого <b>" + Math.round(cv._raw.slice(0, idx+1).reduce(function(a,x){return a+x;},0)/60).toLocaleString("ru-RU") + "</b> шт");
+      hit = true;
+    } else if(cv._hover !== null){
+      cv._hover = null;
+      drawChart(cv.getContext("2d"), cv);
+    }
+  });
+  if(!hit) tt.style.display = "none";
+});
+
+run(false);
+</script>
+</body>
+</html>
