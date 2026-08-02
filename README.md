@@ -17,9 +17,13 @@
 
 .\src\sort-center-layout\sort-center-layout-004.svg
 
+- Открыть в любом рендере svg. Можно в браузере.
+
 ### Plantuml диаграмма потоков грузовиков, палет, ящиков, товаров. 
 
 .\src\plantuml-diagrams\sort-senter-flows.puml
+
+- Открыть в любом рендере plantuml. Можно в Visual Studio Code.
 
 ## Todo
 
