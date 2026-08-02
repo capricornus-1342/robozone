@@ -1,22 +1,40 @@
 # robozone
 
-
-# Пилотные проекты
-
-### Изучение аналогов ситем сортирововчных центров товаров
-Директория .\pilot-projects-archive\research\sorting-center-system-analogs
-
-### Изучение агентов и нейросетей для реализации проекта
-Директория .\pilot-projects-archive\research\agents-&-llm
-
-## Пререлиз
-Директория .\pilot-projects-archive\pre-release
-
 ## Текущая версия 1.0
-Директория .\src 
+
+### Аналитическая модель скорости потоков, наполнения накопителей для палет, ящиков, товаров.
+
+.\src\graph-analitics\index.html
+
+- Открыть файл в браузере.
+- Нажимать кнопку "Пересчитать" для моделирования потоков.
+
+### Схема разметки сортировочного центра со всеми участками внутри здания. 
+
+.\src\sort-center-layout\sort-center-layout-004.svg
+
+### Plantuml диаграмма потоков грузовиков, палет, ящиков, товаров. 
+
+.\src\plantuml-diagrams\sort-senter-flows.puml
 
 ## Todo
 ...
+
+## PS. Пилотные проекты
+
+### Изучение аналогов ситем сортирововчных центров товаров
+
+.\pilot-projects-archive\research\sorting-center-system-analogs
+
+### Изучение агентов и нейросетей для реализации проекта
+
+.\pilot-projects-archive\research\agents-&-llm
+
+## Пререлиз
+
+.\pilot-projects-archive\pre-release
+
+
 
 
 
