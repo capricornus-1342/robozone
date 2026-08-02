@@ -39,7 +39,11 @@
   .chip b{display:block;font-size:15px;color:var(--text);margin-top:2px}
   .chip.warn{border-color:#f59e0b}
   .chip.warn b{color:#fbbf24}
-  .btn{width:100%;padding:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:8px;cursor:pointer;font-size:13px;margin-top:10px}
+  .chip.ok b{color:#4ade80}
+  .note{grid-column:1/-1;font-size:11px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  .btn-row{display:flex;gap:8px;margin-top:10px}
+  .btn-row .btn{margin-top:0;flex:1}
+  .btn{width:100%;padding:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:8px;cursor:pointer;font-size:13px}
   .btn:hover{background:var(--accent);color:#0b1220}
   ::-webkit-scrollbar{width:8px;height:8px}
   ::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
@@ -48,16 +52,19 @@
 <body>
 <header>
   <h1>Аналитика потоков сортировочного центра</h1>
-  <p>Имитация 8 потоков и 6 буферов · изменение параметров слева пересчитывает графики в браузере</p>
+  <p>Имитация 8 потоков и 7 буферов · параметры слева по ТЗ и спецификации · пересчёт графиков в браузере</p>
 </header>
 
 <div class="layout">
   <aside id="controls">
-    <button class="btn" onclick="run(true)">Пересчитать</button>
+    <div class="btn-row">
+      <button class="btn" onclick="run(true)">Пересчитать</button>
+      <button class="btn" onclick="exportJson()">Скачать JSON (параметры + статистика)</button>
+    </div>
     <div class="grp">
       <h2>Входной транспорт</h2>
-      <div class="ctrl"><label>Приезд грузовиков <b id="v1">6</b> маш/ч</label><input type="range" id="p1" min="1" max="10" step="1" value="6" oninput="slider(1,this.value)"></div>
-      <div class="ctrl"><label>Время разгрузки <b id="v2">15</b> мин</label><input type="range" id="p2" min="5" max="30" step="1" value="15" oninput="slider(2,this.value)"></div>
+      <div class="ctrl"><label>Поток палет на входе <b id="v1">185 пал/ч (5,8 маш/ч)</b></label><input type="range" id="p1" min="100" max="260" step="5" value="185" oninput="slider(1,this.value)"></div>
+      <div class="ctrl"><label>Время разгрузки <b id="v2">30</b> мин</label><input type="range" id="p2" min="15" max="60" step="5" value="30" oninput="slider(2,this.value)"></div>
       <div class="ctrl"><label>Приёмочных доков <b id="v3">8</b> шт</label><input type="range" id="p3" min="2" max="12" step="1" value="8" oninput="slider(3,this.value)"></div>
       <div class="ctrl"><label>Палет в машине <b id="v4">32</b> шт</label><input type="range" id="p4" min="16" max="40" step="4" value="32" oninput="slider(4,this.value)"></div>
     </div>
@@ -103,7 +110,7 @@ var CHARTS = [
   { id:"ch1",  title:"1. Приёмка палет",            unit:"пал/ч",    color:"#38bdf8" },
   { id:"ch2",  title:"2. Вскрытие КТЯ",             unit:"КТЯ/ч",    color:"#2dd4bf" },
   { id:"ch3",  title:"3. Товары на сортировку",     unit:"тов/ч",    color:"#f87171" },
-  { id:"ch4",  title:"4. Поток nonsort",            unit:"тов/ч",    color:"#fb923c" },
+  { id:"ch4",  title:"4. Nonsort + отбраковка повторов",  unit:"тов/ч",    color:"#fb923c" },
   { id:"ch5",  title:"5. Заклейка КТЯ",             unit:"КТЯ/ч",    color:"#a3e635" },
   { id:"ch6",  title:"6. Брак КТЯ",                 unit:"КТЯ/ч",    color:"#94a3b8" },
   { id:"ch7",  title:"7. Отгрузка КТЯ",             unit:"КТЯ/ч",    color:"#34d399" },
@@ -111,12 +118,13 @@ var CHARTS = [
 ];
 
 var BUFFER_CHARTS = [
-  { id:"bf1", title:"Б1. Грузовики в очереди к докам",     unit:"маш",   color:"#38bdf8" },
-  { id:"bf2", title:"Б2. КТЯ перед вскрытием",             unit:"КТЯ",   color:"#2dd4bf" },
-  { id:"bf3", title:"Б3. Товары перед сортировкой",        unit:"тов",   color:"#f87171" },
-  { id:"bf4", title:"Б4. Товары на возврате (исключения)", unit:"тов",   color:"#fb923c" },
-  { id:"bf5", title:"Б5. КТЯ в буфере к отгрузке",         unit:"КТЯ",   color:"#34d399" },
-  { id:"bf6", title:"Б6. Ролл-кейджи в буфере к отгрузке", unit:"кейдж", color:"#fbbf24" }
+  { id:"bf1", title:"Б1. Грузовики в очереди к докам",      unit:"маш",   color:"#38bdf8" },
+  { id:"bf2", title:"Б2. КТЯ перед вскрытием",              unit:"КТЯ",   color:"#2dd4bf" },
+  { id:"bf3", title:"Б3. Товары перед сортировкой",         unit:"тов",   color:"#f87171" },
+  { id:"bf4", title:"Б4. Товары в повторном прогоне (исключения)",  unit:"тов",   color:"#fb923c" },
+  { id:"bf5", title:"Б5. КТЯ к отгрузке (после заклейки)",  unit:"КТЯ",   color:"#34d399" },
+  { id:"bf6", title:"Б6. Ролл-кейджи к отгрузке",           unit:"кейдж", color:"#fbbf24" },
+  { id:"bf7", title:"Б7. Пустые КТЯ в стоке (повторные + новые)", unit:"КТЯ", color:"#2dd4bf" }
 ];
 
 var grid = document.getElementById("grid");
@@ -143,23 +151,124 @@ function ck(i){ return document.getElementById("p"+i).checked; }
 
 function slider(i,val){
   var el = document.getElementById("v"+i);
-  el.textContent = (i===11) ? (+val).toLocaleString("ru-RU") : val;
+  if(i===1 || i===4){
+    var pal = +v(1), perTruck = +v(4);
+    var tph = pal/perTruck;
+    document.getElementById("v1").textContent = pal.toLocaleString("ru-RU")+" пал/ч ("+tph.toFixed(1)+" маш/ч)";
+    if(i===4) el.textContent = perTruck+" шт";
+  } else if(i===11){
+    el.textContent = (+val).toLocaleString("ru-RU");
+  } else {
+    el.textContent = val;
+  }
   schedule();
 }
 
 var timer = null;
 function schedule(){ clearTimeout(timer); timer = setTimeout(function(){ run(false); }, 200); }
 
+var lastParams = null, lastResult = null;
+
 function run(force){
   var p = {
-    trucksPerHour: +v(1), unloadMin: +v(2), docks: +v(3), palletsPerTruck: +v(4),
+    palletsPerHour: +v(1), unloadMin: +v(2), docks: +v(3), palletsPerTruck: +v(4),
     itemsPerBox: +v(5), nonsortFrac: +v(6)/100, excFrac: +v(7)/100, retDelay: +v(8),
     scrapFrac: +v(9)/100, sorters: +v(10), sorterRate: +v(11), tapingLines: +v(12),
     gates: +v(13), loadHours: +v(14), itemsPerCage: +v(15), simHours: +v(16),
     random: ck(17)
   };
   var res = simulate(p);
+  lastParams = p; lastResult = res;
   render(res, p);
+}
+
+function exportJson(){
+  if(!lastParams || !lastResult) run(false);
+  var p = lastParams, res = lastResult, h = p.simHours;
+
+  var totals = [
+    { key:"trucks",     name:"Грузовиков принято",        unit:"маш" },
+    { key:"pallets",    name:"Палет принято",             unit:"пал" },
+    { key:"boxesIn",    name:"КТЯ вскрыто",               unit:"КТЯ" },
+    { key:"items",      name:"Товаров на сортировку",     unit:"тов" },
+    { key:"nons",       name:"Nonsort + отбраковка",      unit:"тов" },
+    { key:"taped",      name:"КТЯ заклеено",              unit:"КТЯ" },
+    { key:"scrap",      name:"Брак КТЯ",                  unit:"КТЯ" },
+    { key:"shippedBox", name:"КТЯ отгружено",             unit:"КТЯ" },
+    { key:"cages",      name:"Ролл-кейджей отгружено",    unit:"кейдж" }
+  ];
+  var stats = {};
+  totals.forEach(function(t){
+    stats[t.key] = { name: t.name, unit: t.unit, total: Math.round(res.totals[t.key]), perHour: Math.round(res.totals[t.key]/h) };
+  });
+
+  var util = {};
+  [ ["docks","Приёмочные доки"], ["open","Вскрытие КТЯ"], ["sort","Сортировка"],
+    ["tape","Заклейка"], ["ship","Ворота отгрузки"] ].forEach(function(u){
+    util[u[0]] = { name: u[1], percent: +(res.util[u[0]]*100).toFixed(2) };
+  });
+
+  var queues = {};
+  [ ["trucks","Грузовики на площадке (конец)","маш"], ["items","Товары в буфере к сортировке (конец)","тов"],
+    ["boxes","КТЯ в буфере отгрузки (конец)","КТЯ"], ["cages","Ролл-кейджи в буфере (конец)","кейдж"],
+    ["empty","Пустые КТЯ в стоке (конец)","КТЯ"], ["wait","Товары в ожидании КТЯ (конец)","тов"] ].forEach(function(q){
+    queues[q[0]] = { name: q[1], unit: q[2], value: Math.round(res.queues[q[0]]) };
+  });
+
+  var buffers = {};
+  BUFFER_CHARTS.forEach(function(c, i){
+    var end = res.bufs[i][res.bufs[i].length-1], peak = 0;
+    for(var j=0;j<res.bufs[i].length;j++) if(res.bufs[i][j] > peak) peak = res.bufs[i][j];
+    buffers[c.id] = { name: c.title, unit: c.unit, end: Math.round(end), peak: Math.round(peak) };
+  });
+
+  var out = {
+    meta: {
+      title: "Аналитика потоков сортировочного центра",
+      generated: new Date().toISOString(),
+      simHours: h
+    },
+    input: {
+      palletsPerHour:  { value: p.palletsPerHour,  unit: "пал/ч", name: "Поток палет на входе" },
+      unloadMin:       { value: p.unloadMin,       unit: "мин",   name: "Время разгрузки" },
+      docks:           { value: p.docks,           unit: "шт",    name: "Приёмочных доков" },
+      palletsPerTruck: { value: p.palletsPerTruck, unit: "пал",   name: "Палет в машине" },
+      itemsPerBox:     { value: p.itemsPerBox,     unit: "шт",    name: "Товаров в КТЯ" },
+      nonsortFrac:     { value: p.nonsortFrac,     unit: "доля",  name: "Доля nonsort (отбор на инфиде)" },
+      excFrac:         { value: p.excFrac,         unit: "доля",  name: "Доля исключений (повторный прогон)" },
+      retDelay:        { value: p.retDelay,        unit: "мин",   name: "Задержка повторного прогона" },
+      scrapFrac:       { value: p.scrapFrac,       unit: "доля",  name: "Брак КТЯ" },
+      sorters:         { value: p.sorters,         unit: "шт",    name: "Сортировщиков" },
+      sorterRate:      { value: p.sorterRate,      unit: "тов/ч", name: "Производительность сортировщика" },
+      tapingLines:     { value: p.tapingLines,     unit: "шт",    name: "Линий заклейки" },
+      gates:           { value: p.gates,           unit: "шт",    name: "Ворот отгрузки" },
+      loadHours:       { value: p.loadHours,       unit: "ч",     name: "Время погрузки машины" },
+      itemsPerCage:    { value: p.itemsPerCage,    unit: "шт",    name: "Товаров в ролл-кейдже" },
+      random:          { value: p.random,                        name: "Случайные колебания прибытия" }
+    },
+    output: {
+      totals: stats,
+      utilization: util,
+      queuesEnd: queues,
+      buffers: buffers,
+      balance: {
+        itemsIn: Math.round(res.balance.itemsIn),
+        itemsOut: Math.round(res.balance.itemsOut),
+        buffered: Math.round(res.balance.buffered),
+        diff: res.balance.diff
+      }
+    }
+  };
+
+  var blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json;charset=utf-8" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "simulation-report-" + new Date().toISOString().slice(0,16).replace(/[:T]/g,"-") + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
 }
 
 function poisson(lambda){
@@ -174,88 +283,149 @@ function simulate(p){
   var bufs = BUFFER_CHARTS.map(function(){ return new Array(minutes).fill(0); });
 
   var dockBusy = [], truckQueue = [];
-  var nextArrival = p.random ? null : 60/p.trucksPerHour;
+  var trucksPerHour = p.palletsPerHour/p.palletsPerTruck;
+  var nextArrival = p.random ? null : 0;
   var returnLoop = [];
-  var cageStock = 0, boxStock = 0, unopened = 0;
-  var openCapMin = 3700*dt;
-  var sortCapMin = p.sorters*p.sorterRate*dt;
-  var tapeCapMin = p.tapingLines*1000*dt;
-  var trucksPerMin = p.gates/p.loadHours/60;
-  var boxPerTruck = 16*20, cagesPerTruck = 16;
-  var shipBoxCap = trucksPerMin*boxPerTruck;
-  var shipCageCap = trucksPerMin*cagesPerTruck;
+  var retQueue = 0;   // очередь повторного прогона (первый сбой → повторная подача, спец. 5.5)
 
-  var totalTrucks = 0, totalSortCap = 0, totalSortTaken = 0, totalShipCap = 0, totalShipTaken = 0;
-  var qItems = 0, qBoxes = 0, qCages = 0, qPallets = 0;
+  // Пропускные способности, шт/мин (ТЗ и спецификация):
+  var openCapMin  = 3700*dt;                  // вскрытие КТЯ — 3 700/ч суммарно (спец. 6.3)
+  var newBoxMin   = 740*dt;                   // машина новых коробов — 740/ч (спец. 5.2)
+  var sortCapMin  = p.sorters*p.sorterRate*dt; // сортировка (спец. 6.5)
+  var tapeCapMin  = p.tapingLines*1000*dt;    // заклейка: линия 1 000 КТЯ/ч (планировка)
+  var truckCapMin = p.gates/p.loadHours/60;   // ворота: 24 шт / 2 ч = 12 маш/ч (спец. 6.9)
+  var shipBoxCap  = truckCapMin*16*20;        // 16 палет × 20 КТЯ = 320 КТЯ/машину (спец. 2.1)
+  var shipCageCap = truckCapMin*16;           // 16 ролл-кейджей/машину (спец. 6.9)
+
+  // Запасы (буферы):
+  var unopened   = 0;   // КТЯ перед вскрытием
+  var emptyBoxes = 0;   // сток пустых КТЯ (повторные 80 % + новые 740/ч)
+  var qItems     = 0;   // товары перед сортировкой
+  var waitBox    = 0;   // товары, ожидающие пустой КТЯ
+  var untaped    = 0;   // заполненные КТЯ перед заклейкой
+  var taped      = 0;   // заклеенные КТЯ к отгрузке
+  var cageStock  = 0;   // ролл-кейджи к отгрузке
+
+  // Счётчики (консервация товаров и загрузки):
+  var totalTrucks = 0;
+  var itemsIn = 0, itemsOutBox = 0, itemsOutCage = 0;
+  var totalOpenCap = 0, totalOpenTaken = 0;
+  var totalSortCap = 0, totalSortTaken = 0;
+  var totalTapeCap = 0, totalTapeTaken = 0;
+  var totalShipCap = 0, totalShipTaken = 0;
+  var totalDockMin = 0;
 
   for(var t=0; t<minutes; t++){
+    // 1. Прибытие грузовиков (5,78 маш/ч при 185 пал/ч и 32 пал/машину)
     if(p.random){
-      var k = poisson(p.trucksPerHour*dt);
+      var k = poisson(trucksPerHour*dt);
       for(var a=0;a<k;a++){ truckQueue.push(t+p.unloadMin); totalTrucks++; }
     }
-    else if(t >= nextArrival){ truckQueue.push(t+p.unloadMin); totalTrucks++; nextArrival += 60/p.trucksPerHour; }
+    else if(t >= nextArrival){ truckQueue.push(t+p.unloadMin); totalTrucks++; nextArrival += 60/trucksPerHour; }
 
+    // 2. Назначение свободных доков
     while(truckQueue.length && dockBusy.length < p.docks){
       var e = truckQueue.shift();
       if(e <= t) e = t + p.unloadMin;
       dockBusy.push(e);
     }
+
+    // 3. Окончание разгрузки → палеты поступают в буфер приёмки
     var palletsOut = 0;
     for(var d=dockBusy.length-1; d>=0; d--){
       if(dockBusy[d] <= t){ dockBusy.splice(d,1); palletsOut += p.palletsPerTruck; }
     }
-    qPallets += palletsOut;
+    totalDockMin += dockBusy.length;
     data[0][t] = palletsOut*60;
 
+    // 4. Вскрытие КТЯ (20 КТЯ на палете — спец. 2.1 п.9)
     unopened += palletsOut*20;
     var opened = Math.min(unopened, openCapMin);
     unopened -= opened;
+    totalOpenCap += openCapMin; totalOpenTaken += opened;
     data[1][t] = opened*60;
-    data[5][t] = opened*p.scrapFrac*60;
 
-    qItems += opened*p.itemsPerBox;
-    var take = Math.min(qItems, sortCapMin);
+    // 5. Товары из вскрытых КТЯ → буфер перед сортировкой (27 тов/КТЯ — спец. 2.1 п.3).
+    //    Nonsort отбирается на инфиде (спец. 5.4) — до автоматической сортировки
+    var nonsIn = opened*p.itemsPerBox*p.nonsortFrac;
+    qItems += opened*p.itemsPerBox - nonsIn;
+    itemsIn += opened*p.itemsPerBox;
+
+    // 6. Сток пустых КТЯ: повторные 80 % + новые 740/ч (спец. 5.2)
+    emptyBoxes += opened*(1 - p.scrapFrac) + newBoxMin;
+
+    // 7. Сортировка (спец. 6.5): 10 × 10 000/ч; повторный прогон — приоритет (спец. 5.5)
+    var takeRet = Math.min(retQueue, sortCapMin);
+    retQueue -= takeRet;
+    var take = Math.min(qItems, sortCapMin - takeRet);
     qItems -= take;
-    totalSortCap += sortCapMin;
-    totalSortTaken += take;
+    totalSortCap += sortCapMin; totalSortTaken += take + takeRet;
     data[2][t] = take*60;
 
+    // 8. Распределение первого прохода: исключения → повторный прогон, остальное → КТЯ
     var exc = take*p.excFrac;
-    var nons = take*p.nonsortFrac;
-    var sorted = take - exc - nons;
+    var sorted = take - exc;
     if(exc > 0) returnLoop.push({ at: t + p.retDelay, qty: exc });
     for(var r=returnLoop.length-1; r>=0; r--){
-      if(returnLoop[r].at <= t){ qItems += returnLoop[r].qty; returnLoop.splice(r,1); }
+      if(returnLoop[r].at <= t){ retQueue += returnLoop[r].qty; returnLoop.splice(r,1); }
     }
-    data[3][t] = nons*60;
 
-    cageStock += nons/p.itemsPerCage;
+    // 8а. Повторный прогон (спец. 5.5): повторный сбой → отбраковка → ручная/nonsort; на автосортировщик не возвращается
+    var excRet = takeRet*p.excFrac;
+    var nonsRet = takeRet*p.nonsortFrac;
+    var sortedRet = takeRet - excRet - nonsRet;
+    data[3][t] = (nonsIn + nonsRet + excRet)*60;
+
+    // 9. Брак КТЯ (спец. 5.2): 20 % вскрытых коробов → компактор
+    data[5][t] = opened*p.scrapFrac*60;
+
+    // 10. Nonsort (отбор на инфиде) и отбраковка повторов → ролл-кейджи → отгрузка (спец. 5.4)
+    cageStock += (nonsIn + nonsRet + excRet)/p.itemsPerCage;
     var cagesOut = Math.min(cageStock, shipCageCap);
     cageStock -= cagesOut;
+    itemsOutCage += cagesOut*p.itemsPerCage;
     data[7][t] = cagesOut*60;
 
-    boxStock += sorted/p.itemsPerBox;
-    var taped = Math.min(boxStock, tapeCapMin);
-    data[4][t] = taped*60;
+    // 11. Заполнение КТЯ отсортированными товарами (лимит — сток пустых КТЯ)
+    var sortedTot = sorted + sortedRet;
+    var fill = Math.min(sortedTot/p.itemsPerBox, emptyBoxes);
+    var itemsBoxed = fill*p.itemsPerBox;
+    waitBox += (sortedTot - itemsBoxed);
+    emptyBoxes -= fill;
+    untaped += fill;
 
-    var shipped = Math.min(boxStock, shipBoxCap);
-    boxStock -= shipped;
-    totalShipCap += shipBoxCap;
-    totalShipTaken += shipped;
+    // 12. Заклейка (спец. 6.7): линии по 1 000 КТЯ/ч
+    var tapedNow = Math.min(untaped, tapeCapMin);
+    untaped -= tapedNow;
+    taped += tapedNow;
+    totalTapeCap += tapeCapMin; totalTapeTaken += tapedNow;
+    data[4][t] = tapedNow*60;
+
+    // 13. Отгрузка КТЯ (спец. 6.9): 320 КТЯ/машину, 24 ворота
+    var shipped = Math.min(taped, shipBoxCap);
+    taped -= shipped;
+    totalShipCap += shipBoxCap; totalShipTaken += shipped;
+    itemsOutBox += shipped*p.itemsPerBox;
     data[6][t] = shipped*60;
-    qBoxes = boxStock;
-    qCages = cageStock;
-    bufs[0][t] = truckQueue.length + dockBusy.length;
+
+    // 14. Уровни буферов
+    bufs[0][t] = truckQueue.length;
     bufs[1][t] = unopened;
     bufs[2][t] = qItems;
     var retQ = 0;
     for(var rr=0; rr<returnLoop.length; rr++) retQ += returnLoop[rr].qty;
-    bufs[3][t] = retQ;
-    bufs[4][t] = boxStock;
+    bufs[3][t] = retQ + retQueue;
+    bufs[4][t] = taped;
     bufs[5][t] = cageStock;
+    bufs[6][t] = emptyBoxes;
   }
 
   var sum = function(arr){ return arr.reduce(function(a,x){ return a+x; }, 0)/60; };
+  var retQTot = 0;
+  for(var rq=0; rq<returnLoop.length; rq++) retQTot += returnLoop[rq].qty;
+  var buffered = qItems + waitBox + retQTot + retQueue + (untaped + taped)*p.itemsPerBox + cageStock*p.itemsPerCage;
+  var itemsOut = itemsOutBox + itemsOutCage;
+
   return {
     data: data,
     totals: {
@@ -269,9 +439,28 @@ function simulate(p){
       shippedBox: sum(data[6]),
       cages: sum(data[7])
     },
-    queues: { pallets: qPallets, items: qItems, boxes: qBoxes, cages: qCages },
+    queues: {
+      trucks: truckQueue.length + dockBusy.length,
+      items: qItems,
+      boxes: taped,
+      cages: cageStock,
+      empty: emptyBoxes,
+      wait: waitBox
+    },
     bufs: bufs,
-    util: { sort: totalSortCap ? totalSortTaken/totalSortCap : 0, ship: totalShipCap ? totalShipTaken/totalShipCap : 0 }
+    util: {
+      docks: totalDockMin/(minutes*p.docks),
+      open: totalOpenCap ? totalOpenTaken/totalOpenCap : 0,
+      sort: totalSortCap ? totalSortTaken/totalSortCap : 0,
+      tape: totalTapeCap ? totalTapeTaken/totalTapeCap : 0,
+      ship: totalShipCap ? totalShipTaken/totalShipCap : 0
+    },
+    balance: {
+      itemsIn: itemsIn,
+      itemsOut: itemsOut,
+      buffered: buffered,
+      diff: itemsIn - itemsOut - buffered
+    }
   };
 }
 
@@ -290,7 +479,7 @@ function render(res, p){
   CHARTS.forEach(function(c, i){
     var cv = document.getElementById(c.id);
     var ctx = cv.getContext("2d");
-    var w = Math.min(60, Math.max(10, Math.round(res.data[i].length/10)));
+    var w = 30;
     cv._raw = res.data[i];
     cv._sm = smooth(res.data[i], w);
     cv._hours = p.simHours;
@@ -306,7 +495,7 @@ function render(res, p){
   BUFFER_CHARTS.forEach(function(c, i){
     var cv = document.getElementById(c.id);
     var ctx = cv.getContext("2d");
-    var w = Math.min(60, Math.max(10, Math.round(res.bufs[i].length/10)));
+    var w = 30;
     cv._raw = res.bufs[i];
     cv._sm = smooth(res.bufs[i], w);
     cv._hours = p.simHours;
@@ -326,25 +515,37 @@ function render(res, p){
 
 function renderStats(res){
   var s = document.getElementById("stats");
-  var chip = function(label, val, warn){
-    return '<div class="chip'+(warn?" warn":"")+'">'+label+'<b>'+val+'</b></div>';
+  var chip = function(label, val, warn, ok){
+    return '<div class="chip'+(ok?" ok":(warn?" warn":""))+'">'+label+'<b>'+val+'</b></div>';
   };
   var q = res.queues, u = res.util;
+  var bal = res.balance;
+  var balOk = Math.abs(bal.diff) < 1;
   s.innerHTML =
     chip("Грузовиков принято", res.totals.trucks.toLocaleString("ru-RU")+" маш") +
     chip("Палет принято", Math.round(res.totals.pallets).toLocaleString("ru-RU")+" пал") +
     chip("КТЯ вскрыто", Math.round(res.totals.boxesIn).toLocaleString("ru-RU")+" шт") +
-    chip("Товаров через инфид", Math.round(res.totals.items).toLocaleString("ru-RU")+" шт") +
-    chip("Nonsort товаров", Math.round(res.totals.nons).toLocaleString("ru-RU")+" шт") +
+    chip("Товаров на сортировку", Math.round(res.totals.items).toLocaleString("ru-RU")+" шт") +
+    chip("Nonsort + отбраковка", Math.round(res.totals.nons).toLocaleString("ru-RU")+" шт") +
     chip("КТЯ заклеено", Math.round(res.totals.taped).toLocaleString("ru-RU")+" шт") +
     chip("Брак КТЯ", Math.round(res.totals.scrap).toLocaleString("ru-RU")+" шт") +
     chip("КТЯ отгружено", Math.round(res.totals.shippedBox).toLocaleString("ru-RU")+" шт") +
     chip("Ролл-кейджей отгружено", Math.round(res.totals.cages).toLocaleString("ru-RU")+" шт") +
+    chip("Загрузка приёмочных доков", Math.round(u.docks*100)+" %", u.docks > 0.95) +
+    chip("Загрузка вскрытия", Math.round(u.open*100)+" %", u.open > 0.95) +
     chip("Загрузка сортировки", Math.round(u.sort*100)+" %", u.sort > 0.95) +
+    chip("Загрузка заклейки", Math.round(u.tape*100)+" %", u.tape > 0.95) +
     chip("Загрузка ворот отгрузки", Math.round(u.ship*100)+" %", u.ship > 0.95) +
-    chip("Очередь товаров на инфид", Math.round(q.items).toLocaleString("ru-RU")+" шт", q.items > 0) +
-    chip("Очередь КТЯ к отгрузке", Math.round(q.boxes).toLocaleString("ru-RU")+" шт", q.boxes > 0) +
-    chip("Очередь ролл-кейджей", Math.round(q.cages).toLocaleString("ru-RU")+" шт", q.cages > 0);
+    chip("Товары в буфере к сортировке (конец)", Math.round(q.items).toLocaleString("ru-RU")+" шт", q.items > 0) +
+    chip("КТЯ в буфере отгрузки (конец)", Math.round(q.boxes).toLocaleString("ru-RU")+" шт", q.boxes > 0) +
+    chip("Ролл-кейджи в буфере (конец)", Math.round(q.cages).toLocaleString("ru-RU")+" шт", q.cages > 0) +
+    chip("Пустые КТЯ в стоке (конец)", Math.round(q.empty).toLocaleString("ru-RU")+" шт") +
+    chip("Товары в ожидании КТЯ (конец)", Math.round(q.wait).toLocaleString("ru-RU")+" шт", q.wait > 0) +
+    chip("Грузовики на площадке (конец)", Math.round(q.trucks).toLocaleString("ru-RU")+" маш") +
+    chip("Баланс товаров (вход − выход − буферы)", bal.diff.toFixed(2)+" шт", !balOk, balOk) +
+    '<div class="note">Консервация потока: товары на входе (вскрытые КТЯ × 27) = отгруженные в КТЯ × 27 + отгруженные в ролл-кейджах + остатки во всех буферах; расхождение 0 — ни один товар не теряется. ' +
+    'Nonsort отбирается на инфиде до автосортировки (спец. 5.4) и в её мощность не входит. Исключения проходят повторный прогон один раз (спец. 5.5): при повторном сбое → отбраковка → ручная обработка/nonsort, на автосортировщик не возвращаются; на повторный прогон тратится мощность сортировки (при 2 % исключений — ~2 %). ' +
+    'Значения 3 700 КТЯ/ч и загрузка ворот 96,4 % (раздел 10 спецификации) соответствуют полному потоку 100 000 тов/ч без отвода в nonsort; при доле nonsort КТЯ-поток и загрузка ворот ниже на эту долю (спец. 5.4).</div>';
 }
 
 function drawChart(ctx, cv){
