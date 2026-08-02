@@ -1,0 +1,114 @@
+@startuml
+!define RECTANGLE class
+
+title "Потоки сущностей в сортировочном центре\n(с разделением двух сортировок)"
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+skinparam component {
+  BackgroundColor #F0F8FF
+  BorderColor #00008B
+  FontColor #000080
+}
+skinparam arrow {
+  Color #000000
+  FontColor #000000
+}
+skinparam package {
+  BackgroundColor #F5F5F5
+  BorderColor #808080
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor #FFFFE0
+  BorderColor #000000
+}
+
+' Определение пакетов (зон)
+package "ЗОНЫ АВТОМАТИЧЕСКОЙ (КОНВЕЙЕРНОЙ) СОРТИРОВКИ" #DDEEFF {
+  
+  component "Ворота приёмки" as ReceivingDocks
+  component "Буфер приёмки" as ReceivingBuffer
+  component "Зона разукрупнения\n(депаллетизация)" as Depalletizing
+  component "Зона вскрытия КТЯ" as Opening
+  component "Сток пустых КТЯ" as EmptyStorage
+  component "Машина новых КТЯ" as NewMachine
+  component "Компактор брака КТЯ" as Compactor
+  component "Зона подачи (инфиды)\n+ сканеры/весы" as Infeed
+  
+  ' === СОРТИРОВКА ТОВАРОВ (по направлениям) ===
+  component "Сортировка товаров\nпо направлениям (1–400)\n(10 сортировщиков)" as ItemSorting
+  
+  component "Зона заклейки КТЯ" as Sealing
+  
+  ' === СОРТИРОВКА КТЯ (по палетам) ===
+  component "Сортировка КТЯ\nпо палетам\n(400 ячеек-накопителей)" as CTYSorting
+  
+  component "Зона паллетирования" as Palletizing
+  component "Буфер отгрузки" as OutboundBuffer
+  component "Ворота отгрузки" as OutboundDocks
+}
+
+package "ЗОНА РУЧНОЙ СОРТИРОВКИ (NONSORT)" #FFDDDD {
+  
+  component "Зона ручной сортировки\nNonSort" as NonSortArea
+  component "Возвратные каналы" as ReturnChannels
+}
+
+' ==================== ПОТОКИ ====================
+
+' 1. Приёмка и подготовка
+ReceivingDocks --> ReceivingBuffer : "Палеты с КТЯ (185 пал/ч)"
+ReceivingBuffer --> Depalletizing : "Палеты с КТЯ"
+Depalletizing --> Opening : "КТЯ (3 700 шт/ч)"
+Opening --> Infeed : "Товары (100 000 шт/ч)"
+
+' 2. Оборот тары
+Opening --> EmptyStorage : "Пустые КТЯ (80 % = 2 960 шт/ч)"
+Opening --> Compactor : "Брак КТЯ (20 % = 740 шт/ч)"
+EmptyStorage --> ItemSorting : "Пустые КТЯ\n(установка на сортировщик)"
+NewMachine --> EmptyStorage : "Новые КТЯ (740 шт/ч)"
+
+' 3. СОРТИРОВКА ТОВАРОВ ПО НАПРАВЛЕНИЯМ (в пустые КТЯ)
+Infeed --> ItemSorting : "Товары (100 000 шт/ч)"
+note right of ItemSorting : "Товары сбрасываются в\nпустые КТЯ по направлениям 1–400"
+
+' 4. Заклейка
+ItemSorting --> Sealing : "Заполненные КТЯ (3 700 шт/ч)"
+
+' 5. СОРТИРОВКА КТЯ ПО ПАЛЕТАМ
+Sealing --> CTYSorting : "Заклеенные КТЯ"
+note right of CTYSorting : "КТЯ группируются по палетам\n(на одной палете — КТЯ\nнескольких направлений)"
+
+' 6. Паллетирование и отгрузка
+CTYSorting --> Palletizing : "КТЯ по палетам"
+Palletizing --> OutboundBuffer : "Палеты с КТЯ (185 пал/ч)"
+OutboundBuffer --> OutboundDocks : "Палеты для отгрузки"
+OutboundDocks --> "Исходящие\nмашины" : "16 палет КТЯ + 16 ролл-кейджей"
+
+' ==================== NONSORT И ВОЗВРАТЫ ====================
+
+Infeed --> NonSortArea : "NonSort товары (5–15 %)"
+NonSortArea --> OutboundDocks : "Ролл-кейджи (16 на машину)"
+NonSortArea --> ReturnChannels : "Товары, исправленные\n(возврат)"
+ReturnChannels --> Infeed : "Повторный прогон"
+
+' Исключения с сортировки товаров
+ItemSorting --> ReturnChannels : "Исключения\n(нечитаемый код,\nнегабарит и др.)"
+ReturnChannels --> Compactor : "Отбраковка (в брак)"
+
+' Пустые палеты
+Depalletizing --> "Накопление\nпустых палет" : "Пустые палеты"
+
+' Вывоз отходов
+Compactor --> "Вывоз" : "Брикеты картона"
+
+' Обратная связь для баланса тары
+EmptyStorage --> NewMachine : "Сигнал о потребности"
+
+' ==================== ПРИМЕЧАНИЯ ====================
+
+note top of ItemSorting : "СОРТИРОВКА №1: Товары → в пустые КТЯ\n(по 400 направлениям)"
+note top of CTYSorting : "СОРТИРОВКА №2: КТЯ → на палеты\n(для отгрузки)"
+
+@enduml
