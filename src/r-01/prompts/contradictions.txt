@@ -5,3 +5,4 @@ src\specs\specification-r-01.md
 src\r-01\system
 
 Найди там противоречия и несоответствия, опираясь на предыдущий контекст.
+Отчет опиши в src\r-01\system\contradictions-report.md. Если он не пустой, то замени его. 
