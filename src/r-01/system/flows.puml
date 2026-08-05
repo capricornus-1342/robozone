@@ -1,0 +1,128 @@
+@startuml
+!define RECTANGLE class
+
+title "Потоки динамических объектов в сортировочном центре\n(по спецификации v2.0)"
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+skinparam component {
+  BackgroundColor #F0F8FF
+  BorderColor #00008B
+  FontColor #000080
+}
+skinparam arrow {
+  Color #000000
+  FontColor #000000
+}
+skinparam package {
+  BackgroundColor #F5F5F5
+  BorderColor #808080
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor #FFFFE0
+  BorderColor #000000
+}
+
+' ==================== ВНЕШНИЕ СУБЪЕКТЫ ====================
+
+component "Магистральный транспорт\n(вход)" as ExternalIn
+component "Магистральный транспорт\n(выход)" as ExternalOut
+component "Циркуляция тары\n(возврат порожних паллет)" as PalletReturn
+component "Вывоз брака\nи отходов" as WasteOut
+
+' ==================== ЗОНЫ ОСНОВНОГО КОНТУРА ====================
+
+package "ОСНОВНОЙ КОНТУР (автоматическая сортировка)" {
+
+  component "Зона приёмки\n(приёмочные ворота 6–8)" as ReceivingDocks
+  component "Буфер приёмки\n(≈400 паллетомест)" as ReceivingBuffer
+  component "Зона разукрупнения паллет\n(депаллетайзеры)" as Depalletizing
+  component "Зона вскрытия ящиков" as Opening
+  component "Сток пустых ящиков" as EmptyStorage
+  component "Участок машины\nновых ящиков" as NewMachine
+  component "Зона подачи (инфиды)\n10 станций: сканер + вес/габариты" as Infeed
+  component "Зона сортировки\n(10 сортировщиков)" as ItemSorting
+  component "Зона заклейки (линия)" as Sealing
+  component "Зона сортировки ящиков\nпо направлениям\n(400 ячеек-накопителей)" as BoxSorting
+  component "Зона паллетирования" as Palletizing
+  component "Буфер отгрузки\n(≈370 паллетомест)" as OutboundBuffer
+  component "Зона отгрузки\n(24 ворота)" as OutboundDocks
+}
+
+' ==================== ВСПОМОГАТЕЛЬНЫЕ И ВОЗВРАТНЫЕ УЧАСТКИ ====================
+
+package "ВСПОМОГАТЕЛЬНЫЕ И ВОЗВРАТНЫЕ УЧАСТКИ" {
+
+  component "Накопитель\nпустых паллет" as EmptyPalletStorage
+  component "Зона nonsort\n(адресные ячейки,\nроллтейнеры)" as NonSortArea
+  component "Зона возвратных потоков\n(повторный прогон,\nотбраковка)" as ReturnChannels
+  component "Зона брака ящиков\nи отходов (компактор)" as Compactor
+}
+
+' ==================== ВХОД И ПРИЁМКА ====================
+
+ExternalIn --> ReceivingDocks : "Машины входящие\n(≈5,8 машин/ч, 32 паллеты)"
+ReceivingDocks --> ReceivingBuffer : "Паллеты входные\nс ящиками (185 паллет/ч)"
+ReceivingBuffer --> Depalletizing : "Паллеты с ящиками\n(185 паллет/ч)"
+
+' ==================== РАЗУКРУПНЕНИЕ ====================
+
+Depalletizing --> Opening : "Ящики (3 700 шт/ч)"
+Depalletizing --> EmptyPalletStorage : "Паллеты порожние\n(185 паллет/ч)"
+EmptyPalletStorage --> PalletReturn : "Возврат тары\n(циркуляция)"
+Depalletizing --> Compactor : "Отходы (стрейч-плёнка,\nленты, скотч)"
+
+' ==================== ВСКРЫТИЕ ЯЩИКОВ ====================
+
+Opening --> Infeed : "Товары (100 000 шт/ч)"
+Opening --> EmptyStorage : "Ящики повторные пустые\n(80 % = 2 960 шт/ч)"
+Opening --> Compactor : "Ящики повреждённые\n(часть потока брака 740 шт/ч)"
+NewMachine --> EmptyStorage : "Ящики новые\n(20 % = 740 шт/ч)"
+
+' ==================== ПОДАЧА (ИНФИДЫ) ====================
+
+Infeed --> ItemSorting : "Товары к автоматической\nсортировке (100 000 шт/ч\nминус nonsort и исключения)"
+Infeed --> NonSortArea : "Товары nonsort\n(5–15 % — параметр)"
+Infeed --> ReturnChannels : "Товары-исключения\n(1–3 % — параметр)"
+
+' ==================== СОРТИРОВКА ТОВАРОВ ====================
+
+EmptyStorage --> ItemSorting : "Ящики пустые\n(установка, 3 700 шт/ч)"
+note right of ItemSorting : "Сброс товаров по направлениям 1–400,\nконтроль заполняемости (счёт/объём/масса ≤ 30 кг),\nутряска, съём заполненных ящиков"
+ItemSorting --> Sealing : "Ящики заполненные\n(3 700 шт/ч)"
+ItemSorting --> Compactor : "Ящики бракованные\n(часть потока брака\n740 шт/ч)"
+ItemSorting --> Infeed : "Товары выпавшие\n(подъём, повторная подача)"
+ItemSorting --> ReturnChannels : "Исключения\n(повторный прогон)"
+
+' ==================== ЗАКЛЕЙКА И СОРТИРОВКА ЯЩИКОВ ====================
+
+Sealing --> BoxSorting : "Ящики заклеенные\n(3 700 шт/ч)"
+BoxSorting --> OutboundBuffer : "Ящики по направлениям\n(3 700 шт/ч, 400 направлений)"
+
+' ==================== ПАЛЛЕТИРОВАНИЕ И ОТГРУЗКА ====================
+
+OutboundBuffer --> Palletizing : "Ящики из буфера\n(185 паллет/ч, 20 ящиков)"
+Palletizing --> OutboundDocks : "Паллеты исходящие\n(185 паллет/ч,\n16 паллет на машину)"
+NonSortArea --> OutboundDocks : "Роллтейнеры с товарами\nnonsort (до 192 шт/ч,\n16 на машину)"
+OutboundDocks --> ExternalOut : "Машины исходящие\n(≈11,6 машин/ч, 32 паллеты =\n16 ящиков + 16 роллтейнеров;\nпогрузка 2 ч)"
+
+' ==================== ВОЗВРАТНЫЕ ПОТОКИ ====================
+
+ReturnChannels --> Infeed : "Повторный прогон\n(повторный скан)"
+ReturnChannels --> NonSortArea : "Перевод в nonsort\n(после отбраковки)"
+OutboundDocks --> NonSortArea : "Роллтейнеры порожние\n(возврат)"
+
+' ==================== ВЫВОЗ ====================
+
+Compactor --> WasteOut : "Брак ящиков + отходы\n(740 ящиков/ч)"
+
+' ==================== ИНФОРМАЦИОННЫЕ ПОТОКИ ====================
+
+note bottom
+  Информационные записи (WMS/TMS/трекинг) сопровождают каждый физический шаг:
+  приёмка, сканирование, назначение маршрута, сброс в ячейку, заполнение ящика,
+  съём, заклейка, исключение, паллетирование, загрузка машины, закрытие рейса.
+end note
+
+@enduml
