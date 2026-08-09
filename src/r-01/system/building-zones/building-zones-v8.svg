@@ -2,20 +2,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1280" width="100%" height="100%" style="background:#f0f2f5;font-family:'Segoe UI','Helvetica Neue',Arial,sans-serif">
   <defs>
     <!-- Zone gradients -->
-    <linearGradient id="grd1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#148f77"/><stop offset="100%" stop-color="#1abc9c"/></linearGradient>
-    <linearGradient id="grd2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1e8449"/><stop offset="100%" stop-color="#2ecc71"/></linearGradient>
-    <linearGradient id="grd3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2ecc71"/><stop offset="100%" stop-color="#58d68d"/></linearGradient>
-    <linearGradient id="grd4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#d4ac0d"/><stop offset="100%" stop-color="#f1c40f"/></linearGradient>
-    <linearGradient id="grdSort" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#cb4335"/><stop offset="100%" stop-color="#e74c3c"/></linearGradient>
-    <linearGradient id="grdSeal" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7d3c98"/><stop offset="100%" stop-color="#a569bd"/></linearGradient>
-    <linearGradient id="grdBox" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2e86c1"/><stop offset="100%" stop-color="#5dade2"/></linearGradient>
-    <linearGradient id="grdBuf" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#d35400"/><stop offset="100%" stop-color="#f39c12"/></linearGradient>
-    <linearGradient id="grdPal" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#eb984e"/><stop offset="100%" stop-color="#f0b27a"/></linearGradient>
-    <linearGradient id="grdShip" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#34495e"/><stop offset="100%" stop-color="#5d6d7e"/></linearGradient>
-    <linearGradient id="grdNon" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ca6f1e"/><stop offset="100%" stop-color="#f39c12"/></linearGradient>
-    <linearGradient id="grdRet" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6c3483"/><stop offset="100%" stop-color="#9b59b6"/></linearGradient>
-    <linearGradient id="grdWaste" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4d565b"/><stop offset="100%" stop-color="#7f8c8d"/></linearGradient>
-    <linearGradient id="grdInfra" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#34495e"/><stop offset="100%" stop-color="#5d6d7e"/></linearGradient>
+    <linearGradient id="grd1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2980b9"/><stop offset="100%" stop-color="#3498db"/></linearGradient>
+    <linearGradient id="grd2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1abc9c"/><stop offset="100%" stop-color="#16a085"/></linearGradient>
+    <linearGradient id="grd3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#27ae60"/><stop offset="100%" stop-color="#2ecc71"/></linearGradient>
+    <linearGradient id="grd4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f39c12"/><stop offset="100%" stop-color="#f1c40f"/></linearGradient>
+    <linearGradient id="grdSort" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c0392b"/><stop offset="100%" stop-color="#e74c3c"/></linearGradient>
+    <linearGradient id="grdSeal" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8e44ad"/><stop offset="100%" stop-color="#9b59b6"/></linearGradient>
+    <linearGradient id="grdBox" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2c3e50"/><stop offset="100%" stop-color="#34495e"/></linearGradient>
+    <linearGradient id="grdBuf" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#d35400"/><stop offset="100%" stop-color="#e67e22"/></linearGradient>
+    <linearGradient id="grdPal" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2980b9"/><stop offset="100%" stop-color="#5dade2"/></linearGradient>
+    <linearGradient id="grdShip" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7f8c8d"/><stop offset="100%" stop-color="#95a5a6"/></linearGradient>
+    <linearGradient id="grdNon" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e67e22"/><stop offset="100%" stop-color="#f39c12"/></linearGradient>
+    <linearGradient id="grdRet" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8e44ad"/><stop offset="100%" stop-color="#af7ac5"/></linearGradient>
+    <linearGradient id="grdWaste" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#566573"/><stop offset="100%" stop-color="#808b96"/></linearGradient>
+    <linearGradient id="grdInfra" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5d6d7e"/><stop offset="100%" stop-color="#85929e"/></linearGradient>
     <linearGradient id="grdFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d5d8dc"/><stop offset="100%" stop-color="#e5e8e8"/></linearGradient>
 
     <!-- Flow arrow markers (small) -->
@@ -30,10 +30,10 @@
 
     <!-- Drop shadow -->
     <filter id="shadow" x="-2%" y="-2%" width="104%" height="104%">
-      <feDropShadow dx="3" dy="3" stdDeviation="5" flood-opacity="0.28"/>
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15"/>
     </filter>
     <filter id="shadowLight" x="-2%" y="-2%" width="104%" height="104%">
-      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.18"/>
+      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.1"/>
     </filter>
 
     <!-- Equipment icon templates -->
@@ -136,10 +136,10 @@
   </defs>
 
   <!-- Background building floor -->
-  <rect x="60" y="70" width="800" height="880" rx="12" fill="url(#grdFloor)" stroke="#bdc3c7" stroke-width="2"/>
+  <rect x="60" y="70" width="800" height="880" rx="8" fill="url(#grdFloor)" stroke="#bdc3c7" stroke-width="2"/>
 
   <!-- Building outline -->
-  <rect x="60" y="70" width="800" height="880" rx="12" fill="none" stroke="#2c3e50" stroke-width="3"/>
+  <rect x="60" y="70" width="800" height="880" rx="8" fill="none" stroke="#2c3e50" stroke-width="3"/>
 
   <!-- ==================== BUILDING LABEL ==================== -->
   <text x="460" y="40" text-anchor="middle" font-size="16" font-weight="800" fill="#2c3e50">СХЕМА СОРТИРОВОЧНОГО ЦЕНТРА — ВИД СВЕРХУ</text>
@@ -147,7 +147,7 @@
 
   <!-- ==================== ZONE 1: ПРИЁМКА ==================== -->
   <g filter="url(#shadow)">
-    <rect x="60" y="70" width="60" height="880" rx="10" fill="url(#grd1)" opacity="0.9" stroke="#2980b9" stroke-width="1.5"/>
+    <rect x="60" y="70" width="60" height="880" rx="6" fill="url(#grd1)" opacity="0.9" stroke="#2980b9" stroke-width="1.5"/>
     <text x="90" y="96" text-anchor="middle" font-size="7" font-weight="700" fill="#fff">ЗОНА 1</text>
     <text x="90" y="108" text-anchor="middle" font-size="6" fill="#d5f5e3">ПРИЁМКА</text>
     <text x="90" y="122" text-anchor="middle" font-size="4.5" fill="#aed6f1">15 м × 220 м</text>
@@ -178,7 +178,7 @@
 
   <!-- ==================== ZONE 2: РАЗУКРУПНЕНИЕ ==================== -->
   <g filter="url(#shadow)">
-    <rect x="132" y="70" width="28" height="480" rx="10" fill="url(#grd2)" opacity="0.9" stroke="#16a085" stroke-width="1.5"/>
+    <rect x="132" y="70" width="28" height="480" rx="6" fill="url(#grd2)" opacity="0.9" stroke="#16a085" stroke-width="1.5"/>
     <text x="146" y="96" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">ЗОНА 2</text>
     <text x="146" y="108" text-anchor="middle" font-size="5" fill="#d5f5e3">РАЗУКРУП-</text>
     <text x="146" y="118" text-anchor="middle" font-size="5" fill="#d5f5e3">НЕНИЕ</text>
@@ -196,7 +196,7 @@
 
   <!-- ==================== ZONE 3: ВСКРЫТИЕ КТЯ ==================== -->
   <g filter="url(#shadow)">
-    <rect x="172" y="70" width="24" height="480" rx="10" fill="url(#grd3)" opacity="0.9" stroke="#27ae60" stroke-width="1.5"/>
+    <rect x="172" y="70" width="24" height="480" rx="6" fill="url(#grd3)" opacity="0.9" stroke="#27ae60" stroke-width="1.5"/>
     <text x="184" y="96" text-anchor="middle" font-size="6" font-weight="700" fill="#fff">ЗОНА 3</text>
     <text x="184" y="107" text-anchor="middle" font-size="4.5" fill="#d5f5e3">ВСКРЫТИЕ</text>
     <text x="184" y="117" text-anchor="middle" font-size="4.5" fill="#d5f5e3">КТЯ</text>
@@ -213,7 +213,7 @@
 
   <!-- ==================== ZONE 4: СТОК КТЯ + НОВЫЕ ЯЩИКИ ==================== -->
   <g filter="url(#shadow)">
-    <rect x="208" y="70" width="36" height="480" rx="10" fill="url(#grd4)" opacity="0.9" stroke="#f39c12" stroke-width="1.5"/>
+    <rect x="208" y="70" width="36" height="480" rx="6" fill="url(#grd4)" opacity="0.9" stroke="#f39c12" stroke-width="1.5"/>
     <text x="226" y="96" text-anchor="middle" font-size="6.5" font-weight="700" fill="#2c3e50">ЗОНА 4</text>
     <text x="226" y="108" text-anchor="middle" font-size="5" fill="#2c3e50">СТОК</text>
     <text x="226" y="118" text-anchor="middle" font-size="4.5" fill="#7d6608">9 × 120 м</text>
@@ -230,7 +230,7 @@
 
   <!-- ==================== ZONE 5: ПОДАЧА (ИНФИДЫ) ==================== -->
   <g filter="url(#shadow)">
-    <rect x="256" y="70" width="32" height="880" rx="10" fill="#f39c12" opacity="0.85" stroke="#e67e22" stroke-width="1.5"/>
+    <rect x="256" y="70" width="32" height="880" rx="6" fill="#f39c12" opacity="0.85" stroke="#e67e22" stroke-width="1.5"/>
     <text x="272" y="96" text-anchor="middle" font-size="6.5" font-weight="700" fill="#2c3e50">ЗОНА 5</text>
     <text x="272" y="108" text-anchor="middle" font-size="5" fill="#2c3e50">ПОДАЧА</text>
     <text x="272" y="120" text-anchor="middle" font-size="4" fill="#7d6608">8 × 220 м</text>
@@ -264,7 +264,7 @@
 
   <!-- ==================== ZONE 6: СОРТИРОВКА (ГЛАВНАЯ) ==================== -->
   <g filter="url(#shadow)">
-    <rect x="300" y="70" width="284" height="880" rx="10" fill="url(#grdSort)" opacity="0.95" stroke="#c0392b" stroke-width="1.5"/>
+    <rect x="300" y="70" width="284" height="880" rx="6" fill="url(#grdSort)" opacity="0.95" stroke="#c0392b" stroke-width="1.5"/>
     <text x="442" y="96" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">ЗОНА 6 — СОРТИРОВКА</text>
     <text x="442" y="110" text-anchor="middle" font-size="6" fill="#f5b7b1">71 м × 220 м • 15 620 м² • крупнейшая зона центра • 100 000 товаров/ч</text>
 
@@ -355,7 +355,7 @@
 
   <!-- ==================== ZONE 7: ЗАКЛЕЙКА ==================== -->
   <g filter="url(#shadow)">
-    <rect x="596" y="70" width="38" height="640" rx="10" fill="url(#grdSeal)" opacity="0.9" stroke="#8e44ad" stroke-width="1.5"/>
+    <rect x="596" y="70" width="38" height="640" rx="6" fill="url(#grdSeal)" opacity="0.9" stroke="#8e44ad" stroke-width="1.5"/>
     <text x="615" y="96" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">ЗОНА 7</text>
     <text x="615" y="108" text-anchor="middle" font-size="5" fill="#f5b7b1">ЗАКЛЕЙКА</text>
     <text x="615" y="122" text-anchor="middle" font-size="4" fill="#d7bde2">9,5 × 160 м</text>
@@ -370,7 +370,7 @@
 
   <!-- ==================== ZONE 8: СОРТИРОВКА ЯЩИКОВ ==================== -->
   <g filter="url(#shadow)">
-    <rect x="646" y="70" width="75" height="640" rx="10" fill="url(#grdBox)" opacity="0.9" stroke="#2c3e50" stroke-width="1.5"/>
+    <rect x="646" y="70" width="75" height="640" rx="6" fill="url(#grdBox)" opacity="0.9" stroke="#2c3e50" stroke-width="1.5"/>
     <text x="683" y="96" text-anchor="middle" font-size="6" font-weight="700" fill="#fff">ЗОНА 8</text>
     <text x="683" y="108" text-anchor="middle" font-size="5" fill="#aed6f1">СОРТИРОВКА</text>
     <text x="683" y="119" text-anchor="middle" font-size="5" fill="#aed6f1">ЯЩИКОВ</text>
@@ -394,7 +394,7 @@
 
   <!-- ==================== ZONE 9: ПАЛЛЕТИРОВАНИЕ ==================== -->
   <g filter="url(#shadow)">
-    <rect x="733" y="70" width="24" height="640" rx="10" fill="url(#grdPal)" opacity="0.9" stroke="#2980b9" stroke-width="1.5"/>
+    <rect x="733" y="70" width="24" height="640" rx="6" fill="url(#grdPal)" opacity="0.9" stroke="#2980b9" stroke-width="1.5"/>
     <text x="745" y="96" text-anchor="middle" font-size="6" font-weight="700" fill="#fff">ЗОНА 9</text>
     <text x="745" y="107" text-anchor="middle" font-size="4.5" fill="#d5f5e3">ПАЛЛЕТИ-</text>
     <text x="745" y="117" text-anchor="middle" font-size="4.5" fill="#d5f5e3">РОВАНИЕ</text>
@@ -411,7 +411,7 @@
 
   <!-- ==================== ZONE 10: ОТГРУЗКА ==================== -->
   <g filter="url(#shadow)">
-    <rect x="769" y="70" width="91" height="640" rx="10" fill="url(#grdShip)" opacity="0.9" stroke="#7f8c8d" stroke-width="1.5"/>
+    <rect x="769" y="70" width="91" height="640" rx="6" fill="url(#grdShip)" opacity="0.9" stroke="#7f8c8d" stroke-width="1.5"/>
     <text x="814" y="96" text-anchor="middle" font-size="7" font-weight="700" fill="#fff">ЗОНА 10</text>
     <text x="814" y="110" text-anchor="middle" font-size="6" fill="#d5dbdb">ОТГРУЗКА</text>
     <text x="814" y="124" text-anchor="middle" font-size="4.5" fill="#aeb6bf">22,75 × 160 м</text>
@@ -456,7 +456,7 @@
 
   <!-- ==================== ZONE 11: NONSORT ==================== -->
   <g filter="url(#shadowLight)">
-    <rect x="596" y="722" width="200" height="200" rx="10" fill="url(#grdNon)" opacity="0.9" stroke="#e67e22" stroke-width="1.5"/>
+    <rect x="596" y="722" width="200" height="200" rx="6" fill="url(#grdNon)" opacity="0.9" stroke="#e67e22" stroke-width="1.5"/>
     <text x="696" y="744" text-anchor="middle" font-size="7" font-weight="700" fill="#fff">ЗОНА 11 — NONSORT</text>
     <text x="696" y="758" text-anchor="middle" font-size="5" fill="#fdebd0">50 м × 50 м • 2 500 м²</text>
     <text x="696" y="776" text-anchor="middle" font-size="4" fill="#fdebd0">Ручная сортировка по адресным ячейкам</text>
@@ -470,7 +470,7 @@
 
   <!-- Rollcage buffer (aux) -->
   <g filter="url(#shadowLight)">
-    <rect x="796" y="722" width="64" height="228" rx="10" fill="#fff" opacity="0.5" stroke="#e67e22" stroke-width="1.2" stroke-dasharray="5,3"/>
+    <rect x="796" y="722" width="64" height="228" rx="6" fill="#fff" opacity="0.5" stroke="#e67e22" stroke-width="1.2" stroke-dasharray="5,3"/>
     <text x="828" y="744" text-anchor="middle" font-size="5.5" font-weight="700" fill="#2c3e50">БУФЕР</text>
     <text x="828" y="756" text-anchor="middle" font-size="5" fill="#7f8c8d">РОЛЛТЕЙНЕРОВ</text>
     <text x="828" y="770" text-anchor="middle" font-size="4" fill="#7f8c8d">до 384 ед.</text>
@@ -481,7 +481,7 @@
 
   <!-- ==================== ZONE 12: ВОЗВРАТНЫЕ КАНАЛЫ ==================== -->
   <g filter="url(#shadowLight)">
-    <rect x="206" y="562" width="38" height="210" rx="10" fill="url(#grdRet)" opacity="0.9" stroke="#8e44ad" stroke-width="1.5"/>
+    <rect x="206" y="562" width="38" height="210" rx="6" fill="url(#grdRet)" opacity="0.9" stroke="#8e44ad" stroke-width="1.5"/>
     <text x="225" y="582" text-anchor="middle" font-size="6" font-weight="700" fill="#fff">ЗОНА 12</text>
     <text x="225" y="594" text-anchor="middle" font-size="4.5" fill="#f5eef8">ВОЗВРАТНЫЕ</text>
     <text x="225" y="604" text-anchor="middle" font-size="4.5" fill="#f5eef8">КАНАЛЫ</text>
@@ -494,7 +494,7 @@
 
   <!-- ==================== ZONE 13: БРАК И ОТХОДЫ ==================== -->
   <g filter="url(#shadowLight)">
-    <rect x="206" y="784" width="38" height="166" rx="10" fill="url(#grdWaste)" opacity="0.9" stroke="#566573" stroke-width="1.5"/>
+    <rect x="206" y="784" width="38" height="166" rx="6" fill="url(#grdWaste)" opacity="0.9" stroke="#566573" stroke-width="1.5"/>
     <text x="225" y="804" text-anchor="middle" font-size="6" font-weight="700" fill="#fff">ЗОНА 13</text>
     <text x="225" y="816" text-anchor="middle" font-size="4.5" fill="#d5dbdb">БРАК И</text>
     <text x="225" y="826" text-anchor="middle" font-size="4.5" fill="#d5dbdb">ОТХОДЫ</text>
@@ -508,7 +508,7 @@
 
   <!-- ==================== ZONE 14: ИНФРАСТРУКТУРА ==================== -->
   <g filter="url(#shadowLight)">
-    <rect x="132" y="562" width="62" height="388" rx="10" fill="url(#grdInfra)" opacity="0.9" stroke="#5d6d7e" stroke-width="1.5"/>
+    <rect x="132" y="562" width="62" height="388" rx="6" fill="url(#grdInfra)" opacity="0.9" stroke="#5d6d7e" stroke-width="1.5"/>
     <text x="163" y="582" text-anchor="middle" font-size="6" font-weight="700" fill="#fff">ЗОНА 14</text>
     <text x="163" y="594" text-anchor="middle" font-size="5" fill="#d5dbdb">ИНФРАСТРУКТУРА</text>
     <text x="163" y="608" text-anchor="middle" font-size="3.5" fill="#aeb6bf">15,5 × 97 м</text>
@@ -561,8 +561,8 @@
   <line x1="131" y1="430" x2="121" y2="430" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
 
   <!-- EXCEPTIONS LOOP (PURPLE): Подача → Возвратные → Подача -->
-  <path d="M 256 700 L 250 700 L 250 690 L 244 690" fill="none" stroke="#8e44ad" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrowPurple)"/>
-  <path d="M 244 684 L 250 684 L 250 694 L 256 694" fill="none" stroke="#8e44ad" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrowPurple)"/>
+  <line x1="256" y1="700" x2="244" y2="700" stroke="#8e44ad" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrowPurple)"/>
+  <line x1="244" y1="680" x2="256" y2="680" stroke="#8e44ad" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrowPurple)"/>
 
   <!-- NONSORT FLOW (ORANGE): Сортировка → Nonsort -->
   <line x1="584" y1="900" x2="596" y2="900" stroke="#e67e22" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
@@ -574,47 +574,68 @@
   <path d="M 202 550 L 202 784 L 206 784" fill="none" stroke="#7f8c8d" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowGray)"/>
 
   <!-- TRUCK FLOWS (outside building) -->
-  <path d="M 15 404 L 26 404 L 30 400 L 58 400" fill="none" stroke="#2c3e50" stroke-width="3" marker-end="url(#arrowBlue)"/>
-  <path d="M 862 400 L 884 400 L 890 406 L 890 410" fill="none" stroke="#2c3e50" stroke-width="3" marker-end="url(#arrowBlue)"/>
+  <line x1="15" y1="400" x2="58" y2="400" stroke="#2c3e50" stroke-width="3" marker-end="url(#arrowBlue)"/>
+  <line x1="862" y1="400" x2="900" y2="400" stroke="#2c3e50" stroke-width="3" marker-end="url(#arrowBlue)"/>
 
-    <!-- ==================== FLOW LEGEND ==================== -->
-  <g transform="translate(880, 70)">
-    <rect x="0" y="0" width="300" height="190" rx="12" fill="#fff" stroke="#bdc3c7" stroke-width="1" filter="url(#shadowLight)"/>
-    <text x="150" y="20" text-anchor="middle" font-size="9" font-weight="700" fill="#2c3e50">УСЛОВНЫЕ ОБОЗНАЧЕНИЯ ПОТОКОВ</text>
-    <line x1="12" y1="38" x2="40" y2="38" stroke="#e74c3c" stroke-width="2.5" marker-end="url(#arrowRed)"/>
-    <text x="46" y="42" font-size="6.5" fill="#2c3e50">Основной поток — 100 000 тов/ч</text>
-    <line x1="12" y1="58" x2="40" y2="58" stroke="#2980b9" stroke-width="2" marker-end="url(#arrowBlue)"/>
-    <text x="46" y="62" font-size="6.5" fill="#2c3e50">Ящики повторные — 2 960 КТЯ/ч</text>
-    <line x1="12" y1="78" x2="40" y2="78" stroke="#1abc9c" stroke-width="1.5" marker-end="url(#arrowCyan)"/>
-    <text x="46" y="82" font-size="6.5" fill="#2c3e50">Новые ящики — 740 КТЯ/ч</text>
-    <line x1="12" y1="98" x2="40" y2="98" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
-    <text x="46" y="102" font-size="6.5" fill="#2c3e50">Паллеты — 185 паллет/ч</text>
-    <line x1="12" y1="118" x2="40" y2="118" stroke="#e67e22" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
-    <text x="46" y="122" font-size="6.5" fill="#2c3e50">Nonsort — до 192 роллт/ч</text>
-    <line x1="12" y1="138" x2="40" y2="138" stroke="#8e44ad" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrowPurple)"/>
-    <text x="46" y="142" font-size="6.5" fill="#2c3e50">Возвратные потоки — 1–3 %</text>
-    <line x1="12" y1="158" x2="40" y2="158" stroke="#7f8c8d" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowGray)"/>
-    <text x="46" y="162" font-size="6.5" fill="#2c3e50">Брак — 740 КТЯ/ч</text>
-    <line x1="12" y1="178" x2="40" y2="178" stroke="#f1c40f" stroke-width="2" marker-end="url(#arrowYellow)"/>
-    <text x="46" y="182" font-size="6.5" fill="#2c3e50">Конвейер сортировщика</text>
+  <!-- ==================== FLOW LEGEND ==================== -->
+  <g transform="translate(60, 1000)">
+    <rect x="0" y="0" width="800" height="100" rx="8" fill="#fff" stroke="#bdc3c7" stroke-width="1" filter="url(#shadowLight)"/>
+    <text x="20" y="22" font-size="9" font-weight="700" fill="#2c3e50">УСЛОВНЫЕ ОБОЗНАЧЕНИЯ ПОТОКОВ</text>
+
+    <line x1="20" y1="42" x2="60" y2="42" stroke="#e74c3c" stroke-width="2.5" marker-end="url(#arrowRed)"/>
+    <text x="65" y="46" font-size="7" fill="#2c3e50">Основной поток товаров и ящиков — 100 000 товаров/ч</text>
+
+    <line x1="20" y1="62" x2="60" y2="62" stroke="#2980b9" stroke-width="2" marker-end="url(#arrowBlue)"/>
+    <text x="65" y="66" font-size="7" fill="#2c3e50">Ящики повторные (пустые) — 2 960 КТЯ/ч</text>
+
+    <line x1="310" y1="42" x2="350" y2="42" stroke="#1abc9c" stroke-width="1.5" marker-end="url(#arrowCyan)"/>
+    <text x="355" y="46" font-size="7" fill="#2c3e50">Новые ящики — 740 КТЯ/ч</text>
+
+    <line x1="310" y1="62" x2="350" y2="62" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
+    <text x="355" y="66" font-size="7" fill="#2c3e50">Паллеты — 185 паллет/ч</text>
+
+    <line x1="570" y1="42" x2="610" y2="42" stroke="#e67e22" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
+    <text x="615" y="46" font-size="7" fill="#2c3e50">Nonsort — до 192 роллтейнеров/ч</text>
+
+    <line x1="570" y1="62" x2="610" y2="62" stroke="#8e44ad" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrowPurple)"/>
+    <text x="615" y="66" font-size="7" fill="#2c3e50">Возвратные потоки (исключения) — 1–3 %</text>
+
+    <line x1="570" y1="82" x2="610" y2="82" stroke="#7f8c8d" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowGray)"/>
+    <text x="615" y="86" font-size="7" fill="#2c3e50">Брак и отходы — 740 КТЯ/ч</text>
+
+    <line x1="20" y1="82" x2="60" y2="82" stroke="#f1c40f" stroke-width="2" marker-end="url(#arrowYellow)"/>
+    <text x="65" y="86" font-size="7" fill="#2c3e50">Конвейер сортировщика (слева направо)</text>
   </g>
 
-    <!-- ==================== EQUIPMENT LEGEND ==================== -->
-  <g transform="translate(880, 270)">
-    <rect x="0" y="0" width="300" height="110" rx="12" fill="#fff" stroke="#bdc3c7" stroke-width="1" filter="url(#shadowLight)"/>
-    <text x="12" y="18" font-size="9" font-weight="700" fill="#2c3e50">ОБОЗНАЧЕНИЯ ОБОРУДОВАНИЯ</text>
-    <use href="#truck-in" x="12" y="30"/><text x="38" y="40" font-size="6" fill="#2c3e50">Грузовик</text>
-    <use href="#sorter" x="85" y="30"/><text x="109" y="40" font-size="6" fill="#2c3e50">Сортировщик</text>
-    <use href="#sealer" x="160" y="30"/><text x="184" y="40" font-size="6" fill="#2c3e50">Заклейщик</text>
-    <use href="#agv" x="235" y="30"/><text x="259" y="40" font-size="6" fill="#2c3e50">AGV-робот</text>
-    <use href="#pallet" x="12" y="62"/><text x="38" y="72" font-size="6" fill="#2c3e50">Паллета</text>
-    <use href="#robot-arm" x="85" y="60"/><text x="109" y="72" font-size="6" fill="#2c3e50">Робот</text>
-    <use href="#compactor" x="160" y="60"/><text x="184" y="72" font-size="6" fill="#2c3e50">Компактор</text>
-    <use href="#scanner" x="235" y="60"/><text x="259" y="72" font-size="6" fill="#2c3e50">Сканер</text>
-    <use href="#box" x="12" y="92"/><text x="38" y="102" font-size="6" fill="#2c3e50">КТЯ</text>
-    <use href="#rollcage" x="85" y="90"/><text x="109" y="102" font-size="6" fill="#2c3e50">Роллтейнер</text>
-    <use href="#conveyor" x="160" y="92"/><text x="184" y="102" font-size="6" fill="#2c3e50">Конвейер</text>
-    <use href="#dock-door" x="235" y="90"/><text x="259" y="102" font-size="6" fill="#2c3e50">Ворота</text>
+  <!-- ==================== EQUIPMENT LEGEND ==================== -->
+  <g transform="translate(60, 1112)">
+    <rect x="0" y="0" width="800" height="60" rx="8" fill="#fff" stroke="#bdc3c7" stroke-width="1" filter="url(#shadowLight)"/>
+    <text x="20" y="18" font-size="9" font-weight="700" fill="#2c3e50">ОБОЗНАЧЕНИЯ ОБОРУДОВАНИЯ</text>
+
+    <use href="#truck-in" x="12" y="28"/>
+    <text x="40" y="40" font-size="6" fill="#2c3e50">Грузовик</text>
+    <use href="#pallet" x="95" y="30"/>
+    <text x="115" y="40" font-size="6" fill="#2c3e50">Паллета</text>
+    <use href="#box" x="155" y="30"/>
+    <text x="170" y="40" font-size="6" fill="#2c3e50">КТЯ</text>
+    <use href="#rollcage" x="200" y="28"/>
+    <text x="218" y="40" font-size="6" fill="#2c3e50">Роллтейнер</text>
+    <use href="#sorter" x="275" y="30"/>
+    <text x="298" y="40" font-size="6" fill="#2c3e50">Сортировщик</text>
+    <use href="#robot-arm" x="355" y="28"/>
+    <text x="375" y="40" font-size="6" fill="#2c3e50">Робот-манипулятор</text>
+    <use href="#conveyor" x="445" y="30"/>
+    <text x="465" y="40" font-size="6" fill="#2c3e50">Конвейер</text>
+    <use href="#dock-door" x="525" y="28"/>
+    <text x="545" y="40" font-size="6" fill="#2c3e50">Ворота/док</text>
+    <use href="#sealer" x="595" y="30"/>
+    <text x="615" y="40" font-size="6" fill="#2c3e50">Заклейщик</text>
+    <use href="#compactor" x="675" y="28"/>
+    <text x="695" y="40" font-size="6" fill="#2c3e50">Компактор</text>
+    <use href="#agv" x="755" y="28"/>
+    <text x="773" y="40" font-size="6" fill="#2c3e50">AGV-робот</text>
+    <use href="#scanner" x="825" y="28"/>
+    <text x="845" y="40" font-size="6" fill="#2c3e50">Сканер</text>
   </g>
 
   <!-- Directional labels -->
@@ -622,25 +643,4 @@
   <text x="14" y="418" font-size="6" fill="#7f8c8d">грузовики</text>
   <text x="870" y="392" font-size="8" font-weight="700" fill="#2c3e50">ВЫХОД</text>
   <text x="870" y="418" font-size="6" fill="#7f8c8d">грузовики</text>
-  <!-- ==================== KEY METRICS PANEL ==================== -->
-  <g transform="translate(60, 1000)">
-    <rect x="0" y="0" width="800" height="120" rx="12" fill="#fff" stroke="#bdc3c7" stroke-width="1" filter="url(#shadowLight)"/>
-    <text x="400" y="24" text-anchor="middle" font-size="9" font-weight="700" fill="#2c3e50">КЛЮЧЕВЫЕ ПОКАЗАТЕЛИ ЦЕНТРА</text>
-    <text x="105" y="54" text-anchor="middle" font-size="9" font-weight="700" fill="#e74c3c">100 000 тов/ч</text>
-    <text x="105" y="66" text-anchor="middle" font-size="6" fill="#7f8c8d">входная мощность</text>
-    <text x="280" y="54" text-anchor="middle" font-size="9" font-weight="700" fill="#e74c3c">3 700 КТЯ/ч</text>
-    <text x="280" y="66" text-anchor="middle" font-size="6" fill="#7f8c8d">через заклейку</text>
-    <text x="455" y="54" text-anchor="middle" font-size="9" font-weight="700" fill="#27ae60">185 пал/ч</text>
-    <text x="455" y="66" text-anchor="middle" font-size="6" fill="#7f8c8d">паллетирование</text>
-    <text x="640" y="54" text-anchor="middle" font-size="9" font-weight="700" fill="#8e44ad">1–3 %</text>
-    <text x="640" y="66" text-anchor="middle" font-size="6" fill="#7f8c8d">исключения</text>
-    <text x="105" y="96" text-anchor="middle" font-size="9" font-weight="700" fill="#2980b9">10 сортировщиков</text>
-    <text x="105" y="108" text-anchor="middle" font-size="6" fill="#7f8c8d">по 10 000 тов/ч, 40 направлений</text>
-    <text x="280" y="96" text-anchor="middle" font-size="9" font-weight="700" fill="#2980b9">400 ячеек</text>
-    <text x="280" y="108" text-anchor="middle" font-size="6" fill="#7f8c8d">накопитель 20×20</text>
-    <text x="455" y="96" text-anchor="middle" font-size="9" font-weight="700" fill="#7f8c8d">24 ворота</text>
-    <text x="455" y="108" text-anchor="middle" font-size="6" fill="#7f8c8d">отгрузка / 8 приём</text>
-    <text x="640" y="96" text-anchor="middle" font-size="9" font-weight="700" fill="#e67e22">до 192 роллт/ч</text>
-    <text x="640" y="108" text-anchor="middle" font-size="6" fill="#7f8c8d">nonsort → отгрузка</text>
-  </g>
 </svg>
