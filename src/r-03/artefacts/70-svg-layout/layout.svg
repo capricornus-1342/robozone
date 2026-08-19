@@ -1,0 +1,308 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1880" height="1040" viewBox="0 0 940 520" font-family="Arial">
+  <defs>
+    <marker id="mOrange" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5,2.5 L0,5 z" fill="#FF4500"/></marker>
+    <marker id="mPink" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5,2.5 L0,5 z" fill="#DC143C"/></marker>
+    <marker id="mBlue" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5,2.5 L0,5 z" fill="#1E90FF"/></marker>
+    <marker id="mGreen" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5,2.5 L0,5 z" fill="#228B22"/></marker>
+    <marker id="mPurple" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5,2.5 L0,5 z" fill="#8B008B"/></marker>
+    <marker id="mGray" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L5,2.5 L0,5 z" fill="#808080"/></marker>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0L0 0 0 20" fill="none" stroke="#E3E3E3" stroke-width="0.4"/></pattern>
+    <pattern id="cellNS" width="2.85" height="4" patternUnits="userSpaceOnUse"><rect width="2.85" height="4" fill="#fff" stroke="#777" stroke-width="0.25"/></pattern>
+    <pattern id="cellZ8" width="3.6" height="2" patternUnits="userSpaceOnUse"><rect width="3.6" height="2" fill="#fff" stroke="#777" stroke-width="0.25"/></pattern>
+    <pattern id="scats" width="7.575" height="5" patternUnits="userSpaceOnUse"><line x1="0.5" y1="0" x2="0.5" y2="5" stroke="#999" stroke-width="0.4"/></pattern>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="520" fill="url(#grid)"/>
+
+  <text x="350" y="14" font-size="11" font-weight="bold" text-anchor="middle" fill="#222">СОРТИРОВОЧНЫЙ ЦЕНТР — ПЛАНИРОВКА И ПОТОКИ (этап 7, r-03)</text>
+  <text x="350" y="23" font-size="7.5" text-anchor="middle" fill="#555">Масштаб: 2 px = 1 м · координатная сетка — шаг 10 м · сортировщики — кросс-белт конвейеры на всю длину зоны</text>
+  <text x="350" y="32" font-size="7.5" text-anchor="middle" fill="#555">небольшие зазоры между зонами · коридоры роботов-перевозчиков — отдельный слой · легенда справа</text>
+
+  <g font-size="6.5" fill="#888" text-anchor="middle">
+    <text x="0" y="508">0</text><text x="100" y="508">50</text><text x="200" y="508">100</text>
+    <text x="300" y="508">150</text><text x="400" y="508">200</text><text x="500" y="508">250</text>
+    <text x="600" y="508">300</text><text x="700" y="508">350 м</text>
+  </g>
+  <g font-size="6.5" fill="#888" text-anchor="end">
+    <text x="694" y="7">0</text><text x="694" y="107">50</text><text x="694" y="207">100</text>
+    <text x="694" y="307">150</text><text x="694" y="407">200</text><text x="694" y="507">250 м</text>
+  </g>
+
+  <!-- ===================== БОКОВЫЕ ЗОНЫ (верхняя полоса, 0..30 м, с зазорами) ===================== -->
+  <!-- S1: сток пустых ящиков + машина новых ящиков (42x30 = 1260 м²) -->
+  <rect x="1" y="31" width="82" height="58" fill="#FFB6C1" stroke="#444" stroke-width="1"/>
+  <text x="3" y="40" font-size="6.5" font-weight="bold" fill="#333">З. 4 · СТОК</text>
+  <text x="3" y="48" font-size="6.5" font-weight="bold" fill="#333">ПУСТЫХ ЯЩИКОВ +</text>
+  <text x="3" y="56" font-size="6.5" font-weight="bold" fill="#333">МАШИНА НОВЫХ</text>
+  <text x="3" y="63" font-size="5.5" fill="#333">42×30 м ≈ 1 260 м²</text>
+  <rect x="5" y="70" width="14" height="12" fill="#fff" stroke="#777"/>
+  <text x="22" y="76" font-size="4.5" fill="#333">машина новых ящиков 1 шт</text>
+
+  <!-- S2: инфраструктура (67x30 = 2010 м²) -->
+  <rect x="85" y="31" width="132" height="58" fill="#D3D3D3" stroke="#444" stroke-width="1"/>
+  <text x="87" y="41" font-size="7" font-weight="bold" fill="#333">З. 14 · ИНФРАСТРУКТУРА</text>
+  <text x="87" y="49" font-size="6" fill="#333">67×30 м ≈ 2 010 м²</text>
+  <rect x="92" y="55" width="30" height="14" fill="#fff" stroke="#777"/>
+  <text x="92" y="73" font-size="5" fill="#333">серверная (WMS)</text>
+  <rect x="135" y="55" width="30" height="14" fill="#fff" stroke="#777"/>
+  <text x="135" y="73" font-size="5" fill="#333">зарядные станции</text>
+
+  <!-- S3: возвратные потоки (22x30 = 660 м²) -->
+  <rect x="219" y="31" width="42" height="58" fill="#DDA0DD" stroke="#444" stroke-width="1"/>
+  <text x="221" y="40" font-size="6" font-weight="bold" fill="#333">З. 12</text>
+  <text x="221" y="48" font-size="6" font-weight="bold" fill="#333">ВОЗВРАТНЫЕ</text>
+  <text x="221" y="56" font-size="5.5" font-weight="bold" fill="#333">ПОТОКИ</text>
+  <text x="221" y="63" font-size="5" fill="#333">22×30 м ≈ 660 м²</text>
+  <rect x="224" y="66" width="12" height="10" fill="#fff" stroke="#777"/>
+  <rect x="240" y="66" width="12" height="10" fill="#fff" stroke="#777"/>
+  <text x="221" y="80" font-size="3.5" fill="#333">каналы повторного</text>
+  <text x="221" y="86" font-size="3.5" fill="#333">прогона / отбраковки</text>
+
+  <!-- S4: брак и отходы (13.5x30 = 405 м²) -->
+  <rect x="263" y="31" width="25" height="58" fill="#FFB6C1" stroke="#444" stroke-width="1"/>
+  <text x="265" y="40" font-size="5" font-weight="bold" fill="#333">З. 13</text>
+  <text x="265" y="47" font-size="4.5" font-weight="bold" fill="#333">БРАК И</text>
+  <text x="265" y="54" font-size="4.5" font-weight="bold" fill="#333">ОТХОДЫ</text>
+  <text x="265" y="60" font-size="4" fill="#333">≈ 405 м²</text>
+  <rect x="266" y="66" width="16" height="14" fill="#fff" stroke="#777"/>
+  <text x="265" y="84" font-size="3.5" fill="#333">компактор</text>
+  <text x="265" y="78" font-size="3.5" fill="#333">отходы упаковки</text>
+
+  <!-- ===================== ЗОНЫ ОСНОВНОГО ПОТОКА (30..130 м, с зазорами) ===================== -->
+  <!-- Z1: приёмка (30x100 = 3000 м²) -->
+  <rect x="1" y="91" width="58" height="198" fill="#FFC04D" stroke="#444" stroke-width="1.2"/>
+  <text x="3" y="103" font-size="6.5" font-weight="bold" fill="#222">З. 1 · ПРИЁМКА</text>
+  <text x="3" y="111" font-size="6" fill="#222">30×100 м = 3 000 м²</text>
+  <g fill="#fff" stroke="#777">
+    <rect x="3" y="120" width="5" height="18"/><rect x="3" y="146" width="5" height="18"/>
+    <rect x="3" y="172" width="5" height="18"/><rect x="3" y="198" width="5" height="18"/>
+    <rect x="3" y="224" width="5" height="18"/><rect x="3" y="250" width="5" height="18"/>
+    <rect x="3" y="276" width="5" height="14"/>
+  </g>
+  <text x="10" y="115" font-size="5" fill="#222">ворота приёмки 6-8 шт</text>
+  <g fill="#fff" stroke="#999">
+    <rect x="14" y="120" width="8" height="18"/><rect x="26" y="120" width="8" height="18"/>
+    <rect x="38" y="120" width="8" height="18"/><rect x="50" y="120" width="8" height="18"/>
+    <rect x="14" y="146" width="8" height="18"/><rect x="26" y="146" width="8" height="18"/>
+    <rect x="38" y="146" width="8" height="18"/><rect x="50" y="146" width="8" height="18"/>
+    <rect x="14" y="172" width="8" height="18"/><rect x="26" y="172" width="8" height="18"/>
+    <rect x="38" y="172" width="8" height="18"/><rect x="50" y="172" width="8" height="18"/>
+  </g>
+  <text x="14" y="262" font-size="5" fill="#222">буфер приёмки</text>
+  <text x="14" y="270" font-size="5" fill="#222">≈ 400 паллетомест</text>
+  <rect x="14" y="278" width="40" height="10" fill="#fff" stroke="#777"/>
+  <text x="17" y="286" font-size="5" fill="#222">входные машины</text>
+
+  <!-- Z2: разукрупнение (10x100 = 1000 м²) -->
+  <rect x="61" y="91" width="18" height="198" fill="#FFC04D" stroke="#444" stroke-width="1.2"/>
+  <text x="70" y="105" font-size="5.5" font-weight="bold" fill="#222" text-anchor="middle" transform="rotate(-90 70 105)">З. 2 · РАЗУКРУПНЕНИЕ · 10×100 м = 1 000 м²</text>
+  <text x="70" y="175" font-size="4.5" fill="#222" text-anchor="middle" transform="rotate(-90 70 175)">депаллетайзеры 3-4 шт · накопитель пустых паллет</text>
+  <rect x="63" y="130" width="14" height="18" fill="#fff" stroke="#777"/>
+  <rect x="63" y="156" width="14" height="18" fill="#fff" stroke="#777"/>
+  <rect x="63" y="182" width="14" height="18" fill="#fff" stroke="#777"/>
+  <rect x="65" y="210" width="12" height="20" fill="#87CEFA" stroke="#444"/>
+
+  <!-- Z3: вскрытие (7.5x100 = 750 м²) -->
+  <rect x="81" y="91" width="13" height="198" fill="#FFC04D" stroke="#444" stroke-width="1.2"/>
+  <text x="87.5" y="105" font-size="5.5" font-weight="bold" fill="#222" text-anchor="middle" transform="rotate(-90 87.5 105)">З. 3 · ВСКРЫТИЕ · ≈ 750 м²</text>
+  <text x="87.5" y="175" font-size="4.5" fill="#222" text-anchor="middle" transform="rotate(-90 87.5 175)">машины вскрытия 8-10 шт</text>
+  <g fill="#fff" stroke="#777">
+    <rect x="84" y="126" width="7" height="14"/><rect x="84" y="146" width="7" height="14"/>
+    <rect x="84" y="166" width="7" height="14"/><rect x="84" y="186" width="7" height="14"/>
+    <rect x="84" y="206" width="7" height="14"/><rect x="84" y="226" width="7" height="14"/>
+    <rect x="84" y="246" width="7" height="14"/><rect x="84" y="266" width="7" height="14"/>
+  </g>
+
+  <!-- Z4: подача (17.5x100 = 1750 м²) -->
+  <rect x="96" y="91" width="33" height="198" fill="#FFC04D" stroke="#444" stroke-width="1.2"/>
+  <text x="112.5" y="105" font-size="6" font-weight="bold" fill="#222" text-anchor="middle" transform="rotate(-90 112.5 105)">З. 5 · ПОДАЧА (ИНФИДЫ) · 17,5×100 м ≈ 1 750 м²</text>
+  <text x="112.5" y="180" font-size="4.5" fill="#222" text-anchor="middle" transform="rotate(-90 112.5 180)">инфиды 10 шт · сканеры/весы 10 комплектов</text>
+  <g fill="#fff" stroke="#777">
+    <rect x="98" y="118" width="5" height="6"/><rect x="104" y="118" width="5" height="6"/>
+    <rect x="110" y="118" width="5" height="6"/><rect x="116" y="118" width="5" height="6"/>
+    <rect x="122" y="118" width="5" height="6"/><rect x="98" y="128" width="5" height="6"/>
+    <rect x="104" y="128" width="5" height="6"/><rect x="110" y="128" width="5" height="6"/>
+    <rect x="116" y="128" width="5" height="6"/><rect x="122" y="128" width="5" height="6"/>
+  </g>
+  <!-- Z5: сортировка (160x100 = 16000 м²): кросс-белт конвейеры почти на всю длину зоны, по вертикали друг за другом -->
+  <rect x="131" y="91" width="318" height="198" fill="#FFC04D" stroke="#444" stroke-width="1.2"/>
+  <text x="135" y="103" font-size="9" font-weight="bold" fill="#222">З. 6 · СОРТИРОВКА · 160×100 м = 16 000 м²</text>
+  <text x="135" y="112" font-size="6" fill="#222">кросс-белт: 10 линий × ~150 м · 10 000 товаров/ч на линию · 400 скатов (по 40)</text>
+  <g fill="#fff" stroke="#777">
+    <rect x="137" y="120" width="303" height="5"/><rect x="137" y="137.5" width="303" height="5"/>
+    <rect x="137" y="155" width="303" height="5"/><rect x="137" y="172.5" width="303" height="5"/>
+    <rect x="137" y="190" width="303" height="5"/><rect x="137" y="207.5" width="303" height="5"/>
+    <rect x="137" y="225" width="303" height="5"/><rect x="137" y="242.5" width="303" height="5"/>
+    <rect x="137" y="260" width="303" height="5"/><rect x="137" y="277.5" width="303" height="5"/>
+  </g>
+  <g fill="url(#scats)" stroke="#999">
+    <rect x="137" y="125" width="303" height="5"/><rect x="137" y="142.5" width="303" height="5"/>
+    <rect x="137" y="160" width="303" height="5"/><rect x="137" y="177.5" width="303" height="5"/>
+    <rect x="137" y="195" width="303" height="5"/><rect x="137" y="212.5" width="303" height="5"/>
+    <rect x="137" y="230" width="303" height="5"/><rect x="137" y="247.5" width="303" height="5"/>
+    <rect x="137" y="265" width="303" height="5"/><rect x="137" y="282.5" width="303" height="5"/>
+  </g>
+  <g font-size="5" font-weight="bold" fill="#222">
+    <text x="139" y="123">С1</text><text x="139" y="140.5">С2</text><text x="139" y="158">С3</text>
+    <text x="139" y="175.5">С4</text><text x="139" y="193">С5</text><text x="139" y="210.5">С6</text>
+    <text x="139" y="228">С7</text><text x="139" y="245.5">С8</text><text x="139" y="263">С9</text><text x="139" y="280.5">С10</text>
+  </g>
+
+  <!-- Z6: заклейка (20x100 = 2000 м²) -->
+  <rect x="451" y="91" width="38" height="198" fill="#FFC04D" stroke="#444" stroke-width="1.2"/>
+  <text x="470" y="105" font-size="6" font-weight="bold" fill="#222" text-anchor="middle" transform="rotate(-90 470 105)">З. 7 · ЗАКЛЕЙКА · 20×100 м = 2 000 м²</text>
+  <text x="458" y="175" font-size="4.5" fill="#222" text-anchor="middle" transform="rotate(-90 458 175)">заклейщики 3-4 шт · маркировка штрих-кодом</text>
+  <g fill="#fff" stroke="#777">
+    <rect x="455" y="120" width="6" height="24"/><rect x="455" y="156" width="6" height="24"/>
+    <rect x="455" y="192" width="6" height="24"/><rect x="455" y="228" width="6" height="24"/>
+  </g>
+
+  <!-- Z7: сортировка ящиков + буфер (40x100 = 4000 м²), 400 ячеек направлений (20×20) -->
+  <rect x="491" y="91" width="78" height="198" fill="#FFC04D" stroke="#444" stroke-width="1.2"/>
+  <text x="493" y="103" font-size="5.5" font-weight="bold" fill="#222">З. 8 · СОРТИРОВКА ЯЩИКОВ +</text>
+  <text x="493" y="112" font-size="6" font-weight="bold" fill="#222">БУФЕР ОТГРУЗКИ</text>
+  <text x="493" y="120" font-size="5.5" fill="#222">40×100 м = 4 000 м²</text>
+  <rect x="494" y="134" width="72" height="36" fill="url(#cellZ8)" stroke="#777"/>
+  <text x="494" y="128" font-size="4.5" fill="#222">система сортировки ящиков 1 шт</text>
+  <text x="494" y="178" font-size="5" fill="#222">400 ячеек направлений (20×20)</text>
+  <rect x="492" y="184" width="76" height="104" fill="#FFD180" stroke="#777"/>
+  <text x="494" y="228" font-size="6" font-weight="bold" fill="#222">буфер отгрузки</text>
+  <text x="494" y="237" font-size="5.5" fill="#222">≈ 370 паллетомест</text>
+  <text x="494" y="246" font-size="5.5" fill="#222">(≈ 7 400 ящиков)</text>
+
+  <!-- Z8: паллетирование (10x100 = 1000 м²) -->
+  <rect x="571" y="91" width="18" height="198" fill="#FFC04D" stroke="#444" stroke-width="1.2"/>
+  <text x="580" y="105" font-size="5.5" font-weight="bold" fill="#222" text-anchor="middle" transform="rotate(-90 580 105)">З. 9 · ПАЛЛЕТИРОВАНИЕ · ≈ 1 000 м²</text>
+  <text x="577" y="175" font-size="4.5" fill="#222" text-anchor="middle" transform="rotate(-90 577 175)">паллетайзеры 4-6 шт · 20 ящиков/паллета</text>
+  <g fill="#fff" stroke="#777">
+    <rect x="574" y="136" width="6" height="24"/><rect x="574" y="168" width="6" height="24"/>
+    <rect x="574" y="200" width="6" height="24"/><rect x="574" y="232" width="6" height="24"/>
+  </g>
+
+  <!-- Z9: отгрузка (42.5x100 = 4250 м²) -->
+  <rect x="591" y="91" width="83" height="198" fill="#FFC04D" stroke="#444" stroke-width="1.2"/>
+  <text x="593" y="103" font-size="7" font-weight="bold" fill="#222">З. 10 · ОТГРУЗКА</text>
+  <text x="593" y="112" font-size="6" fill="#222">42,5×100 м ≈ 4 250 м²</text>
+  <text x="593" y="124" font-size="5.5" fill="#222">волны по графику магистрали</text>
+  <g fill="#fff" stroke="#777">
+    <rect x="668" y="100" width="5" height="12"/><rect x="668" y="116" width="5" height="12"/>
+    <rect x="668" y="132" width="5" height="12"/><rect x="668" y="148" width="5" height="12"/>
+    <rect x="668" y="164" width="5" height="12"/><rect x="668" y="180" width="5" height="12"/>
+    <rect x="668" y="196" width="5" height="12"/><rect x="668" y="212" width="5" height="12"/>
+    <rect x="668" y="228" width="5" height="12"/><rect x="668" y="244" width="5" height="12"/>
+    <rect x="668" y="260" width="5" height="12"/><rect x="668" y="276" width="5" height="12"/>
+  </g>
+  <text x="593" y="152" font-size="5.5" fill="#222">ворота отгрузки 24 шт</text>
+  <rect x="640" y="160" width="12" height="10" fill="#fff" stroke="#777"/>
+  <text x="593" y="168" font-size="5.5" fill="#222">исходящие машины</text>
+  <text x="593" y="176" font-size="5.5" fill="#222">32 паллеты: 16 паллет с</text>
+  <text x="593" y="184" font-size="5.5" fill="#222">ящиками (320 ящиков) +</text>
+  <text x="593" y="192" font-size="5.5" fill="#222">16 паллет с роллтейнерами</text>
+  <text x="593" y="200" font-size="5.5" fill="#222">погрузка 2 ч</text>
+  <!-- Z10b: nonsort (83.5x30 = 2505 м²) — внизу, у зоны подачи (З.5); между сортировщиками и nonsort — зоны перемещения ящиков и паллет -->
+  <rect x="96" y="321" width="167" height="60" fill="#90EE90" stroke="#444" stroke-width="1.2"/>
+  <text x="98" y="330" font-size="6.5" font-weight="bold" fill="#333">З. 11 · NONSORT</text>
+  <text x="98" y="337" font-size="5" fill="#333">83,5×30 м ≈ 2 505 м²</text>
+  <rect x="98" y="340" width="112" height="26" fill="url(#cellNS)" stroke="#777"/>
+  <rect x="216" y="340" width="20" height="26" fill="#fff" stroke="#777"/>
+  <rect x="240" y="340" width="19" height="26" fill="#fff" stroke="#777"/>
+  <text x="98" y="374" font-size="3.8" fill="#333">адресные ячейки 400 шт (40×10) · ручная, 250 товаров/ч на чел.</text>
+  <text x="98" y="379" font-size="3.5" fill="#333">роллтейнер-станции · буфер погрузки</text>
+  <!-- ===================== ПОТОКИ ===================== -->
+  <!-- ОСНОВНОЙ ПОТОК (самый яркий) -->
+  <line x1="30" y1="200" x2="61" y2="200" stroke="#FF4500" stroke-width="1" marker-end="url(#mOrange)"/>
+  <text x="20" y="184" font-size="6.5" fill="#FF4500" font-weight="bold">паллеты с ящиками, 185 паллет/ч (ТЗ)</text>
+  <line x1="66" y1="205" x2="82" y2="205" stroke="#FF4500" stroke-width="1" marker-end="url(#mOrange)"/>
+  <line x1="85" y1="205" x2="97" y2="205" stroke="#FF4500" stroke-width="1" marker-end="url(#mOrange)"/>
+  <text x="75" y="184" font-size="6.5" fill="#FF4500" font-weight="bold">ящики с товарами → товары</text>
+  <line x1="110" y1="192" x2="129" y2="192" stroke="#FF4500" stroke-width="1" marker-end="url(#mOrange)"/>
+  <line x1="110" y1="262" x2="129" y2="262" stroke="#FF4500" stroke-width="1" marker-end="url(#mOrange)"/>
+  <text x="240" y="81" font-size="6" fill="#FF4500" font-weight="bold">товары с инфидов → 10 линий (сканер, вес, габариты)</text>
+  <line x1="440" y1="198" x2="452" y2="198" stroke="#FF4500" stroke-width="1" marker-end="url(#mOrange)"/>
+  <text x="300" y="196" font-size="6.5" fill="#FF4500" font-weight="bold">заполненные ящики (3 700/ч)</text>
+  <line x1="465" y1="190" x2="492" y2="190" stroke="#FF4500" stroke-width="1" marker-end="url(#mOrange)"/>
+  <text x="460" y="182" font-size="6.5" fill="#FF4500" font-weight="bold">заклеенные ящики</text>
+  <line x1="530" y1="172" x2="572" y2="172" stroke="#FF4500" stroke-width="1" marker-end="url(#mOrange)"/>
+  <line x1="580" y1="190" x2="592" y2="190" stroke="#FF4500" stroke-width="1" marker-end="url(#mOrange)"/>
+  <text x="520" y="182" font-size="6.5" fill="#FF4500" font-weight="bold">ящики (20 шт/паллета) → паллеты</text>
+
+  <!-- ПОТОКИ ЯЩИКОВ (розово-красные) -->
+  <line x1="87" y1="93" x2="47" y2="93" stroke="#DC143C" stroke-width="1" marker-end="url(#mPink)"/>
+  <text x="52" y="87" font-size="6" fill="#DC143C">пустые повторные ящики (80 %)</text>
+  <path d="M84,58 L133,58 L133,283 L133,299 L440,299" fill="none" stroke="#DC143C" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#mPink)"/>
+  <text x="175" y="46" font-size="5.5" fill="#DC143C">пустые ящики → этап заполнения (у скатов линий)</text>
+  <text x="145" y="295" font-size="4.5" fill="#DC143C">зона перемещения пустых ящиков</text>
+  <line x1="390" y1="122" x2="390" y2="89" stroke="#DC143C" stroke-width="1" marker-end="url(#mPink)"/>
+  <text x="273" y="136" font-size="4" fill="#DC143C">бракованные ящики → компактор (З. 13)</text>
+
+  <!-- ПОТОКИ ПАЛЛЕТ (синие) -->
+  <path d="M71,244 L71,313 L578,313 L578,160" fill="none" stroke="#1E90FF" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#mBlue)"/>
+  <text x="185" y="320" font-size="4.5" fill="#1E90FF">зона перемещения порожних паллет</text>
+  <line x1="71" y1="236" x2="5" y2="236" stroke="#1E90FF" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#mBlue)"/>
+  <text x="10" y="230" font-size="6" fill="#1E90FF">излишек → возврат тары</text>
+
+  <!-- ПОТОК NONSORT (зелёный) -->
+  <line x1="112" y1="140" x2="112" y2="321" stroke="#228B22" stroke-width="1" marker-end="url(#mGreen)"/>
+  <text x="180" y="64" font-size="6" fill="#228B22">товары nonsort (отбор на инфиде: форма, хрупкость, негабарит &gt; 320 мм)</text>
+  <path d="M263,371 L591,371 L591,98" fill="none" stroke="#228B22" stroke-width="1" marker-end="url(#mGreen)"/>
+  <text x="300" y="364" font-size="5" fill="#228B22">роллтейнеры с товарами (16 шт/машина)</text>
+  <path d="M591,96 L591,371 L263,371" fill="none" stroke="#228B22" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#mGreen)"/>
+  <text x="300" y="380" font-size="5" fill="#228B22">роллтейнеры порожние (возврат)</text>
+
+  <!-- ВОЗВРАТНЫЙ ПОТОК ИСКЛЮЧЕНИЙ (фиолетовый) -->
+  <line x1="240" y1="122" x2="240" y2="89" stroke="#8B008B" stroke-width="1" marker-end="url(#mPurple)"/>
+  <text x="248" y="148" font-size="4" fill="#8B008B">исключения (повторный прогон)</text>
+  <line x1="120" y1="94" x2="217" y2="94" stroke="#8B008B" stroke-width="1" marker-end="url(#mPurple)"/>
+  <text x="150" y="84" font-size="5.5" fill="#8B008B">исключения (нечитаемый код)</text>
+  <line x1="217" y1="60" x2="121" y2="60" stroke="#8B008B" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#mPurple)"/>
+  <text x="140" y="54" font-size="5.5" fill="#8B008B">повторная подача (скан)</text>
+
+  <!-- ВСПОМОГАТЕЛЬНЫЕ (серые) -->
+  <path d="M440,122 L441,122 L441,95 L240,95" fill="none" stroke="#808080" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#mGray)"/>
+  <text x="300" y="89" font-size="4" fill="#808080">упавшие товары → повторная подача (З. 12)</text>
+  <line x1="275" y1="90" x2="275" y2="72" stroke="#808080" stroke-width="1" marker-end="url(#mGray)"/>
+  <text x="290" y="73" font-size="6" fill="#808080">вывоз</text>
+
+  <!-- ===================== КОРИДОРЫ РОБОТОВ-ПЕРЕВОЗЧИКОВ (отдельный слой) ===================== -->
+  <g id="robot-corridors" fill="none" stroke="#8B4513" stroke-width="1" stroke-dasharray="6,4">
+    <line x1="10" y1="90" x2="665" y2="90"/>
+    <line x1="213" y1="63" x2="213" y2="90"/>
+    <line x1="130" y1="90" x2="130" y2="283"/>
+    <line x1="441" y1="90" x2="441" y2="283"/>
+    <line x1="492" y1="90" x2="492" y2="134"/>
+    <line x1="665" y1="90" x2="665" y2="96"/>
+  </g>
+  <text x="120" y="95" font-size="5.5" fill="#8B4513">коридоры роботов-перевозчиков (слой id = robot-corridors)</text>
+
+  <!-- ===================== ЛЕГЕНДА (справа от схемы) ===================== -->
+  <text x="715" y="100" font-size="9" font-weight="bold" fill="#222">УСЛОВНЫЕ ОБОЗНАЧЕНИЯ</text>
+  <line x1="715" y1="108" x2="930" y2="108" stroke="#444" stroke-width="1"/>
+  <rect x="715" y="116" width="24" height="10" fill="#FF4500"/><text x="745" y="124" font-size="6.5" fill="#333">основной поток товаров (самый яркий)</text>
+  <rect x="715" y="130" width="24" height="10" fill="#FFC04D"/><text x="745" y="138" font-size="6.5" fill="#333">зоны основного потока</text>
+  <rect x="715" y="144" width="24" height="10" fill="#DC143C"/><text x="745" y="152" font-size="6.5" fill="#333">потоки ящиков (повторные 80 %, новые 20 %,</text>
+  <text x="745" y="166" font-size="6.5" fill="#333">заполненные, брак)</text>
+  <rect x="715" y="172" width="24" height="10" fill="#FFB6C1"/><text x="745" y="180" font-size="6.5" fill="#333">зоны потоков ящиков</text>
+  <rect x="715" y="186" width="24" height="10" fill="#1E90FF"/><text x="745" y="194" font-size="6.5" fill="#333">потоки паллет (входные, порожние → паллетирование,</text>
+  <text x="745" y="208" font-size="6.5" fill="#333">возврат излишка)</text>
+  <rect x="715" y="214" width="24" height="10" fill="#87CEFA"/><text x="745" y="222" font-size="6.5" fill="#333">накопитель пустых паллет</text>
+  <rect x="715" y="228" width="24" height="10" fill="#228B22"/><text x="745" y="236" font-size="6.5" fill="#333">поток nonsort (товары → адресные ячейки →</text>
+  <text x="745" y="250" font-size="6.5" fill="#333">роллтейнеры → отгрузка)</text>
+  <rect x="715" y="256" width="24" height="10" fill="#90EE90"/><text x="745" y="264" font-size="6.5" fill="#333">зоны потока nonsort (адресные ячейки,</text>
+  <text x="745" y="278" font-size="6.5" fill="#333">роллтейнер-станции)</text>
+  <rect x="715" y="284" width="24" height="10" fill="#8B008B"/><text x="745" y="292" font-size="6.5" fill="#333">возвратный поток исключений (повторный</text>
+  <text x="745" y="306" font-size="6.5" fill="#333">прогон / отбраковка)</text>
+  <rect x="715" y="312" width="24" height="10" fill="#DDA0DD"/><text x="745" y="320" font-size="6.5" fill="#333">зоны возвратных потоков</text>
+  <rect x="715" y="326" width="24" height="10" fill="#808080"/><text x="745" y="334" font-size="6.5" fill="#333">вспомогательные потоки (отходы, вывоз,</text>
+  <text x="745" y="348" font-size="6.5" fill="#333">порожние роллтейнеры)</text>
+  <rect x="715" y="354" width="24" height="10" fill="#D3D3D3"/><text x="745" y="362" font-size="6.5" fill="#333">инфраструктура (серверная, зарядные станции)</text>
+  <line x1="715" y1="368" x2="739" y2="368" stroke="#8B4513" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="745" y="376" font-size="6.5" fill="#333">коридоры роботов-перевозчиков (отдельный слой)</text>
+  <rect x="715" y="382" width="24" height="10" fill="url(#grid)" stroke="#444"/>
+  <text x="745" y="390" font-size="6.5" fill="#333">координатная сетка — шаг 10 м</text>
+  <rect x="715" y="398" width="24" height="10" fill="url(#scats)" stroke="#444"/>
+  <text x="745" y="406" font-size="6.5" fill="#333">скаты сортировщиков (40 на линию, шаг ~3,75 м)</text>
+  <text x="715" y="424" font-size="6" fill="#555">Суммарная площадь ≈ 40 500 м²</text>
+  <text x="715" y="436" font-size="6" fill="#555">(в диапазоне спецификации 35 000–55 000 м²)</text>
+  <text x="715" y="448" font-size="6" fill="#555">координатные оси — в метрах · сетка шаг 10 м</text>
+  <text x="715" y="460" font-size="6" fill="#555">единицы измерения указаны у всех величин</text>
+</svg>
